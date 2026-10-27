@@ -1,0 +1,6 @@
+import {test} from 'node:test';
+import {strict as assert} from 'node:assert';
+import {nextMonth,budgetMonth,annualProvision,monthlyForecast} from './period.ts';
+test('décalage salaire et passage décembre à janvier',()=>{assert.equal(nextMonth('2026-12-31'),'2027-01');assert.equal(budgetMonth({date:'2026-12-31',kind:'income',amount:100,frequency:'monthly',incomeAllocation:'next_month'}),'2027-01')});
+test('provision annuelle répartie sur les douze mois sans perdre de centimes',()=>{const e={date:'2026-11-15',kind:'expense' as const,amount:10001,frequency:'annual' as const,incomeAllocation:'calendar' as const};let sum=0;for(let m=1;m<=12;m++)sum+=annualProvision(e,`2026-${String(m).padStart(2,'0')}`);assert.equal(sum,10001);assert.equal(annualProvision(e,'2027-01'),0)});
+test('prévision distingue dépenses mensuelles et provision annuelle',()=>{const entries=[{date:'2026-02-28',kind:'income' as const,amount:200000,frequency:'monthly' as const,incomeAllocation:'next_month' as const},{date:'2026-03-01',kind:'expense' as const,amount:12000,frequency:'annual' as const,incomeAllocation:'calendar' as const}];assert.deepEqual(monthlyForecast(entries,'2026-03'),{income:200000,expense:1000})});

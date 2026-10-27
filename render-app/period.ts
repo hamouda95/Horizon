@@ -1,0 +1,5 @@
+export type BudgetEntry={date:string;kind:'income'|'expense';amount:number;frequency:'monthly'|'annual';incomeAllocation:'calendar'|'next_month'};
+export function nextMonth(date:string):string { const year=Number(date.slice(0,4)),month=Number(date.slice(5,7));return month===12?`${year+1}-01`:`${year}-${String(month+1).padStart(2,'0')}`; }
+export function budgetMonth(entry:BudgetEntry):string{return entry.kind==='income'&&entry.incomeAllocation==='next_month'?nextMonth(entry.date):entry.date.slice(0,7)}
+export function annualProvision(entry:BudgetEntry,month:string):number {if(entry.kind!=='expense'||entry.frequency!=='annual'||entry.date.slice(0,4)!==month.slice(0,4))return 0;const index=Number(month.slice(5,7))-1;return Math.floor(entry.amount/12)+(index<entry.amount%12?1:0)}
+export function monthlyForecast(entries:BudgetEntry[],month:string){return {income:entries.filter(e=>e.kind==='income'&&budgetMonth(e)===month).reduce((sum,e)=>sum+e.amount,0),expense:entries.filter(e=>e.kind==='expense'&&e.frequency==='monthly'&&budgetMonth(e)===month).reduce((sum,e)=>sum+e.amount,0)+entries.reduce((sum,e)=>sum+annualProvision(e,month),0)}}
