@@ -11,7 +11,7 @@ Horizon est une application web de suivi budgétaire en français, développée 
 - Vue mensuelle et historique sur 12 mois, budgets globaux et enveloppes par catégorie, objectif d'épargne et suivi des versements/retraits.
 - Actualisation des données au retour dans l'application ou après reconnexion, dans les cas prévus par l'interface.
 
-La synchronisation bancaire et les rubriques Investissements, Crédits, Prêts et Fiches de paie restent à construire. Le partage donne aux membres l'accès aux opérations, catégories et budgets du foyer ; seul le propriétaire peut gérer les membres et les paramètres du foyer.
+La synchronisation bancaire et la gestion des fiches de paie restent à construire. Le partage donne aux membres l'accès aux opérations, catégories et budgets du foyer ; seul le propriétaire peut gérer les membres et les paramètres du foyer.
 
 ## Organisation
 
