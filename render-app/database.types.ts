@@ -1,5 +1,3 @@
-// Generated from the Horizon Supabase schema on 2026-10-27. Do not edit by hand.
-
 export type Json =
   | string
   | number
@@ -118,6 +116,79 @@ export type Database = {
           },
         ]
       }
+      household_invites: {
+        Row: {
+          accepted_at: string | null
+          accepted_by: string | null
+          created_at: string
+          created_by: string
+          expires_at: string
+          household_id: string
+          id: string
+          invited_email: string | null
+          token_hash: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          created_by: string
+          expires_at: string
+          household_id: string
+          id?: string
+          invited_email?: string | null
+          token_hash: string
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          created_by?: string
+          expires_at?: string
+          household_id?: string
+          id?: string
+          invited_email?: string | null
+          token_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_invites_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      household_members: {
+        Row: {
+          household_id: string
+          joined_at: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          household_id: string
+          joined_at?: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          household_id?: string
+          joined_at?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_members_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       households: {
         Row: {
           created_at: string
@@ -217,7 +288,34 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      accept_household_invite: {
+        Args: { p_token: string }
+        Returns: {
+          household_id: string
+          household_name: string
+        }[]
+      }
+      create_household_invite: {
+        Args: { p_household_id: string; p_invited_email?: string }
+        Returns: {
+          expires_at: string
+          invite_id: string
+          invite_token: string
+        }[]
+      }
+      list_household_members: {
+        Args: { p_household_id: string }
+        Returns: {
+          email: string
+          joined_at: string
+          role: string
+          user_id: string
+        }[]
+      }
+      remove_household_member: {
+        Args: { p_household_id: string; p_user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

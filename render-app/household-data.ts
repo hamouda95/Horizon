@@ -16,7 +16,7 @@ type EntryRow=Omit<RawEntryRow,'kind'|'frequency'|'income_allocation'|'expense_t
 type MonthlyBudgetRow=Pick<Tables<'monthly_budgets'>,'id'|'month'|'income_cents'|'expense_cents'>;
 
 export type Entry={id:string;kind:'income'|'expense';label:string;category:string;amount:number;date:string;frequency:'monthly'|'annual';incomeAllocation:'calendar'|'next_month';expenseType:ExpenseType;categoryId:string;subcategoryId:string|null;subcategory?:string};
-export type Home={id:string;name:string;savingsRate:number|null;incomeTypes:string;expenseTypes:string;categories:{id:string;name:string;kind:string;active:boolean}[]};
+export type Home={id:string;name:string;role:'owner'|'member';savingsRate:number|null;incomeTypes:string;expenseTypes:string;categories:{id:string;name:string;kind:string;active:boolean}[]};
 
 function parseEntryRow(row:RawEntryRow):EntryRow{
  if(row.kind!=='income'&&row.kind!=='expense')throw new Error('Type d’opération invalide dans les données du foyer.');
