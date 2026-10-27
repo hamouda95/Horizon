@@ -21,3 +21,8 @@ Les quatre fonctions `SECURITY DEFINER` destinées aux RPC sont exécutables uni
 ## Retour arrière
 
 Pour retirer le partage, revenir d'abord à une version de l'application qui ne lit pas `household_members`, puis appliquer `supabase/rollback/household_sharing.sql`. Le script supprime les politiques, le déclencheur, les RPC et les deux nouvelles tables; les foyers et leurs données existants restent en place avec les politiques historiques de propriétaire. La restauration ne supprime pas les opérations ni les budgets.
+
+
+## Synchronisation en temps réel
+
+L'application écoute les changements des foyers, opérations, catégories, sous-catégories et budgets mensuels du foyer sélectionné. Une courte coalescence regroupe les changements proches avant de recharger les données via l'API RLS habituelle. L'actualisation à la reconnexion et au retour dans l'onglet reste disponible en complément. La migration `20261027232519_realtime_household_sync` a ajouté les quatre tables manquantes à `supabase_realtime`; `monthly_budgets` était déjà publié. Le retrait de ces ajouts est décrit dans `supabase/rollback/realtime_household_sync.sql`.

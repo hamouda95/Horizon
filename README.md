@@ -11,15 +11,16 @@ Horizon est une application web de suivi budgétaire en français, développée 
 - Vue mensuelle et historique sur 12 mois, budget mensuel global, objectif de taux d'épargne et suggestions simples.
 - Actualisation des données au retour dans l'application ou après reconnexion, dans les cas prévus par l'interface.
 
-La synchronisation en temps réel, les enveloppes par catégorie et les mouvements d'épargne ne sont pas encore disponibles. Le partage donne aux membres l'accès aux opérations, catégories et budgets du foyer ; seul le propriétaire peut gérer les membres et les paramètres du foyer.
+Les enveloppes par catégorie et les mouvements d'épargne ne sont pas encore disponibles. Le partage donne aux membres l'accès aux opérations, catégories et budgets du foyer ; seul le propriétaire peut gérer les membres et les paramètres du foyer.
 
 ## Organisation
 
 - `render-app/` : application React/Vite déployée.
 - `database/applied/` : archives des migrations initiales, à utiliser avec l'historique réel Supabase.
-- `supabase/migrations/` : migrations de partage appliquées en production, y compris les deux corrections successives.
+- `supabase/migrations/` : migrations de partage et de synchronisation appliquées en production.
 - `supabase/tests/household_sharing.sql` : scénario RLS transactionnel annulé après vérification.
 - `supabase/rollback/household_sharing.sql` : retrait du schéma de partage ; redéployer d'abord l'ancienne version de l'application avant de l'utiliser.
+- `supabase/rollback/realtime_household_sync.sql` : retrait des tables ajoutées à la publication Realtime.
 - L'ancien prototype Sites/D1 est conservé dans l'historique Git.
 
 ## Installation

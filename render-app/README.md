@@ -4,4 +4,4 @@ Application React/Vite connectée à Supabase. Les variables de construction `VI
 
 Depuis ce dossier : `npm ci` puis `npm run build`. Render publie `render-app/dist` après `cd render-app && npm ci && npm run build`.
 
-Les accès aux foyers partagés sont contrôlés par RLS et une appartenance explicite. Les invitations expirent après sept jours. La synchronisation bancaire, la tarification et les comptes invités ne sont pas implémentés. Les données du prototype Sites ne sont pas automatiquement migrées.
+Les accès aux foyers partagés sont contrôlés par RLS et une appartenance explicite. Les invitations expirent après sept jours. Les changements du foyer se synchronisent en temps réel pour les membres connectés. La synchronisation bancaire, la tarification et les comptes invités ne sont pas implémentés. Les données du prototype Sites ne sont pas automatiquement migrées.
