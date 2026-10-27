@@ -6,6 +6,7 @@ Horizon est une application web de suivi budgétaire en français, développée 
 
 - Compte par adresse e-mail ou Google, profil et foyer personnel.
 - Revenus et dépenses : saisie, modification, suppression, catégories et sous-catégories.
+- Répartition des dépenses par catégorie avec filtre de détail sur la période sélectionnée.
 - Vue mensuelle et historique sur 12 mois, budget mensuel global, objectif de taux d'épargne et suggestions simples.
 - Actualisation des données au retour dans l'application ou après reconnexion, dans les cas prévus par l'interface.
 
