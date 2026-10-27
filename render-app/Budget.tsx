@@ -1,3 +1,4 @@
+import PeriodControl from './PeriodControl';
 import {fetchHouseholdRows} from './household-data';
 import type {Entry,Home} from './household-data';
 import {normalizeNavigation,moveNavigation} from './navigation';
@@ -12,7 +13,7 @@ import {budgetMonth,annualProvision,monthlyForecast,shiftMonth,monthOverview} fr
 import {supabase} from './client';
 import {useEffect,useMemo,useState,useRef} from 'react';
 import type {CSSProperties} from 'react';
-import { LayoutDashboard, ArrowDownLeft, ArrowUpRight, PiggyBank, Landmark, HandCoins, FileText, Plus, Sparkles, ChevronDown, ArrowRight, Wallet, Trash2, X, Menu, Check, SlidersHorizontal, ChevronLeft, ChevronRight, Pencil, Tags, GripVertical, ChevronUp, ChevronDown as DownIcon } from 'lucide-react';
+import { LayoutDashboard, ArrowDownLeft, ArrowUpRight, PiggyBank, Landmark, HandCoins, FileText, Plus, Sparkles, ChevronDown, ArrowRight, Wallet, Trash2, X, Menu, Check, SlidersHorizontal, Pencil, Tags, GripVertical, ChevronUp, ChevronDown as DownIcon } from 'lucide-react';
 const incomeDefaults=['Salaire','Prime','Aides','Autres revenus'];
 const expenseDefaults=['Logement','Courses','Transport','Factures','Loisirs','Santé','Autres dépenses'];
 const fmt=(n:number)=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(n/100);
@@ -48,7 +49,7 @@ export default function Budget({user,onSignOut}:{user:User;onSignOut:()=>void}){
  function suggestBudget(){let d=new Date(Number(month.slice(0,4)),Number(month.slice(5,7))-2,1);const previous=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;const prev=monthlyForecast(entries,previous);setPlanIncome(String(prev.income/100));setPlanExpense(String(prev.expense/100));setNotice('Proposition basée sur le mois précédent et les provisions annuelles de ce mois ; modifiez-la avant de l’enregistrer.')}
 
  const baseCats:string[]=kind==='income'?(home?JSON.parse(home.incomeTypes):inc):(home?JSON.parse(home.expenseTypes):exp);const originalEntry=entries.find(x=>x.id===editingId);const cats=originalEntry&&originalEntry.kind===kind&&!baseCats.includes(originalEntry.category)?[...baseCats,originalEntry.category]:baseCats;const activeCategory=home?.categories.find(x=>x.kind===kind&&(x.active||x.id===originalEntry?.categoryId)&&x.name===(category||cats[0]));const activeSubs=subcategories.filter(x=>x.category_id===activeCategory?.id&&(x.active||x.id===originalEntry?.subcategoryId));
- const periodControl=<div className="period-controls"><button type="button" aria-label="Mois précédent" title="Mois précédent" onClick={()=>setMonth(m=>shiftMonth(m,-1))}><ChevronLeft size={18}/></button><label className="month"><span>Période</span><input type="month" value={month} onChange={e=>{if(e.target.value)setMonth(e.target.value)}}/></label><button type="button" aria-label="Mois suivant" title="Mois suivant" onClick={()=>setMonth(m=>shiftMonth(m,1))}><ChevronRight size={18}/></button></div>;
+ const periodControl=<PeriodControl month={month} setMonth={setMonth}/>;
  const overviewMonths=Array.from({length:12},(_,i)=>shiftMonth(month,i-6));
  const current=useMemo(()=>entries.filter(x=>budgetMonth(x)===month),[entries,month]);const total=(k:string)=>current.filter(x=>x.kind===k).reduce((s,x)=>s+x.amount,0);const income=total('income'),expense=total('expense'),balance=income-expense;const provision=entries.reduce((sum,x)=>sum+annualProvision(x,month),0);const expenseSplit=expenseTotals(current);
  const shown=current.filter(x=>tab==='Revenus'?x.kind==='income':tab==='Dépenses'?x.kind==='expense':true).sort((a,b)=>b.date.localeCompare(a.date));
