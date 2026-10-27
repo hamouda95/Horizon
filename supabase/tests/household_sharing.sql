@@ -18,6 +18,7 @@ declare
  v_category uuid;
  v_other_category uuid;
  v_entry uuid;
+ v_movement uuid;
  v_token text;
  v_email_token text;
  v_email text;
@@ -42,6 +43,8 @@ begin
   values(v_home,date_trunc('month',current_date)::date,1000,100);
  insert into public.monthly_category_budgets(household_id,category_id,month,amount_cents)
   values(v_home,v_category,date_trunc('month',current_date)::date,500);
+ insert into public.savings_movements(household_id,movement_type,amount_cents,movement_date,note)
+  values(v_home,'deposit',3000,current_date,'test deposit') returning id into v_movement;
  insert into public.subcategories(household_id,category_id,kind,name)
   values(v_home,v_category,'expense','Test subcategory');
  select invite_token into v_token from public.create_household_invite(v_home,null);
@@ -70,6 +73,12 @@ begin
  if v_count<>1 then raise exception using errcode='XX000',message='Member cannot read household budgets'; end if;
  select count(*) into v_count from public.monthly_category_budgets where household_id=v_home;
  if v_count<>1 then raise exception using errcode='XX000',message='Member cannot read category envelopes'; end if;
+ select count(*) into v_count from public.savings_movements where household_id=v_home;
+ if v_count<>1 then raise exception using errcode='XX000',message='Member cannot read savings movements'; end if;
+ insert into public.savings_movements(household_id,movement_type,amount_cents,movement_date)
+  values(v_home,'withdrawal',500,current_date);
+ select count(*) into v_count from public.savings_movements where household_id=v_home;
+ if v_count<>2 then raise exception using errcode='XX000',message='Member cannot add savings movements'; end if;
  select count(*) into v_count from public.subcategories where household_id=v_home;
  if v_count<>1 then raise exception using errcode='XX000',message='Member cannot read household subcategories'; end if;
  insert into public.categories(household_id,kind,name) values(v_home,'expense','Member category');
@@ -91,6 +100,11 @@ begin
   insert into public.monthly_category_budgets(household_id,category_id,month,amount_cents)
    values(v_home,v_other_category,date_trunc('month',current_date)::date,100);
   raise exception using errcode='XX000',message='A member attached an envelope to another household category';
+ exception when insufficient_privilege then null;
+ end;
+ begin
+  update public.savings_movements set household_id=v_other_home where id=v_movement;
+  raise exception using errcode='XX000',message='A member reassigned a savings movement to another household';
  exception when insufficient_privilege then null;
  end;
  begin
