@@ -37,11 +37,13 @@ Ces variables sont incluses dans le code distribué au navigateur. Ne jamais uti
 
 ```sh
 npm run dev
+npm run lint
+npm run typecheck
+npm test
 npm run build
-npx tsc --noEmit
 ```
 
-La mise en place d'un script `npm test` et d'une intégration continue est prévue dans une PR distincte.
+Les vérifications automatiques exécutent le lint, TypeScript, Vitest et la compilation sur GitHub Actions.
 
 ## Déploiement Render
 
