@@ -16,7 +16,7 @@ Conserver l'expérience Horizon (catégories, opérations et bilan mensuel) et r
 | Opération | id, foyer_id, catégorie_id, libellé, type, montant_centimes, date, created_by | Enregistre un revenu ou une dépense. Montant strictement positif. |
 | Invitation (étape ultérieure) | id, foyer_id, rôle, échéance, statut, empreinte du jeton | Permet à un membre d'inviter une personne ; le jeton brut ne doit pas être stocké. |
 
-Ajouter une clé étrangère composite permettant de garantir qu'une opération et sa catégorie appartiennent au même foyer. Indexer les opérations par (foyer_id, date) et les adhésions par (user_id, foyer_id). Utiliser des contraintes de longueur et des types explicites. Les crédits, prêts, investissements et fiches de paie seront modélisés séparément lors de leur implémentation.
+Ajouter une clé étrangère composite permettant de garantir qu'une opération et sa catégorie appartiennent au même foyer. Indexer les opérations par (foyer_id, date) et les adhésions par (user_id, foyer_id). Utiliser des contraintes de longueur et des types explicites. Les fonctionnalités hors gestion directe du budget du foyer ne font pas partie du périmètre actuel; les modéliser séparément seulement si un besoin produit est confirmé.
 
 ## Identité et autorisation
 
