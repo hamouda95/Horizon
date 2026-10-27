@@ -1,0 +1,2 @@
+-- Copie de la migration appliquée ; archive hors du répertoire CLI.\nalter table public.entries add column expense_type text;
+alter table public.entries add constraint entries_expense_type_check check (expense_type is null or (kind='expense' and expense_type in ('recurring','one_off')));
