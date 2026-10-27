@@ -1,0 +1,2 @@
+/** Collecte des pages ordonnées par identifiant ; aucune page courte n'est supposée finale. */
+export async function collectPages<T extends {id:string}>(fetchPage:(after:string|null)=>Promise<T[]>):Promise<T[]>{const rows:T[]=[];let cursor:string|null=null;for(;;){const page=await fetchPage(cursor);if(!page.length)return rows;for(const row of page){if(!row.id||(cursor!==null&&row.id<=cursor))throw new Error('La pagination des données n’a pas progressé.');rows.push(row);cursor=row.id}}}
