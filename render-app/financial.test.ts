@@ -1,0 +1,5 @@
+import {test} from 'node:test';import {strict as assert} from 'node:assert';import {savingsBudget,expenseDistribution} from './financial.ts';
+test('la dépense disponible exclut l’objectif d’épargne',()=>{const x=savingsBudget(300000,88800,2000)!;assert.equal(x.savings,60000);assert.equal(x.spending,240000);assert.equal(x.consumed,37);assert.equal(x.remaining,151200)});
+test('aucun objectif ou revenu et taux 100% ne donnent pas un pourcentage trompeur',()=>{assert.equal(savingsBudget(1000,100,null),null);assert.equal(savingsBudget(0,100,2000),null);assert.equal(savingsBudget(1000,100,10000)?.consumed,null)});
+test('les dépenses au-delà du budget ne sont pas plafonnées',()=>{assert.equal(savingsBudget(1000,1200,0)?.consumed,120)});
+test('la répartition inclut toutes les catégories et ignore les revenus',()=>{assert.deepEqual(expenseDistribution([{category:'Courses',amount:200,kind:'expense'},{category:'Courses',amount:100,kind:'expense'},{category:'Loyer',amount:1000,kind:'expense'},{category:'Salaire',amount:2000,kind:'income'}]),[['Loyer',1000],['Courses',300]])});

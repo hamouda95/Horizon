@@ -1,0 +1,2 @@
+export function savingsBudget(income:number,expense:number,rateBps:number|null){if(rateBps===null||income<=0)return null;const savings=Math.round(income*rateBps/10000),spending=income-savings;return {savings,spending,remaining:spending-expense,consumed:spending>0?expense/spending*100:null}}
+export function expenseDistribution(items:{category:string;amount:number;kind:string}[]){const by=new Map<string,number>();for(const e of items)if(e.kind==='expense'&&e.amount>0)by.set(e.category,(by.get(e.category)||0)+e.amount);return [...by.entries()].sort((a,b)=>b[1]-a[1]);}
