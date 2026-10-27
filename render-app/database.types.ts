@@ -290,6 +290,44 @@ export type Database = {
           },
         ]
       }
+      savings_movements: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          household_id: string
+          id: string
+          movement_date: string
+          movement_type: string
+          note: string | null
+        }
+        Insert: {
+          amount_cents: number
+          created_at?: string
+          household_id: string
+          id?: string
+          movement_date: string
+          movement_type: string
+          note?: string | null
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          household_id?: string
+          id?: string
+          movement_date?: string
+          movement_type?: string
+          note?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "savings_movements_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subcategories: {
         Row: {
           active: boolean

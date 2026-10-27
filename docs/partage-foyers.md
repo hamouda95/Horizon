@@ -31,3 +31,8 @@ L'application écoute les changements des foyers, opérations, catégories, sous
 ## Enveloppes par catégorie
 
 Chaque foyer peut définir un plafond mensuel en euros par catégorie de dépenses active. La page Budget compare le total des dépenses de la période au plafond, signale un dépassement et permet de modifier ou supprimer l'enveloppe. Tous les membres du foyer peuvent gérer ces plafonds. La table `monthly_category_budgets` est protégée par RLS : l'utilisateur doit être membre du foyer et la catégorie doit être une catégorie de dépenses du même foyer. Les lignes sont publiées dans `supabase_realtime` afin que les autres membres reçoivent les changements. La migration est `20261027232857_monthly_category_budgets`; le retrait est décrit dans `supabase/rollback/monthly_category_budgets.sql`.
+
+
+## Suivi des mouvements d'épargne
+
+La page Budget permet de consigner manuellement un versement ou un retrait, sa date et une note facultative. Le solde suivi est la somme des versements moins les retraits; l'application n'initie aucun mouvement d'argent. Les membres du foyer peuvent consulter et gérer ce journal, protégé par RLS et synchronisé en temps réel. La table est indexée par foyer et date. Migration `20261027233400_savings_movements`; retour arrière `supabase/rollback/savings_movements.sql`.
