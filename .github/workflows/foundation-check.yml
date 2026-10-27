@@ -1,10 +1,7 @@
-name: Vérifications des fondations
-
+name: Contrôles
 on:
-  pull_request:
   push:
-    branches:
-      - foundation/0-1-cleanup
+  pull_request:
 
 permissions:
   contents: read
@@ -23,6 +20,7 @@ jobs:
           cache: npm
           cache-dependency-path: render-app/package-lock.json
       - run: npm ci
-      - run: npx tsc --noEmit
-      - run: node --test --experimental-strip-types *.test.ts
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
       - run: npm run build
