@@ -1,0 +1,108 @@
+-- Run after the household-sharing migration with at least three auth.users fixtures.
+-- The transaction creates test rows, exercises authenticated RLS/RPC paths, then rolls back.
+begin;
+select set_config('test.owner_id',(select u.id::text from auth.users u where not exists(select 1 from public.households h where h.owner_id=u.id) order by u.id limit 1),true);
+select set_config('test.member_id',(select h.owner_id::text from public.households h order by h.created_at,h.id limit 1),true);
+select set_config('test.other_id',(select h.owner_id::text from public.households h order by h.created_at,h.id offset 1 limit 1),true);
+select set_config('test.other_email',(select coalesce(u.email,'') from auth.users u where u.id=(select h.owner_id from public.households h order by h.created_at,h.id offset 1 limit 1)),true);
+select set_config('test.other_home_id',(select h.id::text from public.households h order by h.created_at,h.id offset 1 limit 1),true);
+set local role authenticated;
+
+do $test$
+declare
+ v_owner uuid := current_setting('test.owner_id')::uuid;
+ v_member uuid := current_setting('test.member_id')::uuid;
+ v_other uuid := current_setting('test.other_id')::uuid;
+ v_home uuid;
+ v_other_home uuid := current_setting('test.other_home_id')::uuid;
+ v_category uuid;
+ v_entry uuid;
+ v_token text;
+ v_email_token text;
+ v_email text;
+ v_joined uuid;
+ v_count integer;
+ v_rejected boolean;
+begin
+ if v_owner=v_member or v_owner=v_other or v_member=v_other then
+  raise exception using errcode='XX000',message='Fixture identities must be distinct';
+ end if;
+ v_email:=current_setting('test.other_email');
+ if v_email='' then raise exception using errcode='XX000',message='Invitee email fixture is missing'; end if;
+
+ perform set_config('request.jwt.claim.sub',v_owner::text,true);
+ insert into public.households(owner_id,name) values(v_owner,'transactional sharing test') returning id into v_home;
+ insert into public.categories(household_id,kind,name) values(v_home,'expense','Test category') returning id into v_category;
+ insert into public.entries(household_id,category_id,kind,label,amount_cents,entry_date)
+  values(v_home,v_category,'expense','Test entry',100,current_date) returning id into v_entry;
+ insert into public.monthly_budgets(household_id,month,income_cents,expense_cents)
+  values(v_home,date_trunc('month',current_date)::date,1000,100);
+ insert into public.subcategories(household_id,category_id,kind,name)
+  values(v_home,v_category,'expense','Test subcategory');
+ select invite_token into v_token from public.create_household_invite(v_home,null);
+ if v_token is null or char_length(v_token)<>64 then
+  raise exception using errcode='XX000',message='Invitation token generation failed';
+ end if;
+ select count(*) into v_count from public.households where id=v_home;
+ if v_count<>1 then raise exception using errcode='XX000',message='Owner lost access to their household'; end if;
+ select count(*) into v_count from public.list_household_members(v_home);
+ if v_count<>1 then raise exception using errcode='XX000',message='Owner member listing failed'; end if;
+
+ perform set_config('request.jwt.claim.sub',v_other::text,true);
+ select count(*) into v_count from public.households where id=v_home;
+ if v_count<>0 then raise exception using errcode='XX000',message='Uninvited user can read another household'; end if;
+
+ perform set_config('request.jwt.claim.sub',v_member::text,true);
+ select count(*) into v_count from public.households where id=v_home;
+ if v_count<>0 then raise exception using errcode='XX000',message='Household is visible before invite acceptance'; end if;
+ select household_id into v_joined from public.accept_household_invite(v_token);
+ if v_joined<>v_home then raise exception using errcode='XX000',message='Invite accepted into the wrong household'; end if;
+ select count(*) into v_count from public.categories where household_id=v_home;
+ if v_count<>1 then raise exception using errcode='XX000',message='Member cannot read household categories'; end if;
+ select count(*) into v_count from public.entries where household_id=v_home;
+ if v_count<>1 then raise exception using errcode='XX000',message='Member cannot read household entries'; end if;
+ select count(*) into v_count from public.monthly_budgets where household_id=v_home;
+ if v_count<>1 then raise exception using errcode='XX000',message='Member cannot read household budgets'; end if;
+ select count(*) into v_count from public.subcategories where household_id=v_home;
+ if v_count<>1 then raise exception using errcode='XX000',message='Member cannot read household subcategories'; end if;
+ insert into public.categories(household_id,kind,name) values(v_home,'expense','Member category');
+ update public.entries set label='Updated by member' where id=v_entry;
+ if not found then raise exception using errcode='XX000',message='Member cannot update household entries'; end if;
+ begin
+  update public.entries set household_id=v_other_home where id=v_entry;
+  raise exception using errcode='XX000',message='A member reassigned an entry to another household';
+ exception when insufficient_privilege then null;
+ end;
+ begin
+  insert into public.household_members(household_id,user_id,role) values(v_home,v_other,'member');
+  raise exception using errcode='XX000',message='A member directly added another user';
+ exception when insufficient_privilege then null;
+ end;
+ begin
+  perform public.remove_household_member(v_home,v_member);
+  raise exception using errcode='XX000',message='A member removed another member';
+ exception when insufficient_privilege then null;
+ end;
+ v_email:=current_setting('test.other_email');
+ perform set_config('request.jwt.claim.sub',v_owner::text,true);
+ select invite_token into v_email_token from public.create_household_invite(v_home,v_email);
+ perform set_config('request.jwt.claim.sub',v_member::text,true);
+ v_rejected:=false;
+ begin
+  perform public.accept_household_invite(v_email_token);
+ exception when insufficient_privilege then
+  v_rejected:=true;
+ end;
+ if not v_rejected then raise exception using errcode='XX000',message='An invitation email restriction was bypassed'; end if;
+ perform set_config('request.jwt.claim.sub',v_other::text,true);
+ v_rejected:=false;
+ begin
+  perform public.accept_household_invite(v_token);
+ exception when sqlstate 'P0001' then
+  v_rejected:=true;
+ end;
+ if not v_rejected then raise exception using errcode='XX000',message='A used invite was accepted by a second user'; end if;
+end;
+$test$;
+
+rollback;
