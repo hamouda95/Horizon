@@ -1,6 +1,9 @@
 import {test} from 'node:test';
 import {strict as assert} from 'node:assert';
-import {nextMonth,budgetMonth,annualProvision,monthlyForecast} from './period.ts';
+import {nextMonth,budgetMonth,annualProvision,monthlyForecast,shiftMonth,monthOverview} from './period.ts';
 test('décalage salaire et passage décembre à janvier',()=>{assert.equal(nextMonth('2026-12-31'),'2027-01');assert.equal(budgetMonth({date:'2026-12-31',kind:'income',amount:100,frequency:'monthly',incomeAllocation:'next_month'}),'2027-01')});
 test('provision annuelle répartie sur les douze mois sans perdre de centimes',()=>{const e={date:'2026-11-15',kind:'expense' as const,amount:10001,frequency:'annual' as const,incomeAllocation:'calendar' as const};let sum=0;for(let m=1;m<=12;m++)sum+=annualProvision(e,`2026-${String(m).padStart(2,'0')}`);assert.equal(sum,10001);assert.equal(annualProvision(e,'2027-01'),0)});
 test('prévision distingue dépenses mensuelles et provision annuelle',()=>{const entries=[{date:'2026-02-28',kind:'income' as const,amount:200000,frequency:'monthly' as const,incomeAllocation:'next_month' as const},{date:'2026-03-01',kind:'expense' as const,amount:12000,frequency:'annual' as const,incomeAllocation:'calendar' as const}];assert.deepEqual(monthlyForecast(entries,'2026-03'),{income:200000,expense:1000})});
+
+test('navigation entre années et sélection vide',()=>{assert.equal(shiftMonth('2026-01',-1),'2025-12');assert.equal(shiftMonth('2026-12',1),'2027-01');assert.equal(shiftMonth('',1),'')});
+test('vue mensuelle distingue opérations absentes et prévisions nulles',()=>{const entries=[{date:'2026-12-31',kind:'income' as const,amount:200000,frequency:'monthly' as const,incomeAllocation:'next_month' as const}];const plans=[{month:'2027-01-01',income_cents:250000,expense_cents:100000}];assert.deepEqual(monthOverview(entries,plans,'2027-01'),{hasEntries:true,income:200000,expense:0,plan:{income:250000,expense:100000}});assert.equal(monthOverview(entries,plans,'2026-12').hasEntries,false);assert.equal(monthOverview(entries,plans,'2026-12').plan,null)});
