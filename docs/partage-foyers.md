@@ -26,3 +26,8 @@ Pour retirer le partage, revenir d'abord à une version de l'application qui ne 
 ## Synchronisation en temps réel
 
 L'application écoute les changements des foyers, opérations, catégories, sous-catégories et budgets mensuels du foyer sélectionné. Une courte coalescence regroupe les changements proches avant de recharger les données via l'API RLS habituelle. L'actualisation à la reconnexion et au retour dans l'onglet reste disponible en complément. La migration `20261027232519_realtime_household_sync` a ajouté les quatre tables manquantes à `supabase_realtime`; `monthly_budgets` était déjà publié. Le retrait de ces ajouts est décrit dans `supabase/rollback/realtime_household_sync.sql`.
+
+
+## Enveloppes par catégorie
+
+Chaque foyer peut définir un plafond mensuel en euros par catégorie de dépenses active. La page Budget compare le total des dépenses de la période au plafond, signale un dépassement et permet de modifier ou supprimer l'enveloppe. Tous les membres du foyer peuvent gérer ces plafonds. La table `monthly_category_budgets` est protégée par RLS : l'utilisateur doit être membre du foyer et la catégorie doit être une catégorie de dépenses du même foyer. Les lignes sont publiées dans `supabase_realtime` afin que les autres membres reçoivent les changements. La migration est `20261027232857_monthly_category_budgets`; le retrait est décrit dans `supabase/rollback/monthly_category_budgets.sql`.

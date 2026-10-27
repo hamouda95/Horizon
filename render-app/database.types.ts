@@ -248,6 +248,48 @@ export type Database = {
           },
         ]
       }
+      monthly_category_budgets: {
+        Row: {
+          amount_cents: number
+          category_id: string
+          created_at: string
+          household_id: string
+          id: string
+          month: string
+        }
+        Insert: {
+          amount_cents: number
+          category_id: string
+          created_at?: string
+          household_id: string
+          id?: string
+          month: string
+        }
+        Update: {
+          amount_cents?: number
+          category_id?: string
+          created_at?: string
+          household_id?: string
+          id?: string
+          month?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "monthly_category_budgets_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "monthly_category_budgets_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subcategories: {
         Row: {
           active: boolean
