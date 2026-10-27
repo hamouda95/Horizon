@@ -1,0 +1,1 @@
+-- Copie de la migration appliquée ; archive hors du répertoire CLI.\nalter table public.subcategories add column active boolean not null default true;
