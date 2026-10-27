@@ -1,3 +1,3 @@
-export const defaultNavigation=['Vue d’ensemble','Budget','Revenus','Dépenses','Catégories','Astuces','Fiches de paie'];
+export const defaultNavigation=['Vue d’ensemble','Budget','Revenus','Dépenses','Échéances','Catégories','Objectifs','Bilan','Documents','Astuces'];
 export function normalizeNavigation(value:unknown):string[]{const seen=new Set<string>();const saved=Array.isArray(value)?value.filter((x):x is string=>typeof x==='string'&&defaultNavigation.includes(x)&&!seen.has(x)&&!!seen.add(x)):[];return [...saved,...defaultNavigation.filter(x=>!seen.has(x))]}
 export function moveNavigation(items:string[],from:string,to:string):string[]{const a=items.indexOf(from),b=items.indexOf(to);if(a<0||b<0||a===b)return items;const next=[...items];next.splice(a,1);next.splice(b,0,from);return next}
