@@ -1,4 +1,4 @@
-import {test} from 'node:test';
+import {test} from 'vitest';
 import {strict as assert} from 'node:assert';
 import {nextMonth,budgetMonth,annualProvision,monthlyForecast,shiftMonth,monthOverview} from './period.ts';
 test('décalage salaire et passage décembre à janvier',()=>{assert.equal(nextMonth('2026-12-31'),'2027-01');assert.equal(budgetMonth({date:'2026-12-31',kind:'income',amount:100,frequency:'monthly',incomeAllocation:'next_month'}),'2027-01')});

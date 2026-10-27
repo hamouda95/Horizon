@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "vite build",
-    "dev": "vite"
+    "dev": "vite",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +26,9 @@
     "@types/qrcode": "1.5.5",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "4.1.0",
+    "eslint": "9.39.1",
+    "@typescript-eslint/parser": "8.50.1"
   }
 }

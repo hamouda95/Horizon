@@ -1,14 +1,9 @@
-name: Vérifications des fondations
-
+name: Préparation CI
 on:
-  pull_request:
   push:
-    branches:
-      - foundation/0-1-cleanup
-
+    branches: [foundation/0-2-ci]
 permissions:
   contents: read
-
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -20,9 +15,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: npm
-          cache-dependency-path: render-app/package-lock.json
-      - run: npm ci
-      - run: npx tsc --noEmit
-      - run: node --test --experimental-strip-types *.test.ts
+      - run: npm install
+      - name: Exporter le verrou généré
+        run: echo "LOCKFILE_START$(base64 -w 0 package-lock.json)LOCKFILE_END"
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
       - run: npm run build
