@@ -116,6 +116,53 @@ export type Database = {
           },
         ]
       }
+      household_documents: {
+        Row: {
+          created_at: string
+          document_type: string
+          file_name: string
+          file_size_bytes: number
+          household_id: string
+          id: string
+          mime_type: string
+          note: string | null
+          storage_path: string
+          uploaded_by: string
+        }
+        Insert: {
+          created_at?: string
+          document_type: string
+          file_name: string
+          file_size_bytes: number
+          household_id: string
+          id?: string
+          mime_type: string
+          note?: string | null
+          storage_path: string
+          uploaded_by: string
+        }
+        Update: {
+          created_at?: string
+          document_type?: string
+          file_name?: string
+          file_size_bytes?: number
+          household_id?: string
+          id?: string
+          mime_type?: string
+          note?: string | null
+          storage_path?: string
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_documents_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       household_invites: {
         Row: {
           accepted_at: string | null
@@ -182,6 +229,98 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "household_members_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      household_obligations: {
+        Row: {
+          active: boolean
+          amount_cents: number
+          category_id: string | null
+          created_at: string
+          due_day: number
+          due_month: number | null
+          frequency: string
+          household_id: string
+          id: string
+          note: string | null
+          title: string
+        }
+        Insert: {
+          active?: boolean
+          amount_cents: number
+          category_id?: string | null
+          created_at?: string
+          due_day: number
+          due_month?: number | null
+          frequency: string
+          household_id: string
+          id?: string
+          note?: string | null
+          title: string
+        }
+        Update: {
+          active?: boolean
+          amount_cents?: number
+          category_id?: string | null
+          created_at?: string
+          due_day?: number
+          due_month?: number | null
+          frequency?: string
+          household_id?: string
+          id?: string
+          note?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_obligations_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "household_obligations_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      household_savings_goals: {
+        Row: {
+          created_at: string
+          household_id: string
+          id: string
+          target_cents: number
+          target_date: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          household_id: string
+          id?: string
+          target_cents: number
+          target_date?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          household_id?: string
+          id?: string
+          target_cents?: number
+          target_date?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_savings_goals_household_id_fkey"
             columns: ["household_id"]
             isOneToOne: false
             referencedRelation: "households"
@@ -294,6 +433,7 @@ export type Database = {
         Row: {
           amount_cents: number
           created_at: string
+          goal_id: string | null
           household_id: string
           id: string
           movement_date: string
@@ -303,6 +443,7 @@ export type Database = {
         Insert: {
           amount_cents: number
           created_at?: string
+          goal_id?: string | null
           household_id: string
           id?: string
           movement_date: string
@@ -312,6 +453,7 @@ export type Database = {
         Update: {
           amount_cents?: number
           created_at?: string
+          goal_id?: string | null
           household_id?: string
           id?: string
           movement_date?: string
@@ -319,6 +461,13 @@ export type Database = {
           note?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "savings_movements_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "household_savings_goals"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "savings_movements_household_id_fkey"
             columns: ["household_id"]

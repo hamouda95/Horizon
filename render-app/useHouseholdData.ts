@@ -7,7 +7,7 @@ import type {Entry,Home} from './household-data';
 export type HouseholdChoice={id:string;name:string;role:'owner'|'member';savingsRate:number|null};
 
 export function useHouseholdData(userId:string,modal:string,tab:string,setModal:Dispatch<SetStateAction<string>>){
- const [home,setHome]=useState<Home|null>(null),[households,setHouseholds]=useState<HouseholdChoice[]>([]),[entries,setEntries]=useState<Entry[]>([]),[loading,setLoading]=useState(true),[error,setError]=useState('');
+ const [home,setHome]=useState<Home|null>(null),[households,setHouseholds]=useState<HouseholdChoice[]>([]),[entries,setEntries]=useState<Entry[]>([]),[loading,setLoading]=useState(true),[error,setError]=useState(''),[refreshVersion,setRefreshVersion]=useState(0);
  const [subcategories,setSubcategories]=useState<{id:string;name:string;category_id:string;active:boolean}[]>([]);
  const [plans,setPlans]=useState<{month:string;income_cents:number;expense_cents:number}[]>([]);
  const loadSequence=useRef(0);
@@ -23,7 +23,7 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
    });
    if(sequence!==loadSequence.current)return true;
    setHouseholds(choices);
-   if(!choices.length){setHome(null);setEntries([]);setSubcategories([]);setPlans([]);setModal('setup');return true}
+   if(!choices.length){setHome(null);setEntries([]);setSubcategories([]);setPlans([]);setRefreshVersion(value=>value+1);setModal('setup');return true}
    let savedId='';try{savedId=localStorage.getItem(`horizon.household.${userId}`)||''}catch{/* le choix reste valable pour cette session */}
    const selected=choices.find(x=>x.id===(preferredId||savedId))||choices.find(x=>x.role==='owner')||choices[0];
    try{localStorage.setItem(`horizon.household.${userId}`,selected.id)}catch{/* le choix reste valable pour cette session */}
@@ -37,6 +37,7 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
    setSubcategories(subRows);setPlans(budgetRows);
    setHome({id:selected.id,name:selected.name,role:selected.role,savingsRate:selected.savingsRate,incomeTypes:JSON.stringify(categories.filter(x=>x.active&&x.kind==='income').map(x=>x.name)),expenseTypes:JSON.stringify(categories.filter(x=>x.active&&x.kind==='expense').map(x=>x.name)),categories});
    setEntries(entryRows.map(x=>({id:x.id,kind:x.kind,label:x.label,category:categories.find(c=>c.id===x.category_id)?.name||'Autre',amount:Number(x.amount_cents),date:x.entry_date,frequency:x.frequency,incomeAllocation:x.income_allocation,expenseType:x.expense_type,categoryId:x.category_id,subcategoryId:x.subcategory_id,subcategory:subRows.find(y=>y.id===x.subcategory_id)?.name})));
+   setRefreshVersion(value=>value+1);
    return true;
   }catch(e){if(sequence!==loadSequence.current)return true;setError((e as Error).message||'Impossible de charger vos données.');return false}
   finally{if(sequence===loadSequence.current)setLoading(false)}
@@ -57,10 +58,13 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
    .on('postgres_changes',{event:'*',schema:'public',table:'monthly_budgets',filter:`household_id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'monthly_category_budgets',filter:`household_id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'savings_movements',filter:`household_id=eq.${householdId}`},refresh)
+   .on('postgres_changes',{event:'*',schema:'public',table:'household_savings_goals',filter:`household_id=eq.${householdId}`},refresh)
+   .on('postgres_changes',{event:'*',schema:'public',table:'household_obligations',filter:`household_id=eq.${householdId}`},refresh)
+   .on('postgres_changes',{event:'*',schema:'public',table:'household_documents',filter:`household_id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'subcategories',filter:`household_id=eq.${householdId}`},refresh)
    .subscribe();
   return ()=>{if(timer)clearTimeout(timer);void supabase.removeChannel(channel)};
  },[userId,home?.id]);
  useEffect(()=>{const refresh=()=>{if(document.visibilityState==='visible'&&!modal&&tab!=='Budget')void load()};window.addEventListener('online',refresh);document.addEventListener('visibilitychange',refresh);return()=>{window.removeEventListener('online',refresh);document.removeEventListener('visibilitychange',refresh)}},[userId,modal,tab]);
- return {home,households,selectHousehold,entries,loading,error,setError,subcategories,setSubcategories,plans,load};
+ return {home,households,selectHousehold,entries,loading,error,setError,subcategories,setSubcategories,plans,refreshVersion,load};
 }
