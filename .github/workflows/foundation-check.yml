@@ -1,9 +1,11 @@
-name: Préparation CI
+name: Contrôles
 on:
   push:
-    branches: [foundation/0-2-ci]
+  pull_request:
+
 permissions:
-  contents: write
+  contents: read
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -15,14 +17,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install -g npm@11
-      - run: rm package-lock.json && npm install
-      - name: Enregistrer le verrou généré
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package-lock.json
-          git diff --cached --quiet || (git commit -m "chore: lock test dependencies" && git push origin HEAD:foundation/0-2-ci)
+          cache: npm
+          cache-dependency-path: render-app/package-lock.json
+      - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
