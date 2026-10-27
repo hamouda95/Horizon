@@ -16,6 +16,7 @@ declare
  v_home uuid;
  v_other_home uuid := current_setting('test.other_home_id')::uuid;
  v_category uuid;
+ v_other_category uuid;
  v_entry uuid;
  v_token text;
  v_email_token text;
@@ -30,6 +31,8 @@ begin
  v_email:=current_setting('test.other_email');
  if v_email='' then raise exception using errcode='XX000',message='Invitee email fixture is missing'; end if;
 
+ perform set_config('request.jwt.claim.sub',v_other::text,true);
+ insert into public.categories(household_id,kind,name) values(v_other_home,'expense','Temporary other household category') returning id into v_other_category;
  perform set_config('request.jwt.claim.sub',v_owner::text,true);
  insert into public.households(owner_id,name) values(v_owner,'transactional sharing test') returning id into v_home;
  insert into public.categories(household_id,kind,name) values(v_home,'expense','Test category') returning id into v_category;
@@ -37,6 +40,8 @@ begin
   values(v_home,v_category,'expense','Test entry',100,current_date) returning id into v_entry;
  insert into public.monthly_budgets(household_id,month,income_cents,expense_cents)
   values(v_home,date_trunc('month',current_date)::date,1000,100);
+ insert into public.monthly_category_budgets(household_id,category_id,month,amount_cents)
+  values(v_home,v_category,date_trunc('month',current_date)::date,500);
  insert into public.subcategories(household_id,category_id,kind,name)
   values(v_home,v_category,'expense','Test subcategory');
  select invite_token into v_token from public.create_household_invite(v_home,null);
@@ -63,14 +68,29 @@ begin
  if v_count<>1 then raise exception using errcode='XX000',message='Member cannot read household entries'; end if;
  select count(*) into v_count from public.monthly_budgets where household_id=v_home;
  if v_count<>1 then raise exception using errcode='XX000',message='Member cannot read household budgets'; end if;
+ select count(*) into v_count from public.monthly_category_budgets where household_id=v_home;
+ if v_count<>1 then raise exception using errcode='XX000',message='Member cannot read category envelopes'; end if;
  select count(*) into v_count from public.subcategories where household_id=v_home;
  if v_count<>1 then raise exception using errcode='XX000',message='Member cannot read household subcategories'; end if;
  insert into public.categories(household_id,kind,name) values(v_home,'expense','Member category');
+ update public.monthly_category_budgets set amount_cents=750 where household_id=v_home and category_id=v_category;
+ if not found then raise exception using errcode='XX000',message='Member cannot update category envelopes'; end if;
  update public.entries set label='Updated by member' where id=v_entry;
  if not found then raise exception using errcode='XX000',message='Member cannot update household entries'; end if;
  begin
   update public.entries set household_id=v_other_home where id=v_entry;
   raise exception using errcode='XX000',message='A member reassigned an entry to another household';
+ exception when insufficient_privilege then null;
+ end;
+ begin
+  update public.monthly_category_budgets set household_id=v_other_home where household_id=v_home and category_id=v_category;
+  raise exception using errcode='XX000',message='A member reassigned an envelope to another household';
+ exception when insufficient_privilege then null;
+ end;
+ begin
+  insert into public.monthly_category_budgets(household_id,category_id,month,amount_cents)
+   values(v_home,v_other_category,date_trunc('month',current_date)::date,100);
+  raise exception using errcode='XX000',message='A member attached an envelope to another household category';
  exception when insufficient_privilege then null;
  end;
  begin

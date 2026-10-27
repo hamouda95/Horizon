@@ -55,6 +55,7 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
    .on('postgres_changes',{event:'*',schema:'public',table:'categories',filter:`household_id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'entries',filter:`household_id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'monthly_budgets',filter:`household_id=eq.${householdId}`},refresh)
+   .on('postgres_changes',{event:'*',schema:'public',table:'monthly_category_budgets',filter:`household_id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'subcategories',filter:`household_id=eq.${householdId}`},refresh)
    .subscribe();
   return ()=>{if(timer)clearTimeout(timer);void supabase.removeChannel(channel)};
