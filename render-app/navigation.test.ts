@@ -1,0 +1,3 @@
+import {test} from 'node:test';import {strict as assert} from 'node:assert';import {defaultNavigation,normalizeNavigation,moveNavigation} from './navigation.ts';
+test('préférence invalide, doublons et nouvelles pages',()=>{const x=normalizeNavigation(['Budget','Budget','Inconnue','Revenus']);assert.deepEqual(x.slice(0,2),['Budget','Revenus']);assert.equal(x.length,defaultNavigation.length);assert.equal(new Set(x).size,x.length)});
+test('déplacement avant ou après une page',()=>{assert.deepEqual(moveNavigation(['a','b','c'],'a','c'),['b','c','a']);assert.deepEqual(moveNavigation(['a','b','c'],'c','a'),['c','a','b']);assert.deepEqual(moveNavigation(['a','b'],'a','z'),['a','b'])});

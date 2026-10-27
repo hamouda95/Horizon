@@ -1,0 +1,3 @@
+-- Copie de la migration appliquée ; archive hors du répertoire CLI.\nalter table public.entries add column frequency text not null default 'monthly' check (frequency in ('monthly','annual'));
+alter table public.entries add column income_allocation text not null default 'calendar' check (income_allocation in ('calendar','next_month'));
+alter table public.entries add constraint entry_income_allocation_kind check (kind='income' or income_allocation='calendar');
