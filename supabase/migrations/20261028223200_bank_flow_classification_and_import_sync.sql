@@ -69,7 +69,7 @@ begin
    select 1 from public.entries e
    where e.bank_transaction_id=bt.id
   )
-, entries_added as (
+ ), entries_added as (
   insert into public.entries(
    household_id,bank_transaction_id,category_id,kind,label,amount_cents,entry_date,
    frequency,income_allocation,expense_type,subcategory_id,person_id,flow_type
