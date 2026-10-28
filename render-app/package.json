@@ -16,6 +16,7 @@
   "type": "module",
   "dependencies": {
     "@supabase/supabase-js": "2.97.0",
+    "fflate": "0.8.3",
     "lucide-react": "1.31.0",
     "qrcode": "1.5.4",
     "react": "19.2.6",
