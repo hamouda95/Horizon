@@ -191,10 +191,10 @@ function parseCamtStatement(text:string,defaultCurrency='EUR'):StatementPreview{
   return {rowNumber:index+1,transactionDate,valueDate:valueDate||null,label,suggestedLabel:relatedName||undefined,amountCents,currency:currency.toUpperCase(),externalId,fingerprint:externalId?transactionFingerprint(date||'',amountCents,currency,label,externalId):`${base}|occurrence:${occurrence}`,possibleDuplicate:occurrence>1,error};
  });
  const balances=xmlBlocks(text,'Bal');
- const parsedBalances=balances.map(block=>({type:xmlText(block,'Cd'),amountBlock:xmlBlock(block,'Amt'),dateSource:xmlBlock(block,'Dt')})).filter(balance=>balance.type==='CLBD'||balance.type==='OPBD').map(balance=>{
+ const parsedBalances=balances.map(block=>({block,type:xmlText(block,'Cd'),amountBlock:xmlBlock(block,'Amt'),dateSource:xmlBlock(block,'Dt')})).filter(balance=>balance.type==='CLBD'||balance.type==='OPBD').map(balance=>{
   const amount=parseMoney(xmlText(balance.amountBlock,'Amt')||balance.amountBlock.replace(/<[^>]+>/g,' ').trim());
   const dateValue=xmlText(balance.dateSource,'Dt')||xmlText(balance.dateSource,'DtTm');
-  return {amount,date:parseDate(dateValue)||parseDateOfx(dateValue),direction:xmlText(balance.amountBlock,'CdtDbtInd').toUpperCase(),currency:balance.amountBlock.match(/\\bCcy=["']([^"']+)["']/i)?.[1]||defaultCurrency};
+  return {amount,date:parseDate(dateValue)||parseDateOfx(dateValue),direction:xmlText(balance.block,'CdtDbtInd').toUpperCase(),currency:balance.amountBlock.match(/\\bCcy=["']([^"']+)["']/i)?.[1]||defaultCurrency};
  }).filter((balance):balance is typeof balance & {amount:number;date:string}=>balance.amount!==null&&Boolean(balance.date));
  const closing=parsedBalances.filter(balance=>balance.type==='CLBD').at(-1)||parsedBalances.at(-1);
  if(closing&&transactions.length){let index=transactions.length-1;for(let i=0;i<transactions.length;i++)if(transactions[i].transactionDate&&transactions[i].transactionDate<=closing.date)index=i;transactions[index]={...transactions[index],balanceCents:Math.round(Math.abs(closing.amount)*100)*(closing.direction==='DBIT'?-1:1),balanceDate:closing.date}}
