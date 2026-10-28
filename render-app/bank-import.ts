@@ -3,6 +3,14 @@ import {strFromU8,unzipSync} from 'fflate';
 export type CsvMapping={date:string;label:string;amount:string;debit:string;credit:string;valueDate:string;reference:string;currency:string;suggestedLabel:string;category:string;parentCategory:string;balance:string};
 export type StatementTransaction={rowNumber:number;transactionDate:string;valueDate:string|null;label:string;suggestedLabel?:string;categoryHint?:string;parentCategoryHint?:string;amountCents:number;currency:string;externalId:string|null;fingerprint:string;possibleDuplicate?:boolean;balanceCents?:number;balanceDate?:string;error?:string};
 export type StatementPreview={format:'csv'|'xlsx'|'ofx'|'qif';headers:string[];records:string[][];mapping:CsvMapping;transactions:StatementTransaction[];hasHeaders?:boolean};
+export type BalanceReconciliation={
+ checkedIntervals:number;
+ matchedIntervals:number;
+ mismatches:Array<{fromDate:string;toDate:string;expectedBalanceCents:number;reportedBalanceCents:number;differenceCents:number}>;
+ unresolvedDates:string[];
+ conflictingSnapshots:Array<{date:string;candidateBalancesCents:number[];selectedBalanceCents:number|null}>;
+ latestBalance:{date:string;balanceCents:number}|null;
+};
 const emptyMapping:CsvMapping={date:'',label:'',amount:'',debit:'',credit:'',valueDate:'',reference:'',currency:'',suggestedLabel:'',category:'',parentCategory:'',balance:''};
 const normalize=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
 function parseCsv(text:string):{headers:string[];records:string[][];delimiter:string;headerRow:number;hasHeaders:boolean}{
@@ -65,8 +73,48 @@ export function parseTabularTransactions(records:string[][],mapping:CsvMapping,d
   return {rowNumber:index+firstRowNumber,transactionDate,valueDate,label,suggestedLabel,categoryHint,parentCategoryHint,amountCents:amount||0,currency,externalId,fingerprint,possibleDuplicate:occurrence>1,...(balance!==null?{balanceCents:balance,balanceDate:transactionDate||undefined}:{}),error};
  });
 }
+export function reconcileStatementBalances(transactions:StatementTransaction[]):BalanceReconciliation|null{
+ const snapshots=new Map<string,Set<number>>(),totals=new Map<string,number>();
+ for(const row of transactions){
+  if(row.transactionDate&&!row.error)totals.set(row.transactionDate,(totals.get(row.transactionDate)||0)+row.amountCents);
+  const date=row.balanceDate||row.transactionDate;
+  if(row.balanceCents!==undefined&&date){const values=snapshots.get(date)||new Set<number>();values.add(row.balanceCents);snapshots.set(date,values)}
+ }
+ if(!snapshots.size)return null;
+ const dates=[...snapshots.keys()].sort(),selected=new Map<string,number>(),mismatches:BalanceReconciliation['mismatches']=[],unresolvedDates:string[]=[],conflictingSnapshots:BalanceReconciliation['conflictingSnapshots']=[];
+ const first=dates[0],firstValues=[...(snapshots.get(first)||[])].sort((a,b)=>a-b);
+ if(firstValues.length===1)selected.set(first,firstValues[0]);else{unresolvedDates.push(first);conflictingSnapshots.push({date:first,candidateBalancesCents:firstValues,selectedBalanceCents:null})}
+ let checkedIntervals=0,matchedIntervals=0;
+ for(let index=1;index<dates.length;index++){
+  const date=dates[index],previousDate=dates[index-1],previousBalance=selected.get(previousDate),candidates=[...(snapshots.get(date)||[])].sort((a,b)=>a-b);
+  if(candidates.length>1)conflictingSnapshots.push({date,candidateBalancesCents:candidates,selectedBalanceCents:null});
+  if(previousBalance===undefined){if(candidates.length===1)selected.set(date,candidates[0]);else unresolvedDates.push(date);continue}
+  const intervalOperations=[...totals.entries()].filter(([operationDate])=>operationDate>previousDate&&operationDate<=date).reduce((sum,[,amount])=>sum+amount,0);
+  const expectedBalanceCents=previousBalance+intervalOperations,matches=candidates.filter(value=>value===expectedBalanceCents);
+  checkedIntervals++;
+  if(matches.length===1){
+   selected.set(date,matches[0]);matchedIntervals++;
+   if(candidates.length>1){const conflict=conflictingSnapshots.find(item=>item.date===date);if(conflict)conflict.selectedBalanceCents=matches[0]}
+  }else if(candidates.length===1){
+   const reportedBalanceCents=candidates[0];selected.set(date,reportedBalanceCents);
+   mismatches.push({fromDate:previousDate,toDate:date,expectedBalanceCents,reportedBalanceCents,differenceCents:reportedBalanceCents-expectedBalanceCents});
+  }else{
+   unresolvedDates.push(date);
+  }
+ }
+ const latestDate=dates[dates.length-1],latestValue=selected.get(latestDate);
+ return {checkedIntervals,matchedIntervals,mismatches,unresolvedDates,conflictingSnapshots,latestBalance:latestValue===undefined?null:{date:latestDate,balanceCents:latestValue}};
+}
+function resolveDuplicateBalanceMapping(records:string[][],headers:string[],mapping:CsvMapping):CsvMapping{
+ const normalized=headers.map(normalize),balanceIndexes=normalized.map((value,index)=>({value,index})).filter(item=>/^(solde|balance|balance eur|solde compte|balance account)$/.test(item.value)).map(item=>item.index);
+ const explicitAmount=normalized.some(value=>/^(montant|amount|value|valeur|transaction amount|amount eur|montant eur|montant signe|amount signed|signed amount|net amount|montant operation|debit|debits|sortie|withdrawal|montant debit|debit amount|withdrawals|paid out|outflow|depense|credit|credits|entree|deposit|montant credit|credit amount|deposits|paid in|inflow|recette)$/.test(value));
+ if(explicitAmount||balanceIndexes.length<2)return mapping;
+ const candidates=[{...mapping,amount:String(balanceIndexes[0]),debit:'',credit:'',balance:String(balanceIndexes[balanceIndexes.length-1])},{...mapping,amount:String(balanceIndexes[balanceIndexes.length-1]),debit:'',credit:'',balance:String(balanceIndexes[0])}];
+ const scores=candidates.map(candidate=>{const checks=reconcileStatementBalances(parseTabularTransactions(records,candidate));if(!checks||checks.checkedIntervals<2)return {score:-1,checks};return {score:checks.matchedIntervals/checks.checkedIntervals,checks}});
+ return scores[0].score>=0.8&&scores[0].score>scores[1].score?candidates[0]:scores[1].score>=0.8&&scores[1].score>scores[0].score?candidates[1]:mapping;
+}
 export function parseCsvTransactions(text:string,mapping:CsvMapping,defaultCurrency='EUR'):StatementTransaction[]{const parsed=parseCsv(text);return parseTabularTransactions(parsed.hasHeaders?parsed.records:parsed.records.slice(1),mapping,defaultCurrency,2)}
-function csvRows(text:string){const parsed=parseCsv(text);const headerMapping=mapHeaders(parsed.headers);const hasHeaders=Boolean(parsed.headerRow<15&&headerScore(parsed.headers)>=2);const profiled=excelMapping(parsed.records);const inferred=Object.fromEntries((Object.keys(emptyMapping) as (keyof CsvMapping)[]).map(key=>[key,headerMapping[key]||(key==='amount'&&(headerMapping.debit||headerMapping.credit)?'':profiled[key])])) as CsvMapping;const headers=hasHeaders?parsed.headers:syntheticHeaders(Math.max(...parsed.records.slice(0,20).map(row=>row.length),0),inferred);return {...parsed,headers,mapping:inferred,hasHeaders}}
+function csvRows(text:string){const parsed=parseCsv(text);const headerMapping=mapHeaders(parsed.headers);const hasHeaders=Boolean(parsed.headerRow<15&&headerScore(parsed.headers)>=2);const profiled=excelMapping(parsed.records);const inferred=Object.fromEntries((Object.keys(emptyMapping) as (keyof CsvMapping)[]).map(key=>[key,headerMapping[key]||(key==='amount'&&(headerMapping.debit||headerMapping.credit)?'':profiled[key])])) as CsvMapping;const headers=hasHeaders?parsed.headers:syntheticHeaders(Math.max(...parsed.records.slice(0,20).map(row=>row.length),0),inferred);const resolved=hasHeaders?resolveDuplicateBalanceMapping(parsed.records,headers,inferred):inferred;return {...parsed,headers,mapping:resolved,hasHeaders}}
 function columnName(index:number){let n=index+1,name='';while(n){const rem=(n-1)%26;name=String.fromCharCode(65+rem)+name;n=Math.floor((n-1)/26)}return name}
 function excelMapping(records:string[][]):CsvMapping{
  const width=Math.max(...records.slice(0,50).map(row=>row.length),0);const sample=records.slice(0,Math.min(records.length,50));const stats=Array.from({length:width},(_,index)=>{const values=sample.map(row=>row[index]||'').filter(value=>value.trim());const dates=values.filter(value=>parseDate(value)!==null).length;const numbers=values.filter(value=>parseMoney(value)!==null).length;const unique=new Set(values.map(normalize)).size;const averageLength=values.length?values.reduce((sum,value)=>sum+value.length,0)/values.length:0;return {index,values,dates,numbers,unique,ratio:values.length?unique/values.length:0,averageLength,filled:values.length}});
@@ -88,7 +136,7 @@ function xlsxRecords(bytes:Uint8Array){
  return matrix;
 }
 export function parseXlsxStatement(buffer:ArrayBuffer|Uint8Array,defaultCurrency='EUR'):StatementPreview{
- const bytes=buffer instanceof Uint8Array?buffer:new Uint8Array(buffer);const matrix=xlsxRecords(bytes);if(!matrix.length)throw Error('Aucune opération trouvée dans ce classeur Excel.');let headerIndex=0,score=0;for(let index=0;index<Math.min(matrix.length,15);index++){const current=headerScore(matrix[index]);if(current>score){score=current;headerIndex=index}}const hasHeaders=score>=2;const headerMapping=hasHeaders?mapHeaders(matrix[headerIndex]):emptyMapping;const records=hasHeaders?matrix.slice(headerIndex+1):matrix;const inferred=excelMapping(records);const mapping=Object.fromEntries((Object.keys(emptyMapping) as (keyof CsvMapping)[]).map(key=>[key,headerMapping[key]||inferred[key]])) as CsvMapping;if(!mapping.date||!mapping.label||(!mapping.amount&&!mapping.debit&&!mapping.credit))throw Error('Les colonnes de date, libellé et montant n’ont pas été reconnues. Vérifiez le format Excel ou exportez en CSV.');const width=Math.max(...matrix.map(row=>row.length),0);const headers=hasHeaders?matrix[headerIndex]:syntheticHeaders(width,mapping);return {format:'xlsx',headers,records,mapping,transactions:parseTabularTransactions(records,mapping,defaultCurrency,hasHeaders?headerIndex+2:1),hasHeaders};
+ const bytes=buffer instanceof Uint8Array?buffer:new Uint8Array(buffer);const matrix=xlsxRecords(bytes);if(!matrix.length)throw Error('Aucune opération trouvée dans ce classeur Excel.');let headerIndex=0,score=0;for(let index=0;index<Math.min(matrix.length,15);index++){const current=headerScore(matrix[index]);if(current>score){score=current;headerIndex=index}}const hasHeaders=score>=2;const headerMapping=hasHeaders?mapHeaders(matrix[headerIndex]):emptyMapping;const records=hasHeaders?matrix.slice(headerIndex+1):matrix;const inferred=excelMapping(records);const initialMapping=Object.fromEntries((Object.keys(emptyMapping) as (keyof CsvMapping)[]).map(key=>[key,headerMapping[key]||inferred[key]])) as CsvMapping;const mapping=hasHeaders?resolveDuplicateBalanceMapping(records,matrix[headerIndex],initialMapping):initialMapping;if(!mapping.date||!mapping.label||(!mapping.amount&&!mapping.debit&&!mapping.credit))throw Error('Les colonnes de date, libellé et montant n’ont pas été reconnues. Vérifiez le format Excel ou exportez en CSV.');const width=Math.max(...matrix.map(row=>row.length),0);const headers=hasHeaders?matrix[headerIndex]:syntheticHeaders(width,mapping);return {format:'xlsx',headers,records,mapping,transactions:parseTabularTransactions(records,mapping,defaultCurrency,hasHeaders?headerIndex+2:1),hasHeaders};
 }
 function parseDateOfx(value:string):string|null{const raw=value.slice(0,8);return raw.length===8?parseDate(`${raw.slice(0,4)}-${raw.slice(4,6)}-${raw.slice(6,8)}`):null}
 export function parseDelimitedStatement(text:string,filename:string,defaultCurrency='EUR'):StatementPreview{
