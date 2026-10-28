@@ -5,22 +5,24 @@ export type StatementTransaction={rowNumber:number;transactionDate:string;valueD
 export type StatementPreview={format:'csv'|'xlsx'|'ofx'|'qif';headers:string[];records:string[][];mapping:CsvMapping;transactions:StatementTransaction[];hasHeaders?:boolean};
 const emptyMapping:CsvMapping={date:'',label:'',amount:'',debit:'',credit:'',valueDate:'',reference:'',currency:'',suggestedLabel:'',category:'',parentCategory:'',balance:''};
 const normalize=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
-function parseCsv(text:string):{headers:string[];records:string[][];delimiter:string}{
- const source=text.replace(/^\uFEFF/,'');const first=source.split(/\r?\n/,1)[0]||'';const candidates=[',',';','\t'];const delimiter=candidates.map(char=>({char,count:[...first].filter(c=>c===char).length})).sort((a,b)=>b.count-a.count)[0]?.char||',';
+function parseCsv(text:string):{headers:string[];records:string[][];delimiter:string;headerRow:number}{
+ const source=text.replace(/^\uFEFF/,'');const lines=source.split(/\r?\n/).filter(line=>line.trim());const candidates=[',',';','\t','|'];const delimiter=candidates.map(char=>({char,count:lines.slice(0,12).reduce((total,line)=>total+[...line].filter(c=>c===char).length,0)})).sort((a,b)=>b.count-a.count)[0]?.char||',';
  const records:string[][]=[];let row:string[]=[],cell='',quoted=false;
  for(let i=0;i<source.length;i++){const char=source[i];if(char==='"'){if(quoted&&source[i+1]==='"'){cell+='"';i++}else quoted=!quoted}else if(char===delimiter&&!quoted){row.push(cell);cell=''}else if((char==='\n'||char==='\r')&&!quoted){if(char==='\r'&&source[i+1]==='\n')i++;row.push(cell);if(row.some(value=>value.trim()))records.push(row);row=[];cell=''}else cell+=char}
  row.push(cell);if(row.some(value=>value.trim()))records.push(row);
- const headers=(records.shift()||[]).map((value,index)=>value.trim()||`Colonne ${index+1}`);return {headers,records,delimiter};
+ let headerRow=0;let bestScore=0;for(let index=0;index<Math.min(records.length,15);index++){const score=headerScore(records[index]);if(score>bestScore){bestScore=score;headerRow=index}}
+ const hasHeaders=bestScore>=2;const headers=hasHeaders?(records[headerRow]||[]).map((value,index)=>value.trim()||`Colonne ${index+1}`):[];const data=hasHeaders?records.slice(headerRow+1):records;return {headers:headers.length?headers:Array.from({length:Math.max(...records.slice(0,20).map(row=>row.length),0)},(_,i)=>`Colonne ${columnName(i)}`),records:data,delimiter,headerRow};
 }
+function headerScore(row:string[]){const map=mapHeaders(row);return [map.date,map.label,map.amount||map.debit||map.credit].filter(Boolean).length;}
 function mapHeaders(headers:string[]):CsvMapping{
  const tokens=headers.map(normalize);const find=(patterns:RegExp[])=>{const index=tokens.findIndex(value=>patterns.some(pattern=>pattern.test(value)));return index<0?'':String(index)};const findLast=(patterns:RegExp[])=>{for(let index=tokens.length-1;index>=0;index--)if(patterns.some(pattern=>pattern.test(tokens[index])))return String(index);return ''};
  const mapping:CsvMapping={
-  date:find([/^(date|date operation|operation date|booking date|booked date|date comptable|date comptabilisation)$/]),
+  date:find([/^(date|date operation|operation date|booking date|booked date|date comptable|date comptabilisation|date de comptabilisation|transaction date|date de transaction|posting date)$/]),
   valueDate:find([/^(date valeur|value date|date val|valuta)$/]),
-  label:find([/^(libelle|label|description|operation|transaction|nom|name|detail|details|communication)$/]),
-  amount:find([/^(montant|amount|value|valeur|transaction amount|amount eur|montant eur|montant signe)$/]),
-  debit:find([/^(debit|debits|sortie|withdrawal|debit eur|montant debit)$/]),
-  credit:find([/^(credit|credits|entree|deposit|credit eur|montant credit)$/]),
+  label:find([/^(libelle|libelle operation|label|description|operation|transaction|nom|name|detail|details|communication|motif|merchant|payee|beneficiaire)$/]),
+  amount:find([/^(montant|amount|value|valeur|transaction amount|amount eur|montant eur|montant signe|amount signed|signed amount|net amount|montant operation)$/]),
+  debit:find([/^(debit|debits|sortie|withdrawal|debit eur|montant debit|debit amount|withdrawals|paid out|outflow|depense)$/]),
+  credit:find([/^(credit|credits|entree|deposit|credit eur|montant credit|credit amount|deposits|paid in|inflow|recette)$/]),
   reference:find([/^(reference|ref|fitid|transaction id|id operation|id transaction|identifiant)$/]),
   currency:find([/^(devise|currency|code devise|currency code)$/]),
   suggestedLabel:find([/^(libelle suggere|suggested label|merchant label|nom suggere)$/]),
@@ -61,7 +63,7 @@ export function parseTabularTransactions(records:string[][],mapping:CsvMapping,d
  });
 }
 export function parseCsvTransactions(text:string,mapping:CsvMapping,defaultCurrency='EUR'):StatementTransaction[]{return parseTabularTransactions(parseCsv(text).records,mapping,defaultCurrency,2)}
-function csvRows(text:string){const parsed=parseCsv(text);return {...parsed,mapping:mapHeaders(parsed.headers)}}
+function csvRows(text:string){const parsed=parseCsv(text);const headerMapping=mapHeaders(parsed.headers);const hasHeaders=Boolean(parsed.headerRow<15&&headerScore(parsed.headers)>=2);const profiled=excelMapping(parsed.records);const inferred=Object.fromEntries((Object.keys(emptyMapping) as (keyof CsvMapping)[]).map(key=>[key,headerMapping[key]||profiled[key]])) as CsvMapping;const headers=hasHeaders?parsed.headers:syntheticHeaders(Math.max(...parsed.records.slice(0,20).map(row=>row.length),0),inferred);return {...parsed,headers,mapping:inferred,hasHeaders}}
 function columnName(index:number){let n=index+1,name='';while(n){const rem=(n-1)%26;name=String.fromCharCode(65+rem)+name;n=Math.floor((n-1)/26)}return name}
 function excelMapping(records:string[][]):CsvMapping{
  const width=Math.max(...records.slice(0,50).map(row=>row.length),0);const sample=records.slice(0,Math.min(records.length,50));const stats=Array.from({length:width},(_,index)=>{const values=sample.map(row=>row[index]||'').filter(value=>value.trim());const dates=values.filter(value=>parseDate(value)!==null).length;const numbers=values.filter(value=>parseMoney(value)!==null).length;const unique=new Set(values.map(normalize)).size;const averageLength=values.length?values.reduce((sum,value)=>sum+value.length,0)/values.length:0;return {index,values,dates,numbers,unique,ratio:values.length?unique/values.length:0,averageLength,filled:values.length}});
@@ -83,7 +85,7 @@ function xlsxRecords(bytes:Uint8Array){
  return matrix;
 }
 export function parseXlsxStatement(buffer:ArrayBuffer|Uint8Array,defaultCurrency='EUR'):StatementPreview{
- const bytes=buffer instanceof Uint8Array?buffer:new Uint8Array(buffer);const matrix=xlsxRecords(bytes);if(!matrix.length)throw Error('Aucune opération trouvée dans ce classeur Excel.');const detected=mapHeaders(matrix[0]);const headerCount=Object.values(detected).filter(Boolean).length;const hasHeaders=Boolean(detected.date&&detected.label&&headerCount>=2);const records=hasHeaders?matrix.slice(1):matrix;const mapping=hasHeaders?detected:excelMapping(records);if(!mapping.date||!mapping.label||(!mapping.amount&&!mapping.debit&&!mapping.credit))throw Error('Les colonnes de date, libellé et montant n’ont pas été reconnues. Vérifiez le format Excel ou exportez en CSV.');const width=Math.max(...matrix.map(row=>row.length),0);const headers=hasHeaders?matrix[0]:syntheticHeaders(width,mapping);return {format:'xlsx',headers,records,mapping,transactions:parseTabularTransactions(records,mapping,defaultCurrency,hasHeaders?2:1),hasHeaders};
+ const bytes=buffer instanceof Uint8Array?buffer:new Uint8Array(buffer);const matrix=xlsxRecords(bytes);if(!matrix.length)throw Error('Aucune opération trouvée dans ce classeur Excel.');let headerIndex=0,score=0;for(let index=0;index<Math.min(matrix.length,15);index++){const current=headerScore(matrix[index]);if(current>score){score=current;headerIndex=index}}const hasHeaders=score>=2;const headerMapping=hasHeaders?mapHeaders(matrix[headerIndex]):emptyMapping;const records=hasHeaders?matrix.slice(headerIndex+1):matrix;const inferred=excelMapping(records);const mapping=Object.fromEntries((Object.keys(emptyMapping) as (keyof CsvMapping)[]).map(key=>[key,headerMapping[key]||inferred[key]])) as CsvMapping;if(!mapping.date||!mapping.label||(!mapping.amount&&!mapping.debit&&!mapping.credit))throw Error('Les colonnes de date, libellé et montant n’ont pas été reconnues. Vérifiez le format Excel ou exportez en CSV.');const width=Math.max(...matrix.map(row=>row.length),0);const headers=hasHeaders?matrix[headerIndex]:syntheticHeaders(width,mapping);return {format:'xlsx',headers,records,mapping,transactions:parseTabularTransactions(records,mapping,defaultCurrency,hasHeaders?headerIndex+2:1),hasHeaders};
 }
 function parseDateOfx(value:string):string|null{const raw=value.slice(0,8);return raw.length===8?parseDate(`${raw.slice(0,4)}-${raw.slice(4,6)}-${raw.slice(6,8)}`):null}
 export function parseDelimitedStatement(text:string,filename:string,defaultCurrency='EUR'):StatementPreview{
@@ -94,5 +96,12 @@ export function parseDelimitedStatement(text:string,filename:string,defaultCurre
  if(extension==='qif'||/^!Type:/m.test(text)){
   const transactions:StatementTransaction[]=[],seen=new Map<string,number>();let record:Record<string,string>={};const flush=()=>{if(!Object.keys(record).length)return;const date=parseDate(record.D||''),amount=parseMoney(record.T||''),label=record.P||record.M||record.L||'',externalId=record.N||null;const categoryPath=(record.L||'').split(':').map(value=>value.trim()).filter(Boolean);const categoryHint=categoryPath.length?categoryPath.at(-1):'';const parentCategoryHint=categoryPath.length>1?categoryPath.slice(0,-1).join(':'):'';const error=!date?'Date illisible':!label?'Libellé manquant':amount===null?'Montant illisible':amount===0?'Montant nul':undefined;const transactionDate=date||'',base=date&&amount!==null?transactionFingerprint(date,amount,defaultCurrency,label):`invalid:${transactions.length}`,occurrence=(seen.get(base)||0)+1;seen.set(base,occurrence);transactions.push({rowNumber:transactions.length+1,transactionDate,valueDate:null,label,categoryHint,parentCategoryHint,amountCents:amount||0,currency:defaultCurrency.toUpperCase(),externalId,fingerprint:externalId?transactionFingerprint(date||'',amount||0,defaultCurrency,label,externalId):`${base}|occurrence:${occurrence}`,possibleDuplicate:occurrence>1,error});record={}};
   for(const line of text.split(/\r?\n/)){if(line.trim()==='^'){flush();continue}if(line.length>1)record[line[0]]=(record[line[0]]?record[line[0]]+' ':'')+line.slice(1).trim()}flush();return {format:'qif',headers:[],records:[],mapping:emptyMapping,transactions}}
- const {headers,records,mapping}=csvRows(text);return {format:'csv',headers,records,mapping,transactions:parseTabularTransactions(records,mapping,defaultCurrency,2),hasHeaders:true};
+ const {headers,records,mapping,hasHeaders}=csvRows(text);if(!mapping.date||!mapping.label||(!mapping.amount&&!mapping.debit&&!mapping.credit))throw Error('Je n’ai pas reconnu les colonnes essentielles. Choisissez les colonnes date, libellé et montant dans « Ajuster les colonnes ».');return {format:'csv',headers,records,mapping,transactions:parseTabularTransactions(records,mapping,defaultCurrency,hasHeaders?2:1),hasHeaders};
+}
+
+/** Decode common bank export encodings without sending statement data off-device. */
+export function decodeStatementText(buffer:ArrayBuffer):string{
+ const bytes=new Uint8Array(buffer);if(bytes[0]===0xff&&bytes[1]===0xfe)return new TextDecoder('utf-16le').decode(bytes.subarray(2));if(bytes[0]===0xfe&&bytes[1]===0xff)return new TextDecoder('utf-16be').decode(bytes.subarray(2));
+ const start=bytes[0]===0xef&&bytes[1]===0xbb&&bytes[2]===0xbf?3:0;const utf8=new TextDecoder('utf-8',{fatal:false}).decode(bytes.subarray(start));if(!utf8.includes('\uFFFD'))return utf8;
+ try{return new TextDecoder('windows-1252').decode(bytes.subarray(start))}catch{return utf8}
 }
