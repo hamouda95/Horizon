@@ -173,7 +173,7 @@ function parseCamtStatement(text:string,defaultCurrency='EUR'):StatementPreview{
  const entries=xmlBlocks(text,'Ntry'),seen=new Map<string,number>();
  const transactions:StatementTransaction[]=entries.map((entry,index)=>{
   const amountBlock=xmlBlock(entry,'Amt'),amount=parseMoney(xmlText(amountBlock,'Amt')||amountBlock.replace(/<[^>]+>/g,' ').trim());
-  const currency=amountBlock.match(/\\bCcy=["']([^"']+)["']/i)?.[1]||defaultCurrency;
+  const currency=amountBlock.match(/\bCcy=["']([^"']+)["']/i)?.[1]||defaultCurrency;
   const direction=xmlText(entry,'CdtDbtInd').toUpperCase();
   const amountCents=amount===null?0:Math.abs(amount)*(direction==='DBIT'?-1:1);
   const booking=xmlBlock(entry,'BookgDt'),value=xmlBlock(entry,'ValDt');
@@ -193,8 +193,8 @@ function parseCamtStatement(text:string,defaultCurrency='EUR'):StatementPreview{
  const balances=xmlBlocks(text,'Bal');
  const parsedBalances=balances.map(block=>({block,type:xmlText(block,'Cd'),amountBlock:xmlBlock(block,'Amt'),dateSource:xmlBlock(block,'Dt')})).filter(balance=>balance.type==='CLBD'||balance.type==='OPBD').map(balance=>{
   const amount=parseMoney(xmlText(balance.amountBlock,'Amt')||balance.amountBlock.replace(/<[^>]+>/g,' ').trim());
-  const dateValue=xmlText(balance.dateSource,'Dt')||xmlText(balance.dateSource,'DtTm');
-  return {type:balance.type,amount,date:parseDate(dateValue)||parseDateOfx(dateValue),direction:xmlText(balance.block,'CdtDbtInd').toUpperCase(),currency:balance.amountBlock.match(/\\bCcy=["']([^"']+)["']/i)?.[1]||defaultCurrency};
+  const dateValue=xmlText(balance.block,'Dt')||xmlText(balance.block,'DtTm');
+  return {type:balance.type,amount,date:parseDate(dateValue)||parseDateOfx(dateValue),direction:xmlText(balance.block,'CdtDbtInd').toUpperCase(),currency:balance.amountBlock.match(/\bCcy=["']([^"']+)["']/i)?.[1]||defaultCurrency};
  }).filter((balance):balance is typeof balance & {amount:number;date:string}=>balance.amount!==null&&Boolean(balance.date));
  const closing=parsedBalances.filter(balance=>balance.type==='CLBD').at(-1)||parsedBalances.at(-1);
  if(closing&&transactions.length){let index=transactions.length-1;for(let i=0;i<transactions.length;i++)if(transactions[i].transactionDate&&transactions[i].transactionDate<=closing.date)index=i;transactions[index]={...transactions[index],balanceCents:Math.round(Math.abs(closing.amount)*100)*(closing.direction==='DBIT'?-1:1),balanceDate:closing.date}}
