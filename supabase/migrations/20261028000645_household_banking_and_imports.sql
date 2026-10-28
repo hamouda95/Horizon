@@ -98,7 +98,9 @@ begin
  ), entries_added as (
   insert into public.entries(household_id,bank_transaction_id,category_id,kind,label,amount_cents,entry_date,frequency,income_allocation,expense_type)
   select i.household_id,i.id,p.category_id,case when i.amount_cents>0 then 'income' else 'expense' end,i.label,abs(i.amount_cents),i.transaction_date,'monthly','calendar',null
-  from inserted i join parsed p on p.fingerprint=(select bt.fingerprint from public.bank_transactions bt where bt.id=i.id)
+  from inserted i
+  join public.bank_transactions bt on bt.id=i.id
+  join lateral (select p.category_id from parsed p where p.fingerprint=bt.fingerprint limit 1) p on true
   returning bank_transaction_id
  ) select count(*) into v_imported from entries_added;
  return jsonb_build_object('imported',v_imported,'duplicates',greatest(v_requested-v_imported,0));
