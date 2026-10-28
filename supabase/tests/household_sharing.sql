@@ -163,12 +163,36 @@ begin
  end;
  v_rejected:=false;
  begin
+  insert into public.bank_accounts(household_id,owner_user_id,provider,external_account_id,name,account_type,currency)
+   values(v_home,v_member,'bridge','forged-bridge-account','Forged account','checking','EUR');
+  raise exception using errcode='XX000',message='A client created a provider-managed bank account';
+ exception when insufficient_privilege then v_rejected:=true;
+ end;
+ if not v_rejected then raise exception using errcode='XX000',message='A member created a provider-managed bank account'; end if;
+ v_rejected:=false;
+ begin
+  update public.bank_accounts set owner_user_id=v_other where id=v_bank_account;
+  raise exception using errcode='XX000',message='A client changed a bank account owner';
+ exception when insufficient_privilege then v_rejected:=true;
+ end;
+ if not v_rejected then raise exception using errcode='XX000',message='A member changed a bank account owner'; end if;
+ v_rejected:=false;
+ begin
   perform public.import_bank_transactions(v_bank_account,jsonb_build_array(jsonb_build_object('external_id','bank-test:1','fingerprint','bank-test:member-attempt','transaction_date',current_date::text,'value_date',null,'label','Test member attempt','amount_cents',-500,'currency','EUR','category_id',v_category)));
  exception when insufficient_privilege then v_rejected:=true;
  end;
  if not v_rejected then raise exception using errcode='XX000',message='A household member imported into another member’s bank account'; end if;
  v_email:=current_setting('test.other_email');
  perform set_config('request.jwt.claim.sub',v_owner::text,true);
+ update public.bank_accounts set balance_cents=25000,balance_as_of=now() where id=v_bank_account;
+ if not found then raise exception using errcode='XX000',message='Bank account owner could not update the imported balance'; end if;
+ v_rejected:=false;
+ begin
+  update public.bank_accounts set provider='bridge' where id=v_bank_account;
+  raise exception using errcode='XX000',message='A client changed a bank provider';
+ exception when insufficient_privilege then v_rejected:=true;
+ end;
+ if not v_rejected then raise exception using errcode='XX000',message='A client changed a bank provider'; end if;
  v_import_result:=public.import_bank_transactions(v_bank_account,jsonb_build_array(jsonb_build_object('external_id','bank-test:1','fingerprint','bank-test:owner-import','transaction_date',current_date::text,'value_date',null,'label','Test bank import','amount_cents',-1234,'currency','EUR','category_id',v_category)));
  v_second_import_result:=public.import_bank_transactions(v_bank_account,jsonb_build_array(jsonb_build_object('external_id','bank-test:1','fingerprint','bank-test:owner-import','transaction_date',current_date::text,'value_date',null,'label','Test bank import','amount_cents',-1234,'currency','EUR','category_id',v_category)));
  select count(*) into v_count from public.entries where household_id=v_home and bank_transaction_id is not null;

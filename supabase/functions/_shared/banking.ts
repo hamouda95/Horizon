@@ -3,7 +3,7 @@ import {createClient} from 'npm:@supabase/supabase-js@2.97.0';
 export const BRIDGE_BASE='https://api.bridgeapi.io';
 export const BRIDGE_VERSION='2025-01-15';
 const origins=new Set(['https://horizon-foyer.onrender.com','http://localhost:5173']);
-export function corsHeaders(origin:string|null){return {'Access-Control-Allow-Origin':origin&&origins.has(origin)?origin:'https://horizon-foyer.onrender.com','Access-Control-Allow-Headers':'authorization, apikey, content-type, x-client-info','Access-Control-Allow-Methods':'POST, OPTIONS','Vary':'Origin'}}
+export function corsHeaders(origin:string|null){return {'Access-Control-Allow-Origin':origin&&origins.has(origin)?origin:'https://horizon-foyer.onrender.com','Access-Control-Allow-Headers':'authorization, apikey, content-type, x-client-info','Access-Control-Allow-Methods':'POST, OPTIONS','Access-Control-Max-Age':'600','Vary':'Origin'}}
 export function jsonResponse(payload:unknown,status=200,origin:string|null=null){return new Response(JSON.stringify(payload),{status,headers:{...corsHeaders(origin),'Content-Type':'application/json'}})}
 export function getSupabaseKeys(){
  const url=Deno.env.get('SUPABASE_URL');const publishables=Deno.env.get('SUPABASE_PUBLISHABLE_KEYS');const secrets=Deno.env.get('SUPABASE_SECRET_KEYS');
@@ -22,7 +22,7 @@ export async function hasHouseholdAccess(admin:ReturnType<typeof createClient>,h
 export function bridgeCredentials(){const clientId=Deno.env.get('BRIDGE_CLIENT_ID'),clientSecret=Deno.env.get('BRIDGE_CLIENT_SECRET');if(!clientId||!clientSecret)throw new Error('BANK_PROVIDER_NOT_CONFIGURED');return {clientId,clientSecret}}
 export async function bridgeRequest<T>(path:string,token:string,method='GET',body?:unknown):Promise<T>{
  const {clientId,clientSecret}=bridgeCredentials();const url=path.startsWith('https://')?new URL(path):new URL(path,BRIDGE_BASE);if(url.origin!==BRIDGE_BASE)throw new Error('BANK_PROVIDER_INVALID_URL');
- const response=await fetch(url,{method,headers:{'Bridge-Version':BRIDGE_VERSION,'Accept':'application/json','Content-Type':'application/json','Client-Id':clientId,'Client-Secret':clientSecret,...(token?{'Authorization':`Bearer ${token}`}:{})},body:body?JSON.stringify(body):undefined});
+ const response=await fetch(url,{method,signal:AbortSignal.timeout(15000),headers:{'Bridge-Version':BRIDGE_VERSION,'Accept':'application/json','Content-Type':'application/json','Client-Id':clientId,'Client-Secret':clientSecret,...(token?{'Authorization':`Bearer ${token}`}:{})},body:body?JSON.stringify(body):undefined});
  if(!response.ok)throw new Error(`BANK_PROVIDER_HTTP_${response.status}`);return await response.json() as T;
 }
 export async function getBridgeUserId(admin:ReturnType<typeof createClient>,userId:string,userEmail:string){
