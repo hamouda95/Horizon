@@ -29,15 +29,17 @@ const bankCategoryAliases:Record<string,Record<string,string[]>>={expense:{'vie 
 function suggestedStatementFlowType(row:StatementTransaction,kind:'income'|'expense',rules:MerchantKnowledgeRule[]):FlowType{const rule=matchMerchantRule(`${row.label} ${row.suggestedLabel||''}`,kind,rules);return rule?.flow_type||inferStatementFlowType(row)}
 function suggestClassification(row:StatementTransaction,kind:'income'|'expense',categories:Category[],subcategories:Subcategory[],classifier:HouseholdClassifier,merchantRules:MerchantKnowledgeRule[]){
  const fullLabel=`${row.label} ${row.suggestedLabel||''}`;
- if(classifier.isAmbiguous?.(fullLabel,kind))return {categoryId:'',subcategoryValue:''};
+ const ambiguousMerchant=Boolean(classifier.isAmbiguous?.(fullLabel,kind));
  const active=categories.filter(category=>category.active&&category.kind===kind);const parent=normalize(row.parentCategoryHint||'');const leaf=normalize(row.categoryHint||'');
- const merchantRule=matchMerchantRule(fullLabel,kind,merchantRules);
- const learned=classifier(fullLabel,kind);
+ const merchantRule=ambiguousMerchant?null:matchMerchantRule(fullLabel,kind,merchantRules);
+ const learned=ambiguousMerchant?null:classifier(fullLabel,kind);
  let category=merchantRule?active.find(item=>item.id===merchantRule.category_id)||null:null;
  if(!category&&learned)category=active.find(item=>item.id===learned.categoryId)||null;
  if(!category)category=active.find(item=>normalize(item.name)===parent)||null;
  if(!category&&parent){const aliases=bankCategoryAliases[kind][parent]||[];category=active.find(item=>aliases.includes(normalize(item.name)))||null}
  if(!category&&leaf)category=active.find(item=>normalize(item.name)===leaf)||null;
+ const meaningfulSourceHint=Boolean((parent&&parent!=='non categorise'&&parent!=='non classe')||(leaf&&leaf!=='non categorise'&&leaf!=='non classe'));
+ if(!category&&ambiguousMerchant&&!meaningfulSourceHint)return {categoryId:'',subcategoryValue:''};
  if(!category){const id=suggestedCategory(`${fullLabel} ${row.categoryHint||''}`,kind,categories,classifier);category=active.find(item=>item.id===id)||null}
  const usefulLeaf=Boolean(row.categoryHint&&leaf!=='non categorise'&&leaf!=='non classe'&&leaf!==parent&&leaf!==normalize(category?.name||''));
  const sourceSubcategory=category&&usefulLeaf?subcategories.find(item=>item.category_id===category!.id&&item.active&&normalize(item.name)===leaf):undefined;
