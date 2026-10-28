@@ -9,18 +9,18 @@ type Category={id:string;name:string;active:boolean};
 type Envelope={id:string;category_id:string;amount_cents:number};
 const euro=(amount:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(amount/100);
 
-export default function CategoryEnvelopePlanner({householdId,categories,month,entries}:{householdId:string;categories:Category[];month:string;entries:Entry[]}){
+export default function CategoryEnvelopePlanner({householdId,categories,month,entries,refreshVersion}:{householdId:string;categories:Category[];month:string;entries:Entry[];refreshVersion:number}){
  const [envelopes,setEnvelopes]=useState<Envelope[]>([]),[amounts,setAmounts]=useState<Record<string,string>>({}),[loading,setLoading]=useState(true),[saving,setSaving]=useState<string|null>(null),[error,setError]=useState(''),[notice,setNotice]=useState('');
  async function refresh(){
   if(!householdId){setEnvelopes([]);setLoading(false);return}
-  setLoading(true);
+  setLoading(true);setError('');
   const {data,error:queryError}=await supabase.from('monthly_category_budgets').select('id,category_id,amount_cents').eq('household_id',householdId).eq('month',`${month}-01`);
   if(queryError){setError(queryError.message);setLoading(false);return}
   const rows=(data||[]) as Envelope[];setEnvelopes(rows);
   setAmounts(Object.fromEntries(categories.map(c=>{const row=rows.find(x=>x.category_id===c.id);return [c.id,row?String(row.amount_cents/100):'']})));
   setLoading(false);
  }
- useEffect(()=>{void refresh()},[householdId,month,categories]);
+ useEffect(()=>{void refresh()},[householdId,month,categories,refreshVersion]);
  async function save(category:Category){
   const cents=parseEuroCents(amounts[category.id]||'');
   if(cents===null||cents<0||cents>100000000000){setError('Saisissez un montant de budget valide.');return}

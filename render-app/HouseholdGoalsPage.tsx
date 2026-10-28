@@ -15,7 +15,7 @@ export default function HouseholdGoalsPage({householdId,refreshVersion}:{househo
  const [editingId,setEditingId]=useState<string|null>(null),[title,setTitle]=useState(''),[target,setTarget]=useState(''),[targetDate,setTargetDate]=useState('');
  async function refresh(){
   if(!householdId){setGoals([]);setMovements([]);setLoading(false);return}
-  setLoading(true);
+  setLoading(true);setError('');
   try{
    const [goalResult,movementRows]=await Promise.all([
     supabase.from('household_savings_goals').select('id,title,target_cents,target_date,created_at').eq('household_id',householdId).order('created_at',{ascending:false}),

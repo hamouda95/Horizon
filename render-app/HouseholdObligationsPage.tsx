@@ -18,7 +18,7 @@ export default function HouseholdObligationsPage({householdId,categories,month,s
  const [editingId,setEditingId]=useState<string|null>(null),[title,setTitle]=useState(''),[amount,setAmount]=useState(''),[frequency,setFrequency]=useState<'monthly'|'annual'>('monthly'),[dueDay,setDueDay]=useState('1'),[dueMonth,setDueMonth]=useState('1'),[categoryId,setCategoryId]=useState(''),[note,setNote]=useState('');
  async function refresh(){
   if(!householdId){setRows([]);setLoading(false);return}
-  setLoading(true);const {data,error:queryError}=await supabase.from('household_obligations').select('id,category_id,title,amount_cents,frequency,due_day,due_month,note,active').eq('household_id',householdId).eq('active',true).order('due_day',{ascending:true});
+  setLoading(true);setError('');const {data,error:queryError}=await supabase.from('household_obligations').select('id,category_id,title,amount_cents,frequency,due_day,due_month,note,active').eq('household_id',householdId).eq('active',true).order('due_day',{ascending:true});
   if(queryError)setError(queryError.message);else setRows((data||[]) as Obligation[]);
   setLoading(false);
  }

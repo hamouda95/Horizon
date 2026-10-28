@@ -13,6 +13,7 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
  const loadSequence=useRef(0);
  async function load(preferredId?:string){
   const sequence=++loadSequence.current;
+  setError('');
   try{
    const {data:members,error:memberError}=await supabase.from('household_members').select('household_id,role,households!inner(id,name,savings_rate_bps)').eq('user_id',userId).order('joined_at',{ascending:true});
    if(memberError)throw memberError;
