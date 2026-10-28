@@ -1,3 +1,4 @@
+import type {FlowType} from './flow';
 import {strFromU8,unzipSync} from 'fflate';
 
 export type CsvMapping={date:string;label:string;amount:string;debit:string;credit:string;valueDate:string;reference:string;currency:string;suggestedLabel:string;category:string;parentCategory:string;balance:string};
@@ -11,6 +12,14 @@ export type BalanceReconciliation={
  conflictingSnapshots:Array<{date:string;candidateBalancesCents:number[];selectedBalanceCents:number|null}>;
  latestBalance:{date:string;balanceCents:number}|null;
 };
+export function inferStatementFlowType(row:StatementTransaction):FlowType{
+ const text=normalize([row.label,row.suggestedLabel,row.categoryHint,row.parentCategoryHint].filter(Boolean).join(' '));
+ if(/virements? emis de comptes a comptes|virements? recus de comptes a comptes|transfert interne|mouvements internes|vers bourso|depuis bourso/.test(text))return 'transfer';
+ if(/livret|epargne|compte epargne|vers epargne|depuis epargne/.test(text))return 'savings';
+ if(/remboursement|rembourse|refund|cpam|securite sociale|complementaire sante/.test(text))return 'refund';
+ if(/salaire|payroll|paie|virement employeur|remuneration|loyer|revenu locatif|rent/.test(text))return 'standard';
+ return row.amountCents>0?'review':'standard';
+}
 const emptyMapping:CsvMapping={date:'',label:'',amount:'',debit:'',credit:'',valueDate:'',reference:'',currency:'',suggestedLabel:'',category:'',parentCategory:'',balance:''};
 const normalize=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
 function parseCsv(text:string):{headers:string[];records:string[][];delimiter:string;headerRow:number;hasHeaders:boolean}{

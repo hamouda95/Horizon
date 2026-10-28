@@ -120,6 +120,7 @@ export type Database = {
           label: string
           transaction_date: string
           value_date: string | null
+          source_metadata: Json
         }
         Insert: {
           amount_cents: number
@@ -133,6 +134,7 @@ export type Database = {
           label: string
           transaction_date: string
           value_date?: string | null
+          source_metadata?: Json
         }
         Update: {
           amount_cents?: number
@@ -146,6 +148,7 @@ export type Database = {
           label?: string
           transaction_date?: string
           value_date?: string | null
+          source_metadata?: Json
         }
         Relationships: [
           {
@@ -215,6 +218,7 @@ export type Database = {
           label: string
           person_id: string | null
           subcategory_id: string | null
+          flow_type: string
         }
         Insert: {
           amount_cents: number
@@ -231,6 +235,7 @@ export type Database = {
           label: string
           person_id?: string | null
           subcategory_id?: string | null
+          flow_type?: string
         }
         Update: {
           amount_cents?: number
@@ -247,6 +252,7 @@ export type Database = {
           label?: string
           person_id?: string | null
           subcategory_id?: string | null
+          flow_type?: string
         }
         Relationships: [
           {
@@ -414,6 +420,7 @@ export type Database = {
           household_id: string
           id: string
           kind: string
+          flow_type: string | null
           merchant_key: string
           merchant_label: string
           sample_count: number
@@ -427,6 +434,7 @@ export type Database = {
           household_id: string
           id?: string
           kind: string
+          flow_type?: string | null
           merchant_key: string
           merchant_label: string
           sample_count?: number
@@ -440,6 +448,7 @@ export type Database = {
           household_id?: string
           id?: string
           kind?: string
+          flow_type?: string | null
           merchant_key?: string
           merchant_label?: string
           sample_count?: number
