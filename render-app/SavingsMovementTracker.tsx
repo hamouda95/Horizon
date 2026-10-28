@@ -11,11 +11,11 @@ type Goal=Pick<Tables<'household_savings_goals'>,'id'|'title'>;
 const euro=(amount:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(amount/100);
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 
-export default function SavingsMovementTracker({householdId}:{householdId:string}){
+export default function SavingsMovementTracker({householdId,refreshVersion}:{householdId:string;refreshVersion:number}){
  const [movements,setMovements]=useState<Movement[]>([]),[goals,setGoals]=useState<Goal[]>([]),[goalId,setGoalId]=useState(''),[type,setType]=useState<'deposit'|'withdrawal'>('deposit'),[amount,setAmount]=useState(''),[date,setDate]=useState(today()),[note,setNote]=useState(''),[loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  async function refresh(){
   if(!householdId){setMovements([]);setLoading(false);return}
-  setLoading(true);
+  setLoading(true);setError('');
   try{
    const [rows,goalResult]=await Promise.all([collectPages(async after=>{
     let query=supabase.from('savings_movements').select('id,goal_id,movement_type,amount_cents,movement_date,note').eq('household_id',householdId).order('id',{ascending:true}).limit(500);
@@ -28,7 +28,7 @@ export default function SavingsMovementTracker({householdId}:{householdId:string
   }catch(e){setError((e as Error).message||'Impossible de charger les mouvements d’épargne.')}
   finally{setLoading(false)}
  }
- useEffect(()=>{void refresh()},[householdId]);
+ useEffect(()=>{void refresh()},[householdId,refreshVersion]);
  async function addMovement(e:React.FormEvent){
   e.preventDefault();const cents=parseEuroCents(amount);
   if(cents===null||cents<=0||cents>100000000000){setError('Saisissez un montant valide supérieur à zéro.');return}
