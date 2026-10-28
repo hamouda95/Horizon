@@ -19,8 +19,8 @@ function suggestedCategory(label:string,kind:'income'|'expense',categories:Categ
 type BalanceScope=Account[];
 function consolidatedAmount(accounts:BalanceScope){
  const currencies=[...new Set(accounts.map(account=>account.currency))].sort();
- const amounts=currencies.map(currency=>({currency,known:accounts.filter(account=>account.currency===currency&&account.balance_cents!==null).reduce((sum,account)=>sum+(account.balance_cents||0),0),missing:accounts.filter(account=>account.currency===currency&&account.balance_cents===null).length}));
- return <div className="consolidated-amount">{accounts.length===0?<span className="consolidated-empty">Aucun compte</span>:amounts.map(({currency,known,missing})=><span key={currency}><b>{known?fmt(known,currency):'Solde à renseigner'}</b>{missing>0&&<small>{missing} solde{missing>1?'s':''} indisponible{missing>1?'s':''}</small>}</span>)}</div>;
+ const amounts=currencies.map(currency=>{const knownAccounts=accounts.filter(account=>account.currency===currency&&account.balance_cents!==null);return {currency,known:knownAccounts.reduce((sum,account)=>sum+(account.balance_cents||0),0),knownCount:knownAccounts.length,missing:accounts.filter(account=>account.currency===currency&&account.balance_cents===null).length}});
+ return <div className="consolidated-amount">{accounts.length===0?<span className="consolidated-empty">Aucun compte</span>:amounts.map(({currency,known,knownCount,missing})=><span key={currency}><b>{knownCount?fmt(known,currency):'Solde à renseigner'}</b>{missing>0&&<small>{missing} solde{missing>1?'s':''} indisponible{missing>1?'s':''}</small>}</span>)}</div>;
 }
 function BankAccountConsolidation({accounts,userId}:{accounts:Account[];userId:string}){
  const mine=accounts.filter(account=>account.owner_user_id===userId);
