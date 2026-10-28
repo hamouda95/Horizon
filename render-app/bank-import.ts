@@ -17,7 +17,7 @@ export function inferStatementFlowType(row:StatementTransaction):FlowType{
  if(/virements? emis de comptes a comptes|virements? recus de comptes a comptes|transfert interne|mouvements internes|vers bourso|depuis bourso/.test(text))return 'transfer';
  if(/livret|epargne|compte epargne|vers epargne|depuis epargne/.test(text))return 'savings';
  if(/remboursement|rembourse|refund|cpam|securite sociale|complementaire sante/.test(text))return 'refund';
- if(/salaire|payroll|paie|virement employeur|remuneration/.test(text))return 'standard';
+ if(/salaire|payroll|paie|virement employeur|remuneration|loyer|revenu locatif|rent/.test(text))return 'standard';
  return row.amountCents>0?'review':'standard';
 }
 const emptyMapping:CsvMapping={date:'',label:'',amount:'',debit:'',credit:'',valueDate:'',reference:'',currency:'',suggestedLabel:'',category:'',parentCategory:'',balance:''};
