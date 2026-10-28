@@ -50,8 +50,14 @@ begin
    label,amount_cents,currency,source_metadata
   from parsed
   on conflict do nothing
-  returning id
+  returning id,household_id,bank_account_id,fingerprint
  ), eligible as (
+  select i.id,i.household_id,p.transaction_date,p.value_date,p.label,p.amount_cents,
+   p.category_id,p.subcategory_id,p.person_id,p.flow_type
+  from inserted i
+  join parsed p on p.household_id=i.household_id
+   and p.bank_account_id=i.bank_account_id and p.fingerprint=i.fingerprint
+  union all
   select bt.id,bt.household_id,bt.transaction_date,bt.value_date,bt.label,bt.amount_cents,
    p.category_id,p.subcategory_id,p.person_id,p.flow_type
   from parsed p
@@ -63,7 +69,7 @@ begin
    select 1 from public.entries e
    where e.bank_transaction_id=bt.id
   )
- ), entries_added as (
+, entries_added as (
   insert into public.entries(
    household_id,bank_transaction_id,category_id,kind,label,amount_cents,entry_date,
    frequency,income_allocation,expense_type,subcategory_id,person_id,flow_type
