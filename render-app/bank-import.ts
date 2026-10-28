@@ -12,7 +12,7 @@ export type BalanceReconciliation={
  conflictingSnapshots:Array<{date:string;candidateBalancesCents:number[];selectedBalanceCents:number|null}>;
  latestBalance:{date:string;balanceCents:number}|null;
 };
-export function inferStatementFlowType(row:StatementTransaction,accountType?:'checking'|'savings'|'cash'|'crypto'|'other'):FlowType{
+export function inferStatementFlowType(row:StatementTransaction,accountType?:string):FlowType{
  const text=normalize([row.label,row.suggestedLabel,row.categoryHint,row.parentCategoryHint].filter(Boolean).join(' '));
  // Explicit interest is income even when the account itself is a savings account.
  if(/interets? (?:livret|epargne|compte)|remuneration (?:du )?(?:livret|epargne)|interets credites/.test(text))return 'standard';
