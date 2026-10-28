@@ -30,7 +30,7 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
    try{localStorage.setItem(`horizon.household.${userId}`,selected.id)}catch{/* le choix reste valable pour cette session */}
    const [categories,entryRows,budgetRows,subRows,peopleRows]=await Promise.all([
     fetchHouseholdRows('categories','id,name,kind,active',selected.id),
-    fetchHouseholdRows('entries','id,kind,label,amount_cents,entry_date,category_id,frequency,income_allocation,expense_type,subcategory_id,bank_transaction_id,person_id',selected.id),
+    fetchHouseholdRows('entries','id,kind,label,amount_cents,entry_date,category_id,frequency,income_allocation,expense_type,subcategory_id,bank_transaction_id,person_id,flow_type',selected.id),
     fetchHouseholdRows('monthly_budgets','id,month,income_cents,expense_cents',selected.id),
     fetchHouseholdRows('subcategories','id,name,category_id,active',selected.id),
     supabase.from('household_people').select('id,name,relationship,is_primary,active,sort_order').eq('household_id',selected.id).order('sort_order').order('name')
@@ -40,7 +40,7 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
    setSubcategories(subRows);setPlans(budgetRows);
    const people=(peopleRows.data||[]).map(x=>({id:x.id,name:x.name,relationship:x.relationship as 'self'|'partner'|'child'|'other',isPrimary:x.is_primary,active:x.active,sortOrder:x.sort_order}));
    setHome({id:selected.id,name:selected.name,role:selected.role,savingsRate:selected.savingsRate,incomeTypes:JSON.stringify(categories.filter(x=>x.active&&x.kind==='income').map(x=>x.name)),expenseTypes:JSON.stringify(categories.filter(x=>x.active&&x.kind==='expense').map(x=>x.name)),categories,people});
-   setEntries(entryRows.map(x=>({id:x.id,kind:x.kind,label:x.label,category:categories.find(c=>c.id===x.category_id)?.name||'Autre',amount:Number(x.amount_cents),date:x.entry_date,frequency:x.frequency,incomeAllocation:x.income_allocation,expenseType:x.expense_type,categoryId:x.category_id,subcategoryId:x.subcategory_id,bankTransactionId:x.bank_transaction_id,personId:x.person_id,subcategory:subRows.find(y=>y.id===x.subcategory_id)?.name})));
+   setEntries(entryRows.map(x=>({id:x.id,kind:x.kind,label:x.label,category:categories.find(c=>c.id===x.category_id)?.name||'Autre',amount:Number(x.amount_cents),date:x.entry_date,frequency:x.frequency,incomeAllocation:x.income_allocation,expenseType:x.expense_type,flowType:x.flow_type,categoryId:x.category_id,subcategoryId:x.subcategory_id,bankTransactionId:x.bank_transaction_id,personId:x.person_id,subcategory:subRows.find(y=>y.id===x.subcategory_id)?.name})));
    setRefreshVersion(value=>value+1);
    return true;
   }catch(e){if(sequence!==loadSequence.current)return true;setError((e as Error).message||'Impossible de charger vos données.');return false}
