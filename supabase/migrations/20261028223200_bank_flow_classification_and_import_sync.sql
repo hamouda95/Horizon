@@ -68,17 +68,11 @@ begin
    household_id,bank_transaction_id,category_id,kind,label,amount_cents,entry_date,
    frequency,income_allocation,expense_type,subcategory_id,person_id,flow_type
   )
-  select i.household_id,i.id,p.category_id,
+  select i.household_id,i.id,i.category_id,
    case when i.amount_cents>0 then 'income' else 'expense' end,
    i.label,abs(i.amount_cents),i.transaction_date,'monthly','calendar',null,
-   p.subcategory_id,p.person_id,p.flow_type
+   i.subcategory_id,i.person_id,i.flow_type
   from eligible i
-  join lateral (
-   select p.category_id,p.subcategory_id,p.person_id,p.flow_type
-   from parsed p where p.fingerprint=(
-    select bt.fingerprint from public.bank_transactions bt where bt.id=i.id
-   ) limit 1
-  ) p on true
   on conflict (bank_transaction_id) where bank_transaction_id is not null do nothing
   returning bank_transaction_id
  )
