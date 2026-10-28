@@ -38,7 +38,6 @@ function suggestClassification(row:StatementTransaction,kind:'income'|'expense',
  if(!category)category=active.find(item=>normalize(item.name)===parent)||null;
  if(!category&&parent){const aliases=bankCategoryAliases[kind][parent]||[];category=active.find(item=>aliases.includes(normalize(item.name)))||null}
  if(!category&&leaf)category=active.find(item=>normalize(item.name)===leaf)||null;
- const meaningfulSourceHint=Boolean((parent&&parent!=='non categorise'&&parent!=='non classe')||(leaf&&leaf!=='non categorise'&&leaf!=='non classe'));
  if(!category&&ambiguousMerchant&&!/restaurant|resto|supermarche|courses|alimentaire|epicerie|loisirs|cinema|voyage|transport/.test(normalize(`${fullLabel} ${row.categoryHint||''}`)))return {categoryId:'',subcategoryValue:''};
  if(!category){const id=suggestedCategory(`${fullLabel} ${row.categoryHint||''}`,kind,categories,classifier);category=active.find(item=>item.id===id)||null}
  const usefulLeaf=Boolean(row.categoryHint&&leaf!=='non categorise'&&leaf!=='non classe'&&leaf!==parent&&leaf!==normalize(category?.name||''));
