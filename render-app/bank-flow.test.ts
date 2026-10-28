@@ -9,6 +9,8 @@ function row(label:string,amountCents:number,categoryHint?:string,parentCategory
 describe('inferStatementFlowType',()=>{
  it('keeps transfers out of income even when the bank reports a credit',()=>{
   expect(inferStatementFlowType(row('VIR SEPA VIR INST Mohamed',10000,'Virements reçus'))).toBe('review');
+  expect(inferStatementFlowType(row('VIR SEPA GEOPOST',332399,'Virements reçus'))).toBe('review');
+  expect(inferStatementFlowType(row('Lynda Attaya',75000,'Loyers, Charges'))).toBe('standard');
   expect(inferStatementFlowType(row('Virement vers BoursoBank',-10000))).toBe('transfer');
   expect(inferStatementFlowType(row('Virement émis de comptes à comptes',-10000))).toBe('transfer');
  });
