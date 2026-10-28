@@ -406,6 +406,70 @@ export type Database = {
           },
         ]
       }
+      household_merchant_rules: {
+        Row: {
+          category_id: string
+          created_at: string
+          created_by: string | null
+          household_id: string
+          id: string
+          kind: string
+          merchant_key: string
+          merchant_label: string
+          sample_count: number
+          subcategory_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          category_id: string
+          created_at?: string
+          created_by?: string | null
+          household_id: string
+          id?: string
+          kind: string
+          merchant_key: string
+          merchant_label: string
+          sample_count?: number
+          subcategory_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string
+          created_at?: string
+          created_by?: string | null
+          household_id?: string
+          id?: string
+          kind?: string
+          merchant_key?: string
+          merchant_label?: string
+          sample_count?: number
+          subcategory_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_merchant_rules_category_scope_fkey"
+            columns: ["category_id", "household_id", "kind"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id", "household_id", "kind"]
+          },
+          {
+            foreignKeyName: "household_merchant_rules_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "household_merchant_rules_subcategory_scope_fkey"
+            columns: ["subcategory_id", "category_id", "household_id", "kind"]
+            isOneToOne: false
+            referencedRelation: "subcategories"
+            referencedColumns: ["id", "category_id", "household_id", "kind"]
+          },
+        ]
+      }
       household_people: {
         Row: {
           active: boolean

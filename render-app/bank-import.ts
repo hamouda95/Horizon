@@ -13,7 +13,10 @@ function parseCsv(text:string):{headers:string[];records:string[][];delimiter:st
  let headerRow=0;let bestScore=0;for(let index=0;index<Math.min(records.length,15);index++){const score=headerScore(records[index]);if(score>bestScore){bestScore=score;headerRow=index}}
  const hasHeaders=bestScore>=2;const headers=hasHeaders?(records[headerRow]||[]).map((value,index)=>value.trim()||`Colonne ${index+1}`):[];const data=hasHeaders?records.slice(headerRow+1):records;return {headers:headers.length?headers:Array.from({length:Math.max(...records.slice(0,20).map(row=>row.length),0)},(_,i)=>`Colonne ${columnName(i)}`),records:data,delimiter,headerRow,hasHeaders};
 }
-function headerScore(row:string[]){const map=mapHeaders(row);return [map.date,map.label,map.amount||map.debit||map.credit].filter(Boolean).length;}
+export function parseCsvTable(text:string):{headers:string[];records:string[][]}{
+ const parsed=parseCsv(text);if(!parsed.hasHeaders)throw Error('La base doit contenir une ligne de titre avec ses colonnes.');return {headers:parsed.headers,records:parsed.records};
+}
+function headerScore(row:string[]){const map=mapHeaders(row);const normalized=row.map(normalize);const merchant=normalized.some(value=>/^(marque|brand|merchant|enseigne|commercant|nom marchand)$/.test(value));return [map.date,map.label,map.amount||map.debit||map.credit,merchant?String(row.findIndex(value=>/^(marque|brand|merchant|enseigne|commercant|nom marchand)$/.test(normalize(value)))):'',map.category].filter(Boolean).length;}
 function mapHeaders(headers:string[]):CsvMapping{
  const tokens=headers.map(normalize);const find=(patterns:RegExp[])=>{const index=tokens.findIndex(value=>patterns.some(pattern=>pattern.test(value)));return index<0?'':String(index)};const findLast=(patterns:RegExp[])=>{for(let index=tokens.length-1;index>=0;index--)if(patterns.some(pattern=>pattern.test(tokens[index])))return String(index);return ''};
  const mapping:CsvMapping={

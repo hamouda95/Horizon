@@ -1,3 +1,6 @@
+import {matchMerchantRule} from './merchant-knowledge';
+import type {MerchantKnowledgeRule} from './merchant-knowledge';
+
 export type ClassificationKind = 'income' | 'expense';
 
 export type ClassificationExample = {
@@ -40,6 +43,7 @@ function tokens(value: string): string[] {
 export function createHouseholdClassifier(
   categories: ClassificationOption[],
   examples: ClassificationExample[],
+  merchantRules: MerchantKnowledgeRule[] = [],
 ): HouseholdClassifier {
   const activeIds = new Set(categories.filter(category => category.active).map(category => category.id));
   const corpus: Record<ClassificationKind, Array<ClassificationExample & { words: string[] }>> = { income: [], expense: [] };
@@ -57,6 +61,15 @@ export function createHouseholdClassifier(
   }
 
   return (label, kind) => {
+    const knownMerchant = matchMerchantRule(label, kind, merchantRules);
+    if (knownMerchant && activeIds.has(knownMerchant.category_id) &&
+      categories.some(category => category.id === knownMerchant.category_id && category.kind === kind)) {
+      return {
+        categoryId: knownMerchant.category_id,
+        subcategoryId: knownMerchant.subcategory_id,
+        confidence: 'high',
+      };
+    }
     const query = tokens(label);
     const training = corpus[kind];
     if (!query.length || !training.length) return null;
