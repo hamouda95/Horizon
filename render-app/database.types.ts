@@ -32,6 +32,7 @@ export type Database = {
           source_name: string | null
           status: string
           updated_at: string
+          flow_type: string | null
         }
         Insert: {
           account_type: string
@@ -50,6 +51,7 @@ export type Database = {
           source_name?: string | null
           status?: string
           updated_at?: string
+          flow_type?: string | null
         }
         Update: {
           account_type?: string
@@ -68,6 +70,7 @@ export type Database = {
           source_name?: string | null
           status?: string
           updated_at?: string
+          flow_type?: string | null
         }
         Relationships: [
           {
@@ -120,6 +123,7 @@ export type Database = {
           label: string
           transaction_date: string
           value_date: string | null
+          source_metadata: Json
         }
         Insert: {
           amount_cents: number
@@ -133,6 +137,7 @@ export type Database = {
           label: string
           transaction_date: string
           value_date?: string | null
+          source_metadata?: Json
         }
         Update: {
           amount_cents?: number
@@ -146,6 +151,7 @@ export type Database = {
           label?: string
           transaction_date?: string
           value_date?: string | null
+          source_metadata?: Json
         }
         Relationships: [
           {
@@ -215,6 +221,7 @@ export type Database = {
           label: string
           person_id: string | null
           subcategory_id: string | null
+          flow_type: string
         }
         Insert: {
           amount_cents: number
@@ -231,6 +238,7 @@ export type Database = {
           label: string
           person_id?: string | null
           subcategory_id?: string | null
+          flow_type?: string
         }
         Update: {
           amount_cents?: number
@@ -247,6 +255,7 @@ export type Database = {
           label?: string
           person_id?: string | null
           subcategory_id?: string | null
+          flow_type?: string
         }
         Relationships: [
           {
