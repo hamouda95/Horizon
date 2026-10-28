@@ -54,3 +54,25 @@ test('montre un aperçu même quand les en-têtes nécessitent un mapping manuel
  assert.equal(preview.format,'csv');
  assert.ok(preview.transactions.length>0);
 });
+
+test('reconnaît montant et solde quand un export CSV répète la colonne Solde',()=>{
+ const csv='Date Opération;Libellé;Solde;Numéro Compte;Libellé Compte;Solde\n2026-01-01;Achat;-10,00;123;BoursoBank;90,00\n2026-01-02;Achat;-5,00;123;BoursoBank;85,00\n2026-01-03;Virement;2,00;123;BoursoBank;87,00';
+ const preview=parseDelimitedStatement(csv,'export.csv');
+ assert.deepEqual(preview.transactions.map(row=>row.amountCents),[-1000,-500,200]);
+ assert.deepEqual(preview.transactions.map(row=>row.balanceCents),[9000,8500,8700]);
+});
+test('importe un relevé CAMT.053 avec date, sens, devise et solde final',()=>{
+ const xml='<?xml version="1.0"?><Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.053.001.02"><BkToCstmrStmt><Stmt><Ntry><NtryRef>op-1</NtryRef><Amt Ccy="EUR">10.00</Amt><CdtDbtInd>DBIT</CdtDbtInd><BookgDt><Dt>2026-01-01</Dt></BookgDt><NtryDtls><TxDtls><Refs><AcctSvcrRef>ref-1</AcctSvcrRef></Refs><RmtInf><Ustrd>Courses</Ustrd></RmtInf></TxDtls></NtryDtls></Ntry><Ntry><NtryRef>op-2</NtryRef><Amt Ccy="EUR">2.00</Amt><CdtDbtInd>CRDT</CdtDbtInd><BookgDt><Dt>2026-01-02</Dt></BookgDt><NtryDtls><TxDtls><RmtInf><Ustrd>Virement</Ustrd></RmtInf></TxDtls></NtryDtls></Ntry><Bal><Tp><CdOrPrtry><Cd>CLBD</Cd></CdOrPrtry></Tp><Amt Ccy="EUR">92.00</Amt><CdtDbtInd>CRDT</CdtDbtInd><Dt><Dt>2026-01-02</Dt></Dt></Bal></Stmt></BkToCstmrStmt></Document>';
+ const preview=parseDelimitedStatement(xml,'statement.xml');
+ assert.equal(preview.format,'camt');
+ assert.equal(preview.transactions[0].amountCents,-1000);
+ assert.equal(preview.transactions[0].label,'Courses');
+ assert.equal(preview.transactions[0].externalId,'ref-1');
+ assert.equal(preview.transactions[1].amountCents,200);
+ assert.equal(preview.transactions[1].balanceCents,9200);
+ assert.equal(preview.transactions[1].balanceDate,'2026-01-02');
+});
+test('détecte un fichier TSV sans mapping spécifique',()=>{
+ const preview=parseDelimitedStatement('Date\tLibellé\tMontant\n2026-10-27\tBus\t-2,50','operations.tsv');
+ assert.equal(preview.transactions[0].amountCents,-250);
+});
