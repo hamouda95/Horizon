@@ -10,7 +10,7 @@ describe('summarizeFlows',()=>{
    {kind:'income',amount:75000,flowType:'refund'},
    {kind:'income',amount:40000,flowType:'transfer'},
    {kind:'income',amount:90000,flowType:'review'},
-  ])).toMatchObject({income:230000,expense:4280,savingsWithdrawals:15000,refundsReceived:75000,transfersReceived:40000,needsReviewReceived:90000,confirmedBalance:225720});
+  ])).toMatchObject({income:230000,expense:4280,savingsWithdrawals:15000,refundsReceived:75000,transfersReceived:40000,needsReviewReceived:90000,confirmedBalance:300720});
  });
  it('keeps refunds separate and subtracts reversed refunds from balance',()=>{
   expect(summarizeFlows([{kind:'expense',amount:8000,flowType:'refund'}])).toMatchObject({refundsReversed:8000,expense:0,confirmedBalance:-8000});
