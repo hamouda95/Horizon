@@ -32,7 +32,6 @@ export type Database = {
           source_name: string | null
           status: string
           updated_at: string
-          flow_type: string | null
         }
         Insert: {
           account_type: string
@@ -51,7 +50,6 @@ export type Database = {
           source_name?: string | null
           status?: string
           updated_at?: string
-          flow_type?: string | null
         }
         Update: {
           account_type?: string
@@ -70,7 +68,6 @@ export type Database = {
           source_name?: string | null
           status?: string
           updated_at?: string
-          flow_type?: string | null
         }
         Relationships: [
           {
