@@ -1,5 +1,5 @@
 import {test} from 'vitest';import {strict as assert} from 'node:assert';
-import {parseDelimitedStatement,parseCsvTransactions,transactionFingerprint} from './bank-import.ts';
+import {parseDelimitedStatement,parseCsvTransactions,transactionFingerprint,inferStatementFlowType,type StatementTransaction} from './bank-import.ts';
 
 test('détecte le CSV français, les guillemets, le signe et les doublons',()=>{
  const preview=parseDelimitedStatement('Date opération;Libellé;Débit;Crédit;Date valeur\r\n27/10/2026;"SUPERMARCHÉ; PARIS";42,35;;28/10/2026\r\n27/10/2026;"SUPERMARCHÉ; PARIS";42,35;;28/10/2026','releve.csv');
@@ -27,4 +27,16 @@ test('lit le solde OFX et conserve des doublons identiques comme lignes distinct
 
 test('préserve les opérations QIF identiques comme opérations distinctes',()=>{
  const preview=parseDelimitedStatement('!Type:Bank\nD27/10/2026\nT-4.25\nPMarket\n^\nD27/10/2026\nT-4.25\nPMarket\n^','statement.qif');assert.equal(preview.transactions[1].possibleDuplicate,true);assert.notEqual(preview.transactions[0].fingerprint,preview.transactions[1].fingerprint);
+});
+
+const flowRow=(label:string,amountCents:number):StatementTransaction=>({rowNumber:1,transactionDate:'2026-09-22',valueDate:null,label,amountCents,currency:'EUR',externalId:null,fingerprint:'test'});
+test('exclut les virements entre comptes des revenus et dépenses',()=>{
+ assert.equal(inferStatementFlowType(flowRow('VIR Virement depuis BoursoBank',399000)),'transfer');
+ assert.equal(inferStatementFlowType(flowRow('VIR Virement depuis LIVRET A',10000)),'transfer');
+ assert.equal(inferStatementFlowType(flowRow('VIR Virement depuis LIVRET A',-10000)),'transfer');
+});
+test('demande une vérification pour un mouvement inconnu sur un livret et conserve les intérêts comme revenu',()=>{
+ assert.equal(inferStatementFlowType(flowRow('VIR CREATION COMPTE',1000),'savings'),'review');
+ assert.equal(inferStatementFlowType(flowRow('INTÉRÊTS LIVRET A',125),'savings'),'standard');
+ assert.equal(inferStatementFlowType(flowRow('SALAIRE',250000),'checking'),'standard');
 });

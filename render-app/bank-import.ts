@@ -12,12 +12,19 @@ export type BalanceReconciliation={
  conflictingSnapshots:Array<{date:string;candidateBalancesCents:number[];selectedBalanceCents:number|null}>;
  latestBalance:{date:string;balanceCents:number}|null;
 };
-export function inferStatementFlowType(row:StatementTransaction):FlowType{
+export function inferStatementFlowType(row:StatementTransaction,accountType?:string):FlowType{
  const text=normalize([row.label,row.suggestedLabel,row.categoryHint,row.parentCategoryHint].filter(Boolean).join(' '));
- if(/virements? emis de comptes a comptes|virements? recus de comptes a comptes|transfert interne|mouvements internes|vers bourso|depuis bourso/.test(text))return 'transfer';
- if(/livret|epargne|compte epargne|vers epargne|depuis epargne/.test(text))return 'savings';
+ // Explicit interest is income even when the account itself is a savings account.
+ if(/interets? (?:livret|epargne|compte)|remuneration (?:du )?(?:livret|epargne)|interets credites/.test(text))return 'standard';
+ // Transfers between accounts are balance movements, never household income or spending.
+ if(/virements? emis de comptes a comptes|virements? recus de comptes a comptes|transfert interne|mouvements internes/.test(text))return 'transfer';
+ if(/\b(?:virement|vir|transfert)\b.*\b(?:depuis|vers)\b.*\b(?:bourso(?:bank)?|boursorama|livret|epargne|compte courant|compte epargne)\b/.test(text))return 'transfer';
+ if(/\b(?:depuis|vers)\b.*\b(?:bourso|boursorama|livret|epargne|compte courant|compte epargne)\b/.test(text))return 'transfer';
+ if(/livret|epargne|compte epargne/.test(text))return 'savings';
  if(/remboursement|rembourse|refund|cpam|securite sociale|complementaire sante/.test(text))return 'refund';
  if(/salaire|payroll|paie|virement employeur|remuneration|loyer|revenu locatif|rent/.test(text))return 'standard';
+ // Unrecognized savings-account movements need review rather than being counted as income.
+ if(accountType==='savings')return 'review';
  return row.amountCents>0?'review':'standard';
 }
 const emptyMapping:CsvMapping={date:'',label:'',amount:'',debit:'',credit:'',valueDate:'',reference:'',currency:'',suggestedLabel:'',category:'',parentCategory:'',balance:''};
