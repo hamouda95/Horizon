@@ -1,3 +1,4 @@
+import {appLocale} from './locale';
 import {useEffect,useMemo,useState} from 'react';
 import {ArrowRight,CalendarClock,CheckCircle2,Plus,Wallet} from 'lucide-react';
 import type {Tables} from './database.types';
@@ -5,8 +6,8 @@ import {supabase} from './client';
 
 type Obligation=Pick<Tables<'household_obligations'>,'id'|'title'|'amount_cents'|'frequency'|'due_day'|'due_month'>;
 type Plan={income_cents:number;expense_cents:number}|null;
-const fmt=(cents:number)=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(cents/100);
-const monthName=(month:string)=>new Date(`${month}-01T12:00:00`).toLocaleDateString('fr-FR',{month:'long',year:'numeric'});
+const fmt=(cents:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR'}).format(cents/100);
+const monthName=(month:string)=>new Date(`${month}-01T12:00:00`).toLocaleDateString(appLocale(),{month:'long',year:'numeric'});
 
 export default function HouseholdPulse({householdId,month,expense,plan,refreshVersion,onAddExpense,onOpenBudget,onOpenBills,onOpenBank}:{householdId:string;month:string;expense:number;plan:Plan;refreshVersion:number;onAddExpense:()=>void;onOpenBudget:()=>void;onOpenBills:()=>void;onOpenBank:()=>void}){
  const [obligations,setObligations]=useState<Obligation[]>([]),[loading,setLoading]=useState(true),[loadError,setLoadError]=useState(false);
