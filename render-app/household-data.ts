@@ -14,6 +14,7 @@ type EntryRow=Omit<RawEntryRow,'kind'|'frequency'|'income_allocation'|'expense_t
  frequency:'monthly'|'annual';
  income_allocation:'calendar'|'next_month';
  expense_type:ExpenseType;
+ flow_type:FlowType;
 };
 type MonthlyBudgetRow=Pick<Tables<'monthly_budgets'>,'id'|'month'|'income_cents'|'expense_cents'>;
 
