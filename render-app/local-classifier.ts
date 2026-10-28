@@ -1,4 +1,4 @@
-import {cardMerchantKey,isKnownAmbiguousMerchant,matchMerchantRule} from './merchant-knowledge';
+import {cardMerchantKey,matchMerchantRule} from './merchant-knowledge';
 import type {MerchantKnowledgeRule} from './merchant-knowledge';
 
 export type ClassificationKind = 'income' | 'expense';
@@ -53,7 +53,7 @@ export function createHouseholdClassifier(
     if (!activeIds.has(example.categoryId)) continue;
     const merchantKey = cardMerchantKey(example.label);
     if (merchantKey) {
-      const key = `${example.kind}:${merchantKey}`;
+      const key = `${example.kind}:${merchantKey.replace(/\s+/g, '')}`;
       const known = merchantCategories.get(key) || new Set<string>();
       known.add(example.categoryId);
       merchantCategories.set(key, known);
@@ -72,9 +72,8 @@ export function createHouseholdClassifier(
     .map(([key]) => key));
 
   const classifier: HouseholdClassifier = (label, kind) => {
-    if (isKnownAmbiguousMerchant(label)) return null;
     const merchantKey = cardMerchantKey(label);
-    if (merchantKey && ambiguousMerchants.has(`${kind}:${merchantKey}`)) return null;
+    if (merchantKey && ambiguousMerchants.has(`${kind}:${merchantKey.replace(/\s+/g, '')}`)) return null;
     const knownMerchant = matchMerchantRule(label, kind, merchantRules);
     if (knownMerchant && activeIds.has(knownMerchant.category_id) &&
       categories.some(category => category.id === knownMerchant.category_id && category.kind === kind)) {
@@ -124,9 +123,8 @@ export function createHouseholdClassifier(
     };
   };
   classifier.isAmbiguous = (label, kind) => {
-    if (isKnownAmbiguousMerchant(label)) return true;
     const merchantKey = cardMerchantKey(label);
-    return Boolean(merchantKey && ambiguousMerchants.has(`${kind}:${merchantKey}`));
+    return Boolean(merchantKey && ambiguousMerchants.has(`${kind}:${merchantKey.replace(/\s+/g, '')}`));
   };
   return classifier;
 }
