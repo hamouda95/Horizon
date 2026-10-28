@@ -25,9 +25,9 @@ const typeName=(type:string)=>type==='checking'?'Compte courant':type==='savings
 const fileSize=10*1024*1024;
 function detectSource(filename:string):{name:string;type:'checking'|'savings'|'cash'|'crypto'|'other';explicitAccountType:boolean}{
  const name=normalize(filename);
- const savings=/\b(livret|epargne|savings)\b/.test(name);
+ const accountDescriptor=name.replace(/caisse d epargne/g,'');const savings=/\b(livret|epargne|savings)\b/.test(accountDescriptor);
  const explicitAccountType=savings||/\b(compte courant|checking)\b/.test(name);
- const known:[RegExp,string,'checking'|'savings'|'cash'|'crypto'|'other'][]=[[/bourso|boursorama/,'BoursoBank','checking'],[/revolut/,'Revolut','checking'],[/credit.?agricole/,'Crédit Agricole','checking'],[/banque.?postale/,'La Banque Postale','checking'],[/fortuneo/,'Fortuneo','checking'],[/bnp|paribas/,'BNP Paribas','checking'],[/societe.?generale|\\bsg\\b/,'Société Générale','checking'],[/caisse.?epargne/,'Caisse d’Épargne','checking'],[/hello.?bank/,'Hello bank!','checking'],[/\\blcl\\b/,'LCL','checking'],[/\\bn26\\b/,'N26','checking'],[/\\bwise\\b/,'Wise','checking'],[/binance|coinbase|crypto/,'Crypto','crypto']];
+ const known:[RegExp,string,'checking'|'savings'|'cash'|'crypto'|'other'][]=[[/bourso|boursorama/,'BoursoBank','checking'],[/revolut/,'Revolut','checking'],[/credit.?agricole/,'Crédit Agricole','checking'],[/banque.?postale/,'La Banque Postale','checking'],[/fortuneo/,'Fortuneo','checking'],[/bnp|paribas/,'BNP Paribas','checking'],[/societe.?generale|\\bsg\\b/,'Société Générale','checking'],[/caisse.?epargne/,'Caisse d’Épargne','checking'],[/hello.?bank/,'Hello bank!','checking'],[/\blcl\b/,'LCL','checking'],[/\bn26\b/,'N26','checking'],[/\bwise\b/,'Wise','checking'],[/binance|coinbase|crypto/,'Crypto','crypto']];
  const match=known.find(([pattern])=>pattern.test(name));
  if(match)return {name:match[1],type:savings?'savings':match[2],explicitAccountType};
  if(savings)return {name:'Épargne',type:'savings',explicitAccountType:true};
