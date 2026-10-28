@@ -15,7 +15,8 @@ const ignored = new Set([
 export function normalizeMerchant(value: string): string {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
     .replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/)
-    .filter(token => token && !ignored.has(token) && !/^\d+$/.test(token)).join(' ');
+    .filter(token => token && !ignored.has(token) && !/^\d+$/.test(token)).join(' ')
+    .replace(/\bsouk al charq\b/g, 'souk alcharq');
 }
 
 function exactTokenPhrase(label: string, phrase: string): boolean {
@@ -44,5 +45,7 @@ export function cardMerchantKey(label: string): string | null {
   if (!/(^| )(carte|cb|card|visa|mastercard)( |$)/.test(normalized)) return null;
   const merchantTokens = normalized.split(' ').filter(token => !/^\d+$/.test(token) && !ignored.has(token));
   if (!merchantTokens.length) return null;
-  return merchantTokens.slice(0, Math.min(3, merchantTokens.length)).join(' ');
+  const canonical = merchantTokens.join(' ').replace(/\bsouk al charq\b/g, 'souk alcharq');
+  const canonicalTokens = canonical.split(' ');
+  return canonicalTokens.slice(0, Math.min(3, canonicalTokens.length)).join(' ');
 }
