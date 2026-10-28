@@ -31,7 +31,7 @@ function detectSource(filename:string):{name:string;type:'checking'|'savings'|'c
  const match=known.find(([pattern])=>pattern.test(name));
  if(match)return {name:match[1],type:savings?'savings':match[2],explicitAccountType};
  if(savings)return {name:'Épargne',type:'savings',explicitAccountType:true};
- const clean=filename.replace(/\\.(csv|xlsx|ofx|qfx|qif)$/i,'').replace(/[_-]+/g,' ').replace(/\\s+/g,' ').trim();
+ const clean=filename.replace(/\.(csv|xlsx|ofx|qfx|qif)$/i,'').replace(/[_-]+/g,' ').replace(/\s+/g,' ').trim();
  return {name:clean.slice(0,70)||'Relevé importé',type:'checking',explicitAccountType};
 }
 function sameDetectedBank(account:Account,detected:{name:string;type:'checking'|'savings'|'cash'|'crypto'|'other'}){
