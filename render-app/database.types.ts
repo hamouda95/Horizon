@@ -26,6 +26,7 @@ export type Database = {
           id: string
           name: string
           owner_user_id: string
+          owner_person_id: string | null
           provider: string
           provider_item_id: string | null
           source_name: string | null
@@ -43,6 +44,7 @@ export type Database = {
           id?: string
           name: string
           owner_user_id: string
+          owner_person_id?: string | null
           provider: string
           provider_item_id?: string | null
           source_name?: string | null
@@ -60,6 +62,7 @@ export type Database = {
           id?: string
           name?: string
           owner_user_id?: string
+          owner_person_id?: string | null
           provider?: string
           provider_item_id?: string | null
           source_name?: string | null
@@ -67,6 +70,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "bank_accounts_owner_person_id_fkey"
+            columns: ["owner_person_id"]
+            isOneToOne: false
+            referencedRelation: "household_people"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "bank_accounts_household_id_fkey"
             columns: ["household_id"]
