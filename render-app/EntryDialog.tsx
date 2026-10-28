@@ -8,7 +8,7 @@ type ExpenseType=''|'recurring'|'one_off';
 type Setter<T>=Dispatch<SetStateAction<T>>;
 type Subcategory={id:string;name:string};
 
-export default function EntryDialog({kind,setKind,label,setLabel,amount,setAmount,date,setDate,category,setCategory,categories,subcategoryId,setSubcategoryId,subcategories,newSubcategory,setNewSubcategory,addSubcategory,frequency,setFrequency,expenseType,setExpenseType,allocation,setAllocation,editingId,saving,onSubmit}:{
+export default function EntryDialog({kind,setKind,label,setLabel,amount,setAmount,date,setDate,category,setCategory,categories,subcategoryId,setSubcategoryId,subcategories,newSubcategory,setNewSubcategory,addSubcategory,frequency,setFrequency,expenseType,setExpenseType,allocation,setAllocation,personId,setPersonId,people,editingId,saving,onSubmit}:{
  kind:EntryKind;setKind:Setter<EntryKind>;
  label:string;setLabel:Setter<string>;
  amount:string;setAmount:Setter<string>;
@@ -19,6 +19,7 @@ export default function EntryDialog({kind,setKind,label,setLabel,amount,setAmoun
  frequency:Frequency;setFrequency:Setter<Frequency>;
  expenseType:ExpenseType;setExpenseType:Setter<ExpenseType>;
  allocation:Allocation;setAllocation:Setter<Allocation>;
+ personId:string;setPersonId:Setter<string>;people:{id:string;name:string;active:boolean}[];
  editingId:string|null;saving:boolean;onSubmit:FormEventHandler<HTMLFormElement>;
 }){
  return <form onSubmit={onSubmit}>
@@ -36,6 +37,7 @@ export default function EntryDialog({kind,setKind,label,setLabel,amount,setAmoun
   </div>
   <label>Catégorie<select value={category||categories[0]||''} onChange={event=>{setCategory(event.target.value);setSubcategoryId('')}}>{categories.map(value=><option key={value}>{value}</option>)}</select></label>
   <label>Sous-catégorie <span className="optional">(facultatif)</span><select value={subcategoryId} onChange={event=>setSubcategoryId(event.target.value)}><option value="">Sans sous-catégorie</option>{subcategories.map(item=><option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
+  {people.length>0&&<label>{kind==='expense'?'Pour qui ?':'Qui contribue à ce revenu ?'} <span className="optional">(facultatif)</span><select value={personId} onChange={event=>setPersonId(event.target.value)}><option value="">Dépense ou revenu commun</option>{people.filter(person=>person.active).map(person=><option key={person.id} value={person.id}>{person.name}</option>)}</select></label>}
   <div className="subcategory-add"><input aria-label="Nouvelle sous-catégorie" maxLength={60} placeholder="Nouvelle sous-catégorie" value={newSubcategory} onChange={event=>setNewSubcategory(event.target.value)}/><button type="button" className="secondary" disabled={saving||!newSubcategory.trim()} onClick={addSubcategory}>Ajouter</button></div>
   {kind==='expense'&&<label>Type de dépense<select required value={expenseType} onChange={event=>setExpenseType(event.target.value as ExpenseType)}><option value="">Choisir un type</option><option value="recurring">Récurrente — loyer, abonnement…</option><option value="one_off">Ponctuelle — achat occasionnel…</option></select></label>}
   <label>Fréquence<select value={frequency} onChange={event=>setFrequency(event.target.value as Frequency)}><option value="monthly">Mensuelle</option><option value="annual">Annuelle</option></select></label>

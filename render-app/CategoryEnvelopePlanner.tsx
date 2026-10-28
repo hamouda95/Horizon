@@ -1,3 +1,4 @@
+import {appLocale} from './locale';
 import {useEffect,useState} from 'react';
 import {Trash2} from 'lucide-react';
 import {supabase} from './client';
@@ -6,7 +7,7 @@ import type {Entry} from './household-data';
 
 type Category={id:string;name:string;active:boolean};
 type Envelope={id:string;category_id:string;amount_cents:number};
-const euro=(amount:number)=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(amount/100);
+const euro=(amount:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(amount/100);
 
 export default function CategoryEnvelopePlanner({householdId,categories,month,entries}:{householdId:string;categories:Category[];month:string;entries:Entry[]}){
  const [envelopes,setEnvelopes]=useState<Envelope[]>([]),[amounts,setAmounts]=useState<Record<string,string>>({}),[loading,setLoading]=useState(true),[saving,setSaving]=useState<string|null>(null),[error,setError]=useState(''),[notice,setNotice]=useState('');
@@ -35,7 +36,7 @@ export default function CategoryEnvelopePlanner({householdId,categories,month,en
   if(deleteError)setError(deleteError.message);else{setNotice(`Enveloppe « ${category.name} » supprimée.`);await refresh()}
   setSaving(null);
  }
- return <section className="card envelope-planner"><div><span className="overline">RÉPARTIR LES DÉPENSES</span><h2>Enveloppes par catégorie</h2><p>Fixez une limite mensuelle et suivez les dépenses déjà enregistrées pour {new Date(`${month}-01T12:00:00`).toLocaleDateString('fr-FR',{month:'long',year:'numeric'})}.</p></div>{error&&<div className="error" role="alert">{error}</div>}{notice&&<div className="sharing-notice" role="status">{notice}</div>}{!householdId?<p>Créez d’abord votre foyer pour définir des enveloppes.</p>:loading?<p>Chargement des enveloppes…</p>:categories.length===0?<p>Ajoutez une catégorie de dépenses pour créer une enveloppe.</p>:<div className="envelope-list">{categories.map(category=>{
+ return <section className="card envelope-planner"><div><span className="overline">RÉPARTIR LES DÉPENSES</span><h2>Enveloppes par catégorie</h2><p>Fixez une limite mensuelle et suivez les dépenses déjà enregistrées pour {new Date(`${month}-01T12:00:00`).toLocaleDateString(appLocale(),{month:'long',year:'numeric'})}.</p></div>{error&&<div className="error" role="alert">{error}</div>}{notice&&<div className="sharing-notice" role="status">{notice}</div>}{!householdId?<p>Créez d’abord votre foyer pour définir des enveloppes.</p>:loading?<p>Chargement des enveloppes…</p>:categories.length===0?<p>Ajoutez une catégorie de dépenses pour créer une enveloppe.</p>:<div className="envelope-list">{categories.map(category=>{
   const envelope=envelopes.find(x=>x.category_id===category.id),limit=envelope?.amount_cents||0;
   const spent=entries.filter(x=>x.kind==='expense'&&x.categoryId===category.id).reduce((sum,x)=>sum+x.amount,0);
   const percent=limit>0?Math.min(100,Math.round(spent/limit*100)):0;

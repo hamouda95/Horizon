@@ -200,6 +200,7 @@ export type Database = {
           income_allocation: string
           kind: string
           label: string
+          person_id: string | null
           subcategory_id: string | null
         }
         Insert: {
@@ -215,6 +216,7 @@ export type Database = {
           income_allocation?: string
           kind: string
           label: string
+          person_id?: string | null
           subcategory_id?: string | null
         }
         Update: {
@@ -230,6 +232,7 @@ export type Database = {
           income_allocation?: string
           kind?: string
           label?: string
+          person_id?: string | null
           subcategory_id?: string | null
         }
         Relationships: [
@@ -252,6 +255,13 @@ export type Database = {
             columns: ["household_id"]
             isOneToOne: false
             referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "entries_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "household_people"
             referencedColumns: ["id"]
           },
           {
@@ -376,6 +386,47 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "household_members_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      household_people: {
+        Row: {
+          active: boolean
+          created_at: string
+          household_id: string
+          id: string
+          is_primary: boolean
+          name: string
+          relationship: string
+          sort_order: number
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          household_id: string
+          id?: string
+          is_primary?: boolean
+          name: string
+          relationship?: string
+          sort_order?: number
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          household_id?: string
+          id?: string
+          is_primary?: boolean
+          name?: string
+          relationship?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_people_household_id_fkey"
             columns: ["household_id"]
             isOneToOne: false
             referencedRelation: "households"

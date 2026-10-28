@@ -1,3 +1,4 @@
+import {appLocale} from './locale';
 import {useEffect,useMemo,useState} from 'react';
 import type {Dispatch,SetStateAction} from 'react';
 import {Pencil,Trash2,X} from 'lucide-react';
@@ -8,8 +9,8 @@ import {supabase} from './client';
 
 type Category={id:string;name:string};
 type Obligation=Pick<Tables<'household_obligations'>,'id'|'category_id'|'title'|'amount_cents'|'frequency'|'due_day'|'due_month'|'note'|'active'>;
-const fmt=(cents:number)=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(cents/100);
-const monthName=(month:number)=>new Date(2026,month-1,1).toLocaleDateString('fr-FR',{month:'long'});
+const fmt=(cents:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR'}).format(cents/100);
+const monthName=(month:number)=>new Date(2026,month-1,1).toLocaleDateString(appLocale(),{month:'long'});
 const actualDay=(year:number,month:number,day:number)=>Math.min(day,new Date(year,month,0).getDate());
 
 export default function HouseholdObligationsPage({householdId,categories,month,setMonth,refreshVersion}:{householdId:string;categories:Category[];month:string;setMonth:Dispatch<SetStateAction<string>>;refreshVersion:number}){
