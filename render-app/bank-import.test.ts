@@ -40,3 +40,17 @@ test('demande une vérification pour un mouvement inconnu sur un livret et conse
  assert.equal(inferStatementFlowType(flowRow('INTÉRÊTS LIVRET A',125),'savings'),'standard');
  assert.equal(inferStatementFlowType(flowRow('SALAIRE',250000),'checking'),'standard');
 });
+
+test('reconnaît les en-têtes détaillés des exports bancaires français',()=>{
+ const preview=parseDelimitedStatement('Date de l’opération;Date de valeur;Libellé de l’opération;Montant (EUR)\n27/10/2026;28/10/2026;SUPERMARCHÉ;−42,35','releve.csv');
+ assert.equal(preview.transactions.length,1);
+ assert.equal(preview.transactions[0].transactionDate,'2026-10-27');
+ assert.equal(preview.transactions[0].valueDate,'2026-10-28');
+ assert.equal(preview.transactions[0].label,'SUPERMARCHÉ');
+ assert.equal(preview.transactions[0].amountCents,-4235);
+});
+test('montre un aperçu même quand les en-têtes nécessitent un mapping manuel',()=>{
+ const preview=parseDelimitedStatement('Quand;Quoi;Somme\n27/10/2026;Marché;12,50','export.csv');
+ assert.equal(preview.format,'csv');
+ assert.ok(preview.transactions.length>0);
+});
