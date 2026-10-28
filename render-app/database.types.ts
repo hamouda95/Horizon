@@ -28,6 +28,7 @@ export type Database = {
           owner_user_id: string
           provider: string
           provider_item_id: string | null
+          source_name: string | null
           status: string
           updated_at: string
         }
@@ -44,6 +45,7 @@ export type Database = {
           owner_user_id: string
           provider: string
           provider_item_id?: string | null
+          source_name?: string | null
           status?: string
           updated_at?: string
         }
@@ -60,6 +62,7 @@ export type Database = {
           owner_user_id?: string
           provider?: string
           provider_item_id?: string | null
+          source_name?: string | null
           status?: string
           updated_at?: string
         }
@@ -732,6 +735,10 @@ export type Database = {
       }
       import_bank_transactions: {
         Args: { p_bank_account_id: string; p_transactions: Json }
+        Returns: Json
+      }
+      delete_bank_data: {
+        Args: { p_household_id: string; p_month?: string | null; p_scope?: string; p_bank_account_id?: string | null }
         Returns: Json
       }
       list_household_members: {
