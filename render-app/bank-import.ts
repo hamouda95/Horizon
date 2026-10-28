@@ -3,7 +3,7 @@ import {strFromU8,unzipSync} from 'fflate';
 
 export type CsvMapping={date:string;label:string;amount:string;debit:string;credit:string;valueDate:string;reference:string;currency:string;suggestedLabel:string;category:string;parentCategory:string;balance:string};
 export type StatementTransaction={rowNumber:number;transactionDate:string;valueDate:string|null;label:string;suggestedLabel?:string;categoryHint?:string;parentCategoryHint?:string;amountCents:number;currency:string;externalId:string|null;fingerprint:string;possibleDuplicate?:boolean;balanceCents?:number;balanceDate?:string;error?:string};
-export type StatementPreview={format:'csv'|'xlsx'|'ofx'|'qif';headers:string[];records:string[][];mapping:CsvMapping;transactions:StatementTransaction[];hasHeaders?:boolean};
+export type StatementPreview={format:'csv'|'xlsx'|'ofx'|'qif'|'camt';headers:string[];records:string[][];mapping:CsvMapping;transactions:StatementTransaction[];hasHeaders?:boolean};
 export type BalanceReconciliation={
  checkedIntervals:number;
  matchedIntervals:number;
@@ -156,8 +156,52 @@ export function parseXlsxStatement(buffer:ArrayBuffer|Uint8Array,defaultCurrency
  const bytes=buffer instanceof Uint8Array?buffer:new Uint8Array(buffer);const matrix=xlsxRecords(bytes);if(!matrix.length)throw Error('Aucune opération trouvée dans ce classeur Excel.');let headerIndex=0,score=0;for(let index=0;index<Math.min(matrix.length,15);index++){const current=headerScore(matrix[index]);if(current>score){score=current;headerIndex=index}}const hasHeaders=score>=2;const headerMapping=hasHeaders?mapHeaders(matrix[headerIndex]):emptyMapping;const records=hasHeaders?matrix.slice(headerIndex+1):matrix;const inferred=excelMapping(records);const initialMapping=Object.fromEntries((Object.keys(emptyMapping) as (keyof CsvMapping)[]).map(key=>[key,headerMapping[key]||inferred[key]])) as CsvMapping;const mapping=hasHeaders?resolveDuplicateBalanceMapping(records,matrix[headerIndex],initialMapping):initialMapping;if(!mapping.date||!mapping.label||(!mapping.amount&&!mapping.debit&&!mapping.credit))throw Error('Les colonnes de date, libellé et montant n’ont pas été reconnues. Vérifiez le format Excel ou exportez en CSV.');const width=Math.max(...matrix.map(row=>row.length),0);const headers=hasHeaders?matrix[headerIndex]:syntheticHeaders(width,mapping);return {format:'xlsx',headers,records,mapping,transactions:parseTabularTransactions(records,mapping,defaultCurrency,hasHeaders?headerIndex+2:1),hasHeaders};
 }
 function parseDateOfx(value:string):string|null{const raw=value.slice(0,8);return raw.length===8?parseDate(`${raw.slice(0,4)}-${raw.slice(4,6)}-${raw.slice(6,8)}`):null}
+function xmlBlock(source:string,tag:string):string{
+ const pattern=new RegExp(`<(?:(?:[\\w.-]+):)?${tag}\\b[^>]*>([\\s\\S]*?)<\\/(?:(?:[\\w.-]+):)?${tag}\\s*>`,'i');
+ return source.match(pattern)?.[1]||'';
+}
+function xmlBlocks(source:string,tag:string):string[]{
+ const pattern=new RegExp(`<(?:(?:[\\w.-]+):)?${tag}\\b[^>]*>[\\s\\S]*?<\\/(?:(?:[\\w.-]+):)?${tag}\\s*>`,'gi');
+ return [...source.matchAll(pattern)].map(match=>match[0]);
+}
+function xmlText(source:string,tag:string):string{
+ const value=xmlBlock(source,tag).replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&#(\\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replace(/&#x([\\da-f]+);/gi,(_,n)=>String.fromCodePoint(parseInt(n,16))).replace(/\\s+/g,' ').trim();
+ return value;
+}
+function parseCamtStatement(text:string,defaultCurrency='EUR'):StatementPreview{
+ if(!/<(?:[\\w.-]+:)?(?:BkToCstmrStmt|Stmt)\\b/i.test(text)||!/<(?:[\\w.-]+:)?Ntry\\b/i.test(text))throw Error('XML bancaire non reconnu. Choisissez un export CSV, OFX ou CAMT.053.');
+ const entries=xmlBlocks(text,'Ntry'),seen=new Map<string,number>();
+ const transactions:StatementTransaction[]=entries.map((entry,index)=>{
+  const amountBlock=xmlBlock(entry,'Amt'),amount=parseMoney(xmlText(amountBlock,'Amt')||amountBlock.replace(/<[^>]+>/g,' ').trim());
+  const currency=amountBlock.match(/\\bCcy=["']([^"']+)["']/i)?.[1]||defaultCurrency;
+  const direction=xmlText(entry,'CdtDbtInd').toUpperCase();
+  const amountCents=amount===null?0:Math.abs(amount)*(direction==='DBIT'?-1:1);
+  const booking=xmlBlock(entry,'BookgDt'),value=xmlBlock(entry,'ValDt');
+  const dateValue=xmlText(booking,'Dt')||xmlText(booking,'DtTm')||xmlText(value,'Dt')||xmlText(value,'DtTm');
+  const date=parseDate(dateValue)||parseDateOfx(dateValue);
+  const valueDateValue=xmlText(value,'Dt')||xmlText(value,'DtTm');
+  const valueDate=parseDate(valueDateValue)||parseDateOfx(valueDateValue);
+  const details=xmlBlock(entry,'NtryDtls')||entry;
+  const remittance=xmlBlocks(details,'Ustrd').map(block=>block.replace(/<[^>]+>/g,' ').trim()).filter(Boolean);
+  const relatedName=xmlBlocks(details,'RltdPties').map(block=>xmlText(block,'Nm')).find(Boolean)||'';
+  const label=xmlText(entry,'AddtlNtryInf')||remittance.join(' · ')||xmlText(entry,'NtryRef')||'Opération bancaire';
+  const externalId=xmlText(entry,'AcctSvcrRef')||xmlText(entry,'NtryRef')||null;
+  const error=!date?'Date illisible':amount===null?'Montant illisible':amount===0?'Montant nul':undefined;
+  const transactionDate=date||'',base=date&&amount!==null?transactionFingerprint(date,amountCents,currency,label):`invalid:${index}`,occurrence=(seen.get(base)||0)+1;seen.set(base,occurrence);
+  return {rowNumber:index+1,transactionDate,valueDate:valueDate||null,label,suggestedLabel:relatedName||undefined,amountCents,currency:currency.toUpperCase(),externalId,fingerprint:externalId?transactionFingerprint(date||'',amountCents,currency,label,externalId):`${base}|occurrence:${occurrence}`,possibleDuplicate:occurrence>1,error};
+ });
+ const balances=xmlBlocks(text,'Bal');
+ const parsedBalances=balances.map(block=>({type:xmlText(block,'Cd'),amountBlock:xmlBlock(block,'Amt'),dateSource:xmlBlock(block,'Dt')})).filter(balance=>balance.type==='CLBD'||balance.type==='OPBD').map(balance=>{
+  const amount=parseMoney(xmlText(balance.amountBlock,'Amt')||balance.amountBlock.replace(/<[^>]+>/g,' ').trim());
+  const dateValue=xmlText(balance.dateSource,'Dt')||xmlText(balance.dateSource,'DtTm');
+  return {amount,date:parseDate(dateValue)||parseDateOfx(dateValue),direction:xmlText(balance.amountBlock,'CdtDbtInd').toUpperCase(),currency:balance.amountBlock.match(/\\bCcy=["']([^"']+)["']/i)?.[1]||defaultCurrency};
+ }).filter((balance):balance is typeof balance & {amount:number;date:string}=>balance.amount!==null&&Boolean(balance.date));
+ const closing=parsedBalances.filter(balance=>balance.type==='CLBD').at(-1)||parsedBalances.at(-1);
+ if(closing&&transactions.length){let index=transactions.length-1;for(let i=0;i<transactions.length;i++)if(transactions[i].transactionDate&&transactions[i].transactionDate<=closing.date)index=i;transactions[index]={...transactions[index],balanceCents:Math.round(Math.abs(closing.amount)*100)*(closing.direction==='DBIT'?-1:1),balanceDate:closing.date}}
+ return {format:'camt',headers:[],records:[],mapping:emptyMapping,transactions};
+}
 export function parseDelimitedStatement(text:string,filename:string,defaultCurrency='EUR'):StatementPreview{
- const extension=filename.toLowerCase().split('.').pop();if(extension==='ofx'||extension==='qfx'||/<OFX|<STMTTRN/i.test(text)){
+ const extension=filename.toLowerCase().split('.').pop();if(extension==='xml'||/<(?:[\\w.-]+:)?Document\\b/i.test(text)&&/<(?:[\\w.-]+:)?Ntry\\b/i.test(text))return parseCamtStatement(text,defaultCurrency);if(extension==='ofx'||extension==='qfx'||/<OFX|<STMTTRN/i.test(text)){
   const rows=[...text.matchAll(/<STMTTRN>([\s\S]*?)(?=<STMTTRN>|<\/BANKTRANLIST|<\/OFX|$)/gi)],seen=new Map<string,number>();const balanceRaw=text.match(/<LEDGERBAL>[\s\S]*?<BALAMT>([^<\r\n]+)/i)?.[1]||'',balance=parseMoney(balanceRaw),balanceDateRaw=text.match(/<LEDGERBAL>[\s\S]*?<DTASOF>(\d{8})/i)?.[1]||'',balanceDate=balanceDateRaw?parseDateOfx(balanceDateRaw)||undefined:undefined;
   const transactions=rows.map((match,index)=>{const body=match[1];const field=(name:string)=>body.match(new RegExp(`<${name}>([^<\\r\\n]+)`,'i'))?.[1].trim()||'';const date=parseDateOfx(field('DTPOSTED'));const label=field('NAME')||field('MEMO');const suggestedLabel=field('MEMO');const amount=parseMoney(field('TRNAMT'));const externalId=field('FITID')||null;const error=!date?'Date illisible':!label?'Libellé manquant':amount===null?'Montant illisible':amount===0?'Montant nul':undefined;const transactionDate=date||'';const base=date&&amount!==null?transactionFingerprint(date,amount,defaultCurrency,label):`invalid:${index}`;const occurrence=(seen.get(base)||0)+1;seen.set(base,occurrence);return {rowNumber:index+1,transactionDate,valueDate:null,label,suggestedLabel,amountCents:amount||0,currency:defaultCurrency.toUpperCase(),externalId,fingerprint:externalId?transactionFingerprint(date||'',amount||0,defaultCurrency,label,externalId):`${base}|occurrence:${occurrence}`,possibleDuplicate:occurrence>1,...(index===rows.length-1&&balance!==null?{balanceCents:balance,balanceDate}:{}),error}});return {format:'ofx',headers:[],records:[],mapping:emptyMapping,transactions};
  }
