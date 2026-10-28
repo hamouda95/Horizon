@@ -13,7 +13,7 @@ export type MerchantKnowledgeRule = {
 const ignored = new Set([
   'achat', 'carte', 'cb', 'debit', 'paiement', 'payment', 'visa', 'mastercard',
   'operation', 'transaction', 'contactless', 'sans', 'contact', 'euros', 'eur',
-  'vir', 'virs', 'virement', 'virements', 'sepa', 'inst', 'instantane', 'prlv', 'prelevement', 'prelevements',
+  'vir', 'virs', 'virement', 'virements', 'sepa', 'inst', 'instantane', 'prlv', 'prelevement', 'prelevements', 'recu', 'recus', 'emis', 'vers', 'de', 'du', 'compte', 'comptes',
 ]);
 
 export function normalizeMerchant(value: string): string {
@@ -53,6 +53,6 @@ export function cardMerchantKey(label: string): string | null {
 
 /** Stable key for learning a bank counterparty beyond card-only labels. */
 export function transactionMerchantKey(label:string):string|null{
- const key=normalizeMerchant(label).split(' ').filter(token=>token&&!/^\\d+$/.test(token)).slice(0,3).join(' ');
+ const key=normalizeMerchant(label).split(' ').filter(token=>token&&!/^\d+$/.test(token)).slice(0,3).join(' ');
  return key.length>=4?key:null;
 }
