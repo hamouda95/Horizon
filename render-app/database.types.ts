@@ -448,6 +448,7 @@ export type Database = {
           household_id?: string
           id?: string
           kind?: string
+          flow_type?: string | null
           merchant_key?: string
           merchant_label?: string
           sample_count?: number
