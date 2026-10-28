@@ -197,7 +197,7 @@ function parseCamtStatement(text:string,defaultCurrency='EUR'):StatementPreview{
   return {type:balance.type,amount,date:parseDate(dateValue)||parseDateOfx(dateValue),direction:xmlText(balance.block,'CdtDbtInd').toUpperCase(),currency:balance.amountBlock.match(/\bCcy=["']([^"']+)["']/i)?.[1]||defaultCurrency};
  }).filter((balance):balance is typeof balance & {amount:number;date:string}=>balance.amount!==null&&Boolean(balance.date));
  const closing=parsedBalances.filter(balance=>balance.type==='CLBD').at(-1)||parsedBalances.at(-1);
- if(closing&&transactions.length){let index=transactions.length-1;for(let i=0;i<transactions.length;i++)if(transactions[i].transactionDate&&transactions[i].transactionDate<=closing.date)index=i;transactions[index]={...transactions[index],balanceCents:Math.round(Math.abs(closing.amount)*100)*(closing.direction==='DBIT'?-1:1),balanceDate:closing.date}}
+ if(closing&&transactions.length){let index=transactions.length-1;for(let i=0;i<transactions.length;i++)if(transactions[i].transactionDate&&transactions[i].transactionDate<=closing.date)index=i;transactions[index]={...transactions[index],balanceCents:Math.abs(closing.amount)*(closing.direction==='DBIT'?-1:1),balanceDate:closing.date}}
  return {format:'camt',headers:[],records:[],mapping:emptyMapping,transactions};
 }
 export function parseDelimitedStatement(text:string,filename:string,defaultCurrency='EUR'):StatementPreview{
