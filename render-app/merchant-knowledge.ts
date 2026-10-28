@@ -16,7 +16,6 @@ export function normalizeMerchant(value: string): string {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
     .replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/)
     .filter(token => token && !ignored.has(token) && !/^\d+$/.test(token)).join(' ');
-}
 
 function exactTokenPhrase(label: string, phrase: string): boolean {
   return (` ${normalizeMerchant(label)} `).includes(` ${phrase} `);
