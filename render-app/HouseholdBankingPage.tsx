@@ -8,7 +8,7 @@ import type {HouseholdClassifier} from './local-classifier';
 import {collectPages} from './pagination';
 import {decodeStatementText,parseCsvTable,parseDelimitedStatement,parseTabularTransactions,parseXlsxStatement,reconcileStatementBalances} from './bank-import';
 import type {CsvMapping,StatementPreview,StatementTransaction} from './bank-import';
-import {cardMerchantKey,matchMerchantRule,normalizeMerchant} from './merchant-knowledge';
+import {cardMerchantKey,isKnownAmbiguousMerchant,matchMerchantRule,normalizeMerchant} from './merchant-knowledge';
 import type {MerchantKnowledgeRule} from './merchant-knowledge';
 import {supabase} from './client';
 
@@ -26,6 +26,8 @@ function detectSource(filename:string){const name=normalize(filename);const know
 function suggestedCategory(label:string,kind:'income'|'expense',categories:Category[],classifier:HouseholdClassifier){const learned=classifier(label,kind);if(learned)return learned.categoryId;const text=normalize(label);const rules:Record<string,RegExp[]>={Courses:[/supermarche|market|epicerie|carrefour|auchan|lidl|aldi|intermarche|courses|alimentation/],Transport:[/sncf|ratp|metro|bus|essence|carburant|uber|bolt|parking|transport|auto|moto|voyage/],Logement:[/loyer|rent|immobilier|syndic|foncier|logement/],Factures:[/electricite|edf|engie|\beau\b|internet|telephone|orange|free mobile|assurance|abonnement/],Santé:[/pharmacie|medical|sante|medecin|dentiste/],Loisirs:[/restaurant|cinema|streaming|loisir|spotify|netflix|culture|sortie/],Salaire:[/salaire|payroll|virement employeur|remuneration/]};const options=categories.filter(category=>category.active&&category.kind===kind);for(const category of options)if((rules[category.name]||[]).some(pattern=>pattern.test(text)))return category.id;return options.find(category=>normalize(category.name)===(kind==='expense'?'autres depenses':'autres revenus'))?.id||options[0]?.id||''}
 const bankCategoryAliases:Record<string,Record<string,string[]>>={expense:{'vie quotidienne':['courses','alimentation'],'loisirs et sorties':['loisirs'],'auto moto':['transport'],'voyages transports':['transport'],'abonnements telephonie':['factures'],'services financiers professionnels':['autres depenses'],'virements emis':['autres depenses'],'mouvements internes debiteurs':['autres depenses'],'non categorise':['autres depenses']},income:{'virements recus':['autres revenus'],'mouvements internes crediteurs':['autres revenus'],'remboursements':['autres revenus'],'non categorise':['autres revenus']}};
 function suggestClassification(row:StatementTransaction,kind:'income'|'expense',categories:Category[],subcategories:Subcategory[],classifier:HouseholdClassifier,merchantRules:MerchantKnowledgeRule[]){
+ const fullLabel=`${row.label} ${row.suggestedLabel||''}`;
+ if(isKnownAmbiguousMerchant(fullLabel)||classifier.isAmbiguous?.(fullLabel,kind))return {categoryId:'',subcategoryValue:''};
  const active=categories.filter(category=>category.active&&category.kind===kind);const parent=normalize(row.parentCategoryHint||'');const leaf=normalize(row.categoryHint||'');
  const merchantRule=matchMerchantRule(`${row.label} ${row.suggestedLabel||''}`,kind,merchantRules);
  let category=merchantRule?active.find(item=>item.id===merchantRule.category_id)||null:null;
