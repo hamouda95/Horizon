@@ -165,11 +165,11 @@ function xmlBlocks(source:string,tag:string):string[]{
  return [...source.matchAll(pattern)].map(match=>match[0]);
 }
 function xmlText(source:string,tag:string):string{
- const value=xmlBlock(source,tag).replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&#(\\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replace(/&#x([\\da-f]+);/gi,(_,n)=>String.fromCodePoint(parseInt(n,16))).replace(/\\s+/g,' ').trim();
+ const value=xmlBlock(source,tag).replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replace(/&#x([\da-f]+);/gi,(_,n)=>String.fromCodePoint(parseInt(n,16))).replace(/\s+/g,' ').trim();
  return value;
 }
 function parseCamtStatement(text:string,defaultCurrency='EUR'):StatementPreview{
- if(!/<(?:[\\w.-]+:)?(?:BkToCstmrStmt|Stmt)\\b/i.test(text)||!/<(?:[\\w.-]+:)?Ntry\\b/i.test(text))throw Error('XML bancaire non reconnu. Choisissez un export CSV, OFX ou CAMT.053.');
+ if(!/<(?:[\w.-]+:)?(?:BkToCstmrStmt|Stmt)\b/i.test(text)||!/<(?:[\w.-]+:)?Ntry\b/i.test(text))throw Error('XML bancaire non reconnu. Choisissez un export CSV, OFX ou CAMT.053.');
  const entries=xmlBlocks(text,'Ntry'),seen=new Map<string,number>();
  const transactions:StatementTransaction[]=entries.map((entry,index)=>{
   const amountBlock=xmlBlock(entry,'Amt'),amount=parseMoney(xmlText(amountBlock,'Amt')||amountBlock.replace(/<[^>]+>/g,' ').trim());
@@ -201,7 +201,7 @@ function parseCamtStatement(text:string,defaultCurrency='EUR'):StatementPreview{
  return {format:'camt',headers:[],records:[],mapping:emptyMapping,transactions};
 }
 export function parseDelimitedStatement(text:string,filename:string,defaultCurrency='EUR'):StatementPreview{
- const extension=filename.toLowerCase().split('.').pop();if(extension==='xml'||/<(?:[\\w.-]+:)?Document\\b/i.test(text)&&/<(?:[\\w.-]+:)?Ntry\\b/i.test(text))return parseCamtStatement(text,defaultCurrency);if(extension==='ofx'||extension==='qfx'||/<OFX|<STMTTRN/i.test(text)){
+ const extension=filename.toLowerCase().split('.').pop();if(extension==='xml'||/<(?:[\w.-]+:)?Document\b/i.test(text)&&/<(?:[\w.-]+:)?Ntry\b/i.test(text))return parseCamtStatement(text,defaultCurrency);if(extension==='ofx'||extension==='qfx'||/<OFX|<STMTTRN/i.test(text)){
   const rows=[...text.matchAll(/<STMTTRN>([\s\S]*?)(?=<STMTTRN>|<\/BANKTRANLIST|<\/OFX|$)/gi)],seen=new Map<string,number>();const balanceRaw=text.match(/<LEDGERBAL>[\s\S]*?<BALAMT>([^<\r\n]+)/i)?.[1]||'',balance=parseMoney(balanceRaw),balanceDateRaw=text.match(/<LEDGERBAL>[\s\S]*?<DTASOF>(\d{8})/i)?.[1]||'',balanceDate=balanceDateRaw?parseDateOfx(balanceDateRaw)||undefined:undefined;
   const transactions=rows.map((match,index)=>{const body=match[1];const field=(name:string)=>body.match(new RegExp(`<${name}>([^<\\r\\n]+)`,'i'))?.[1].trim()||'';const date=parseDateOfx(field('DTPOSTED'));const label=field('NAME')||field('MEMO');const suggestedLabel=field('MEMO');const amount=parseMoney(field('TRNAMT'));const externalId=field('FITID')||null;const error=!date?'Date illisible':!label?'Libellé manquant':amount===null?'Montant illisible':amount===0?'Montant nul':undefined;const transactionDate=date||'';const base=date&&amount!==null?transactionFingerprint(date,amount,defaultCurrency,label):`invalid:${index}`;const occurrence=(seen.get(base)||0)+1;seen.set(base,occurrence);return {rowNumber:index+1,transactionDate,valueDate:null,label,suggestedLabel,amountCents:amount||0,currency:defaultCurrency.toUpperCase(),externalId,fingerprint:externalId?transactionFingerprint(date||'',amount||0,defaultCurrency,label,externalId):`${base}|occurrence:${occurrence}`,possibleDuplicate:occurrence>1,...(index===rows.length-1&&balance!==null?{balanceCents:balance,balanceDate}:{}),error}});return {format:'ofx',headers:[],records:[],mapping:emptyMapping,transactions};
  }
