@@ -14,7 +14,7 @@ export type BalanceReconciliation={
 };
 export function inferStatementFlowType(row:StatementTransaction):FlowType{
  const text=normalize([row.label,row.suggestedLabel,row.categoryHint,row.parentCategoryHint].filter(Boolean).join(' '));
- if(/virements emis de comptes a comptes|virements recus de comptes a comptes|transfert interne|mouvements internes|vers bourso|depuis bourso/.test(text))return 'transfer';
+ if(/virements? emis de comptes a comptes|virements? recus de comptes a comptes|transfert interne|mouvements internes|vers bourso|depuis bourso/.test(text))return 'transfer';
  if(/livret|epargne|compte epargne|vers epargne|depuis epargne/.test(text))return 'savings';
  if(/remboursement|rembourse|refund|cpam|securite sociale|complementaire sante/.test(text))return 'refund';
  if(/salaire|payroll|paie|virement employeur|remuneration/.test(text))return 'standard';
