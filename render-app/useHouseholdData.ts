@@ -58,6 +58,8 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
    .on('postgres_changes',{event:'*',schema:'public',table:'households',filter:`id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'categories',filter:`household_id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'entries',filter:`household_id=eq.${householdId}`},refresh)
+   .on('postgres_changes',{event:'*',schema:'public',table:'bank_accounts',filter:`household_id=eq.${householdId}`},refresh)
+   .on('postgres_changes',{event:'*',schema:'public',table:'bank_transactions',filter:`household_id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'monthly_budgets',filter:`household_id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'monthly_category_budgets',filter:`household_id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'savings_movements',filter:`household_id=eq.${householdId}`},refresh)
