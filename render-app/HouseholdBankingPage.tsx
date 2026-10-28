@@ -8,7 +8,7 @@ import type {HouseholdClassifier} from './local-classifier';
 import {collectPages} from './pagination';
 import {decodeStatementText,parseCsvTable,parseDelimitedStatement,parseTabularTransactions,parseXlsxStatement,reconcileStatementBalances} from './bank-import';
 import type {CsvMapping,StatementPreview,StatementTransaction} from './bank-import';
-import {cardMerchantKey,isKnownAmbiguousMerchant,matchMerchantRule,normalizeMerchant} from './merchant-knowledge';
+import {cardMerchantKey,matchMerchantRule,normalizeMerchant} from './merchant-knowledge';
 import type {MerchantKnowledgeRule} from './merchant-knowledge';
 import {supabase} from './client';
 
@@ -27,16 +27,16 @@ function suggestedCategory(label:string,kind:'income'|'expense',categories:Categ
 const bankCategoryAliases:Record<string,Record<string,string[]>>={expense:{'vie quotidienne':['courses','alimentation'],'loisirs et sorties':['loisirs'],'auto moto':['transport'],'voyages transports':['transport'],'abonnements telephonie':['factures'],'services financiers professionnels':['autres depenses'],'virements emis':['autres depenses'],'mouvements internes debiteurs':['autres depenses'],'non categorise':['autres depenses']},income:{'virements recus':['autres revenus'],'mouvements internes crediteurs':['autres revenus'],'remboursements':['autres revenus'],'non categorise':['autres revenus']}};
 function suggestClassification(row:StatementTransaction,kind:'income'|'expense',categories:Category[],subcategories:Subcategory[],classifier:HouseholdClassifier,merchantRules:MerchantKnowledgeRule[]){
  const fullLabel=`${row.label} ${row.suggestedLabel||''}`;
- if(isKnownAmbiguousMerchant(fullLabel)||classifier.isAmbiguous?.(fullLabel,kind))return {categoryId:'',subcategoryValue:''};
+ if(classifier.isAmbiguous?.(fullLabel,kind))return {categoryId:'',subcategoryValue:''};
  const active=categories.filter(category=>category.active&&category.kind===kind);const parent=normalize(row.parentCategoryHint||'');const leaf=normalize(row.categoryHint||'');
- const merchantRule=matchMerchantRule(`${row.label} ${row.suggestedLabel||''}`,kind,merchantRules);
+ const merchantRule=matchMerchantRule(fullLabel,kind,merchantRules);
+ const learned=classifier(fullLabel,kind);
  let category=merchantRule?active.find(item=>item.id===merchantRule.category_id)||null:null;
+ if(!category&&learned)category=active.find(item=>item.id===learned.categoryId)||null;
  if(!category)category=active.find(item=>normalize(item.name)===parent)||null;
  if(!category&&parent){const aliases=bankCategoryAliases[kind][parent]||[];category=active.find(item=>aliases.includes(normalize(item.name)))||null}
  if(!category&&leaf)category=active.find(item=>normalize(item.name)===leaf)||null;
- const learned=classifier(`${row.label} ${row.suggestedLabel||''}`,kind);
- if(!category&&learned)category=active.find(item=>item.id===learned.categoryId)||null;
- if(!category){const id=suggestedCategory(`${row.label} ${row.suggestedLabel||''} ${row.categoryHint||''}`,kind,categories,classifier);category=active.find(item=>item.id===id)||null}
+ if(!category){const id=suggestedCategory(`${fullLabel} ${row.categoryHint||''}`,kind,categories,classifier);category=active.find(item=>item.id===id)||null}
  const usefulLeaf=Boolean(row.categoryHint&&leaf!=='non categorise'&&leaf!=='non classe'&&leaf!==parent&&leaf!==normalize(category?.name||''));
  const sourceSubcategory=category&&usefulLeaf?subcategories.find(item=>item.category_id===category!.id&&item.active&&normalize(item.name)===leaf):undefined;
  const learnedSubcategory=category&&learned?.categoryId===category.id&&learned.subcategoryId?subcategories.find(item=>item.id===learned.subcategoryId&&item.category_id===category!.id&&item.active):undefined;
