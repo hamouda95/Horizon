@@ -1,4 +1,4 @@
-import {cardMerchantKey,matchMerchantRule} from './merchant-knowledge';
+import {cardMerchantKey,isKnownAmbiguousMerchant,matchMerchantRule} from './merchant-knowledge';
 import type {MerchantKnowledgeRule} from './merchant-knowledge';
 
 export type ClassificationKind = 'income' | 'expense';
@@ -22,10 +22,9 @@ export type LocalClassification = {
   confidence: 'high' | 'medium';
 };
 
-export type HouseholdClassifier = (
-  label: string,
-  kind: ClassificationKind,
-) => LocalClassification | null;
+export type HouseholdClassifier = ((label: string, kind: ClassificationKind) => LocalClassification | null) & {
+  isAmbiguous?: (label: string, kind: ClassificationKind) => boolean;
+};
 
 const ignoredWords = new Set([
   'avec', 'dans', 'pour', 'chez', 'sur', 'par', 'les', 'des', 'une', 'aux', 'and',
@@ -72,7 +71,8 @@ export function createHouseholdClassifier(
     .filter(([, categoryIds]) => categoryIds.size > 1)
     .map(([key]) => key));
 
-  return (label, kind) => {
+  const classifier: HouseholdClassifier = (label, kind) => {
+    if (isKnownAmbiguousMerchant(label)) return null;
     const merchantKey = cardMerchantKey(label);
     if (merchantKey && ambiguousMerchants.has(`${kind}:${merchantKey}`)) return null;
     const knownMerchant = matchMerchantRule(label, kind, merchantRules);
@@ -123,4 +123,10 @@ export function createHouseholdClassifier(
       confidence: best.score >= 0.72 && best.support >= 2 ? 'high' : 'medium',
     };
   };
+  classifier.isAmbiguous = (label, kind) => {
+    if (isKnownAmbiguousMerchant(label)) return true;
+    const merchantKey = cardMerchantKey(label);
+    return Boolean(merchantKey && ambiguousMerchants.has(`${kind}:${merchantKey}`));
+  };
+  return classifier;
 }
