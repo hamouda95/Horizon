@@ -31,7 +31,7 @@ function detectSource(filename:string,statement?:StatementPreview):DetectedSourc
  const filenameKey=normalize(filename),headers=statement?.headers||[],records=statement?.records||[];
  const accountNameIndex=headers.findIndex(header=>/^(libelle compte|nom compte|account name|account label|bank name|banque)$/.test(headerKey(header)));
  const accountNames=accountNameIndex<0?[]:records.map(row=>(row[accountNameIndex]||'').trim()).filter(Boolean);
- const accountName=accountNames.reduce((best,value)=>accountNames.filter(item=>item===value).length>accountNames.filter(item=>item===best).length?value:best,'');
+ const accountNameCounts=new Map<string,number>();let accountName='',accountNameCount=0;for(const value of accountNames){const count=(accountNameCounts.get(value)||0)+1;accountNameCounts.set(value,count);if(count>accountNameCount){accountName=value;accountNameCount=count}}
  const filenameBank=knownBankSources.find(([pattern])=>pattern.test(filenameKey));
  const contentBank=knownBankSources.find(([pattern])=>pattern.test(normalize(accountName)));
  const bankMatch=filenameBank||contentBank;
