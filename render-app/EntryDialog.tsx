@@ -1,5 +1,6 @@
 import type {Dispatch, FormEventHandler, SetStateAction} from 'react';
 import {ArrowRight} from 'lucide-react';
+import type {FlowType} from './flow';
 
 type EntryKind='income'|'expense';
 type Frequency='monthly'|'annual';
@@ -8,7 +9,7 @@ type ExpenseType=''|'recurring'|'one_off';
 type Setter<T>=Dispatch<SetStateAction<T>>;
 type Subcategory={id:string;name:string};
 
-export default function EntryDialog({kind,setKind,label,setLabel,amount,setAmount,date,setDate,category,setCategory,categories,subcategoryId,setSubcategoryId,subcategories,newSubcategory,setNewSubcategory,addSubcategory,frequency,setFrequency,expenseType,setExpenseType,allocation,setAllocation,personId,setPersonId,people,editingId,saving,onSubmit}:{
+export default function EntryDialog({kind,setKind,label,setLabel,amount,setAmount,date,setDate,category,setCategory,categories,subcategoryId,setSubcategoryId,subcategories,newSubcategory,setNewSubcategory,addSubcategory,frequency,setFrequency,expenseType,setExpenseType,flowType,setFlowType,allocation,setAllocation,personId,setPersonId,people,editingId,saving,onSubmit}:{
  kind:EntryKind;setKind:Setter<EntryKind>;
  label:string;setLabel:Setter<string>;
  amount:string;setAmount:Setter<string>;
@@ -18,6 +19,7 @@ export default function EntryDialog({kind,setKind,label,setLabel,amount,setAmoun
  newSubcategory:string;setNewSubcategory:Setter<string>;addSubcategory:()=>void;
  frequency:Frequency;setFrequency:Setter<Frequency>;
  expenseType:ExpenseType;setExpenseType:Setter<ExpenseType>;
+ flowType:FlowType;setFlowType:Setter<FlowType>;
  allocation:Allocation;setAllocation:Setter<Allocation>;
  personId:string;setPersonId:Setter<string>;people:{id:string;name:string;active:boolean}[];
  editingId:string|null;saving:boolean;onSubmit:FormEventHandler<HTMLFormElement>;
@@ -30,6 +32,7 @@ export default function EntryDialog({kind,setKind,label,setLabel,amount,setAmoun
    <button type="button" disabled={!!editingId} className={kind==='expense'?'selected':''} onClick={()=>{setKind('expense');setCategory('');setSubcategoryId('');setAllocation('calendar')}}>Dépense</button>
    <button type="button" disabled={!!editingId} className={kind==='income'?'selected':''} onClick={()=>{setKind('income');setCategory('');setSubcategoryId('')}}>Revenu</button>
   </div>
+  <label>Nature du mouvement<select value={flowType} onChange={event=>setFlowType(event.target.value as FlowType)}><option value="standard">{kind==='income'?'Revenu':'Dépense'} comptabilisé·e au budget</option><option value="transfer">Transfert entre comptes</option><option value="refund">Remboursement</option><option value="savings">Mouvement d’épargne</option><option value="review">À vérifier</option></select></label>
   <label>Libellé<input required maxLength={100} placeholder="Ex. Courses de la semaine" value={label} onChange={event=>setLabel(event.target.value)}/></label>
   <div className="formgrid">
    <label>Montant (€)<input required type="number" min="0.01" max="1000000000" step="0.01" placeholder="0,00" value={amount} onChange={event=>setAmount(event.target.value)}/></label>
