@@ -13,9 +13,9 @@ const ignored = new Set([
 ]);
 
 export function normalizeMerchant(value: string): string {
-  return value.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase()
-    .replace(/[^a-z0-9]+/g, ' ').trim().split(/\\s+/)
-    .filter(token => token && !ignored.has(token) && !/^\\d+$/.test(token)).join(' ');
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/)
+    .filter(token => token && !ignored.has(token) && !/^\d+$/.test(token)).join(' ');
 }
 
 function exactTokenPhrase(label: string, phrase: string): boolean {
@@ -39,10 +39,10 @@ export function matchMerchantRule(
 
 /** Learn from a card transaction only after the user changed its suggested category. */
 export function cardMerchantKey(label: string): string | null {
-  const normalized = label.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase()
+  const normalized = label.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
     .replace(/[^a-z0-9]+/g, ' ').trim();
   if (!/(^| )(carte|cb|card|visa|mastercard)( |$)/.test(normalized)) return null;
-  const merchantTokens = normalized.split(' ').filter(token => !/^\\d+$/.test(token) && !ignored.has(token));
+  const merchantTokens = normalized.split(' ').filter(token => !/^\d+$/.test(token) && !ignored.has(token));
   if (!merchantTokens.length) return null;
   return merchantTokens.slice(0, Math.min(3, merchantTokens.length)).join(' ');
 }
