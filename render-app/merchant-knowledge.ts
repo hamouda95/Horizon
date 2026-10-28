@@ -19,6 +19,13 @@ export function normalizeMerchant(value: string): string {
     .replace(/\bsouk al charq\b/g, 'souk alcharq');
 }
 
+/** This bare bank label is known to identify two different Antony businesses. */
+export function isKnownAmbiguousMerchant(value: string): boolean {
+  const normalized = normalizeMerchant(value);
+  return normalized.includes('souk alcharq') &&
+    !/\b(superette|epicerie|restaurant|resto)\b/.test(normalized);
+}
+
 function exactTokenPhrase(label: string, phrase: string): boolean {
   return (` ${normalizeMerchant(label)} `).includes(` ${phrase} `);
 }
