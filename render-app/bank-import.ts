@@ -29,6 +29,7 @@ export function inferStatementFlowType(row:StatementTransaction,accountType?:str
 }
 const emptyMapping:CsvMapping={date:'',label:'',amount:'',debit:'',credit:'',valueDate:'',reference:'',currency:'',suggestedLabel:'',category:'',parentCategory:'',balance:''};
 const normalize=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+const normalizeHeader=(value:string)=>normalize(value).replace(/\b(?:de|d|l|le|la|les|du|des)\b/g,' ').replace(/\s+/g,' ').trim();
 function parseCsv(text:string):{headers:string[];records:string[][];delimiter:string;headerRow:number;hasHeaders:boolean}{
  const source=text.replace(/^\uFEFF/,'');const lines=source.split(/\r?\n/).filter(line=>line.trim());const candidates=[',',';','\t','|'];const delimiter=candidates.map(char=>({char,count:lines.slice(0,12).reduce((total,line)=>total+[...line].filter(c=>c===char).length,0)})).sort((a,b)=>b.count-a.count)[0]?.char||',';
  const records:string[][]=[];let row:string[]=[],cell='',quoted=false;
@@ -42,7 +43,7 @@ export function parseCsvTable(text:string):{headers:string[];records:string[][]}
 }
 function headerScore(row:string[]){const map=mapHeaders(row);const normalized=row.map(normalize);const merchant=normalized.some(value=>/^(marque|brand|merchant|enseigne|commercant|nom marchand)$/.test(value));return [map.date,map.label,map.amount||map.debit||map.credit,merchant?String(row.findIndex(value=>/^(marque|brand|merchant|enseigne|commercant|nom marchand)$/.test(normalize(value)))):'',map.category].filter(Boolean).length;}
 function mapHeaders(headers:string[]):CsvMapping{
- const tokens=headers.map(normalize);const find=(patterns:RegExp[])=>{const index=tokens.findIndex(value=>patterns.some(pattern=>pattern.test(value)));return index<0?'':String(index)};const findLast=(patterns:RegExp[])=>{for(let index=tokens.length-1;index>=0;index--)if(patterns.some(pattern=>pattern.test(tokens[index])))return String(index);return ''};
+ const tokens=headers.map(normalizeHeader);const find=(patterns:RegExp[])=>{const index=tokens.findIndex(value=>patterns.some(pattern=>pattern.test(value)));return index<0?'':String(index)};const findLast=(patterns:RegExp[])=>{for(let index=tokens.length-1;index>=0;index--)if(patterns.some(pattern=>pattern.test(tokens[index])))return String(index);return ''};
  const mapping:CsvMapping={
   date:find([/^(date|date operation|operation date|booking date|booked date|date comptable|date comptabilisation|date de comptabilisation|transaction date|date de transaction|posting date)$/]),
   valueDate:find([/^(date valeur|value date|date val|valuta)$/]),
@@ -163,7 +164,7 @@ export function parseDelimitedStatement(text:string,filename:string,defaultCurre
  if(extension==='qif'||/^!Type:/m.test(text)){
   const transactions:StatementTransaction[]=[],seen=new Map<string,number>();let record:Record<string,string>={};const flush=()=>{if(!Object.keys(record).length)return;const date=parseDate(record.D||''),amount=parseMoney(record.T||''),label=record.P||record.M||record.L||'',externalId=record.N||null;const categoryPath=(record.L||'').split(':').map(value=>value.trim()).filter(Boolean);const categoryHint=categoryPath.length?categoryPath.at(-1):'';const parentCategoryHint=categoryPath.length>1?categoryPath.slice(0,-1).join(':'):'';const error=!date?'Date illisible':!label?'Libellé manquant':amount===null?'Montant illisible':amount===0?'Montant nul':undefined;const transactionDate=date||'',base=date&&amount!==null?transactionFingerprint(date,amount,defaultCurrency,label):`invalid:${transactions.length}`,occurrence=(seen.get(base)||0)+1;seen.set(base,occurrence);transactions.push({rowNumber:transactions.length+1,transactionDate,valueDate:null,label,categoryHint,parentCategoryHint,amountCents:amount||0,currency:defaultCurrency.toUpperCase(),externalId,fingerprint:externalId?transactionFingerprint(date||'',amount||0,defaultCurrency,label,externalId):`${base}|occurrence:${occurrence}`,possibleDuplicate:occurrence>1,error});record={}};
   for(const line of text.split(/\r?\n/)){if(line.trim()==='^'){flush();continue}if(line.length>1)record[line[0]]=(record[line[0]]?record[line[0]]+' ':'')+line.slice(1).trim()}flush();return {format:'qif',headers:[],records:[],mapping:emptyMapping,transactions}}
- const {headers,records,mapping,hasHeaders}=csvRows(text);if(!mapping.date||!mapping.label||(!mapping.amount&&!mapping.debit&&!mapping.credit))throw Error('Je n’ai pas reconnu les colonnes essentielles. Choisissez les colonnes date, libellé et montant dans « Ajuster les colonnes ».');return {format:'csv',headers,records,mapping,transactions:parseTabularTransactions(records,mapping,defaultCurrency,hasHeaders?2:1),hasHeaders};
+ const {headers,records,mapping,hasHeaders}=csvRows(text);return {format:'csv',headers,records,mapping,transactions:parseTabularTransactions(records,mapping,defaultCurrency,hasHeaders?2:1),hasHeaders};
 }
 
 /** Decode common bank export encodings without sending statement data off-device. */
