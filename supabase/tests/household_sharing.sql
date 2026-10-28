@@ -23,6 +23,9 @@ declare
  v_other_goal uuid;
  v_obligation uuid;
  v_document uuid;
+ v_bank_account uuid;
+ v_import_result jsonb;
+ v_second_import_result jsonb;
  v_token text;
  v_email_token text;
  v_email text;
@@ -42,6 +45,8 @@ begin
  perform set_config('request.jwt.claim.sub',v_owner::text,true);
  insert into public.households(owner_id,name) values(v_owner,'transactional sharing test') returning id into v_home;
  insert into public.categories(household_id,kind,name) values(v_home,'expense','Test category') returning id into v_category;
+ insert into public.bank_accounts(household_id,owner_user_id,provider,external_account_id,name,account_type,currency)
+  values(v_home,v_owner,'import','bank-test-account','Test checking','checking','EUR') returning id into v_bank_account;
  insert into public.household_savings_goals(household_id,title,target_cents,target_date) values(v_home,'Test goal',100000,current_date+90) returning id into v_goal;
  insert into public.household_obligations(household_id,category_id,title,amount_cents,frequency,due_day,due_month)
   values(v_home,v_category,'Test annual bill',12000,'annual',15,7) returning id into v_obligation;
@@ -156,8 +161,18 @@ begin
   raise exception using errcode='XX000',message='A member removed another member';
  exception when insufficient_privilege then null;
  end;
+ v_rejected:=false;
+ begin
+  perform public.import_bank_transactions(v_bank_account,jsonb_build_array(jsonb_build_object('external_id','bank-test:1','fingerprint','bank-test:member-attempt','transaction_date',current_date::text,'value_date',null,'label','Test member attempt','amount_cents',-500,'currency','EUR','category_id',v_category)));
+ exception when insufficient_privilege then v_rejected:=true;
+ end;
+ if not v_rejected then raise exception using errcode='XX000',message='A household member imported into another member’s bank account'; end if;
  v_email:=current_setting('test.other_email');
  perform set_config('request.jwt.claim.sub',v_owner::text,true);
+ v_import_result:=public.import_bank_transactions(v_bank_account,jsonb_build_array(jsonb_build_object('external_id','bank-test:1','fingerprint','bank-test:owner-import','transaction_date',current_date::text,'value_date',null,'label','Test bank import','amount_cents',-1234,'currency','EUR','category_id',v_category)));
+ v_second_import_result:=public.import_bank_transactions(v_bank_account,jsonb_build_array(jsonb_build_object('external_id','bank-test:1','fingerprint','bank-test:owner-import','transaction_date',current_date::text,'value_date',null,'label','Test bank import','amount_cents',-1234,'currency','EUR','category_id',v_category)));
+ select count(*) into v_count from public.entries where household_id=v_home and bank_transaction_id is not null;
+ if v_import_result->>'imported'<>'1' or v_second_import_result->>'imported'<>'0' or v_second_import_result->>'duplicates'<>'1' or v_count<>1 then raise exception using errcode='XX000',message='Bank import is not idempotent'; end if;
  select invite_token into v_email_token from public.create_household_invite(v_home,v_email);
  perform set_config('request.jwt.claim.sub',v_member::text,true);
  v_rejected:=false;

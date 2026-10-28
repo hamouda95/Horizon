@@ -14,6 +14,143 @@ export type Database = {
   }
   public: {
     Tables: {
+      bank_accounts: {
+        Row: {
+          account_type: string
+          balance_as_of: string | null
+          balance_cents: number | null
+          created_at: string
+          currency: string
+          external_account_id: string
+          household_id: string
+          id: string
+          name: string
+          owner_user_id: string
+          provider: string
+          provider_item_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          account_type: string
+          balance_as_of?: string | null
+          balance_cents?: number | null
+          created_at?: string
+          currency?: string
+          external_account_id: string
+          household_id: string
+          id?: string
+          name: string
+          owner_user_id: string
+          provider: string
+          provider_item_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          account_type?: string
+          balance_as_of?: string | null
+          balance_cents?: number | null
+          created_at?: string
+          currency?: string
+          external_account_id?: string
+          household_id?: string
+          id?: string
+          name?: string
+          owner_user_id?: string
+          provider?: string
+          provider_item_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_accounts_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bank_provider_users: {
+        Row: {
+          created_at: string
+          provider: string
+          provider_user_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          provider: string
+          provider_user_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          provider?: string
+          provider_user_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      bank_transactions: {
+        Row: {
+          amount_cents: number
+          bank_account_id: string
+          created_at: string
+          currency: string
+          external_id: string | null
+          fingerprint: string
+          household_id: string
+          id: string
+          label: string
+          transaction_date: string
+          value_date: string | null
+        }
+        Insert: {
+          amount_cents: number
+          bank_account_id: string
+          created_at?: string
+          currency: string
+          external_id?: string | null
+          fingerprint: string
+          household_id: string
+          id?: string
+          label: string
+          transaction_date: string
+          value_date?: string | null
+        }
+        Update: {
+          amount_cents?: number
+          bank_account_id?: string
+          created_at?: string
+          currency?: string
+          external_id?: string | null
+          fingerprint?: string
+          household_id?: string
+          id?: string
+          label?: string
+          transaction_date?: string
+          value_date?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_transactions_account_scope"
+            columns: ["bank_account_id", "household_id"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id", "household_id"]
+          },
+          {
+            foreignKeyName: "bank_transactions_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       categories: {
         Row: {
           active: boolean
@@ -52,6 +189,7 @@ export type Database = {
       entries: {
         Row: {
           amount_cents: number
+          bank_transaction_id: string | null
           category_id: string
           created_at: string
           entry_date: string
@@ -66,6 +204,7 @@ export type Database = {
         }
         Insert: {
           amount_cents: number
+          bank_transaction_id?: string | null
           category_id: string
           created_at?: string
           entry_date: string
@@ -80,6 +219,7 @@ export type Database = {
         }
         Update: {
           amount_cents?: number
+          bank_transaction_id?: string | null
           category_id?: string
           created_at?: string
           entry_date?: string
@@ -93,6 +233,13 @@ export type Database = {
           subcategory_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "entries_bank_transaction_scope"
+            columns: ["bank_transaction_id", "household_id"]
+            isOneToOne: false
+            referencedRelation: "bank_transactions"
+            referencedColumns: ["id", "household_id"]
+          },
           {
             foreignKeyName: "entries_category_id_household_id_kind_fkey"
             columns: ["category_id", "household_id", "kind"]
@@ -531,6 +678,10 @@ export type Database = {
           invite_id: string
           invite_token: string
         }[]
+      }
+      import_bank_transactions: {
+        Args: { p_bank_account_id: string; p_transactions: Json }
+        Returns: Json
       }
       list_household_members: {
         Args: { p_household_id: string }

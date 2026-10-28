@@ -1,0 +1,18 @@
+alter publication supabase_realtime drop index if exists public.bank_transactions_external_id_unique;
+drop table if exists public.bank_transactions;
+alter publication supabase_realtime drop table if exists public.bank_accounts;
+revoke all on function public.import_bank_transactions(uuid,jsonb) from public,anon,authenticated;
+drop function if exists public.import_bank_transactions(uuid,jsonb);
+drop index if exists public.entries_bank_transaction_unique;
+alter table public.entries drop constraint if exists entries_bank_transaction_scope;
+alter table public.entries drop column if exists bank_transaction_id;
+drop policy if exists bank_transactions_insert_account_owner on public.bank_transactions;
+drop policy if exists bank_transactions_select_members on public.bank_transactions;
+drop policy if exists bank_accounts_delete_owner on public.bank_accounts;
+drop policy if exists bank_accounts_update_owner on public.bank_accounts;
+drop policy if exists bank_accounts_insert_members on public.bank_accounts;
+drop policy if exists bank_accounts_select_members on public.bank_accounts;
+drop index if exists public.bank_transactions_external_id_unique;
+drop table if exists public.bank_transactions;
+drop table if exists public.bank_provider_users;
+drop table if exists public.bank_accounts;
