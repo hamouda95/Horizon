@@ -741,6 +741,10 @@ export type Database = {
         Args: { p_household_id: string; p_month?: string | null; p_scope?: string; p_bank_account_id?: string | null }
         Returns: Json
       }
+      delete_imported_bank_transaction: {
+        Args: { p_bank_transaction_id: string }
+        Returns: undefined
+      }
       list_household_members: {
         Args: { p_household_id: string }
         Returns: {
