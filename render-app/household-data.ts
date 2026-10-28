@@ -25,7 +25,8 @@ function parseEntryRow(row:RawEntryRow):EntryRow{
  if(row.kind!=='income'&&row.kind!=='expense')throw new Error('Type d’opération invalide dans les données du foyer.');
  if(row.frequency!=='monthly'&&row.frequency!=='annual')throw new Error('Fréquence d’opération invalide dans les données du foyer.');
  if(row.income_allocation!=='calendar'&&row.income_allocation!=='next_month')throw new Error('Affectation de revenu invalide dans les données du foyer.');
- if(!isFlowType(row.flow_type))throw new Error('Nature du mouvement invalide dans les données du foyer.');\n if(row.expense_type!==null&&row.expense_type!=='recurring'&&row.expense_type!=='one_off')throw new Error('Type de dépense invalide dans les données du foyer.');
+ if(!isFlowType(row.flow_type))throw new Error('Nature du mouvement invalide dans les données du foyer.');
+ if(row.expense_type!==null&&row.expense_type!=='recurring'&&row.expense_type!=='one_off')throw new Error('Type de dépense invalide dans les données du foyer.');
  return {...row,kind:row.kind,frequency:row.frequency,income_allocation:row.income_allocation,expense_type:row.expense_type,flow_type:row.flow_type};
 }
 
