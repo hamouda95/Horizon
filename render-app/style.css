@@ -75,3 +75,40 @@
 
 .budget-threshold-alert{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 16px;margin:0 0 16px;border-radius:10px;background:#fff4df;color:#79571b;font-size:13px}.budget-threshold-alert>div{display:grid;gap:4px}.budget-threshold-alert span{font-size:12px}.budget-threshold-alert button{border:0;border-radius:7px;padding:8px 11px;background:#ead7ad;color:#604817;font-weight:700;white-space:nowrap}.budget-threshold-alert.over-budget{background:#fff0ec;color:#a34e39}.budget-threshold-alert.over-budget button{background:#f3d5cc;color:#873d2b}.budget-threshold-alert.budget-not-defined{background:#eaf4e8;color:#345f45}.budget-threshold-alert.budget-not-defined button{background:#d5e6d2;color:#315e4d}.envelope-warning{display:block;color:#8a6422;margin-top:6px}
 @media(max-width:600px){.budget-threshold-alert{align-items:flex-start;flex-direction:column}.budget-threshold-alert button{align-self:flex-start}}
+
+.dashboard-money-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0 0 20px}
+.dashboard-money-card{min-width:0;padding:20px}
+.dashboard-money-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.dashboard-money-heading h2{margin:4px 0 0;font-size:18px}
+.dashboard-account-list{display:grid;gap:0}
+.dashboard-account-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:10px 0;border-bottom:1px solid #edf0eb}
+.dashboard-account-row:last-child{border-bottom:0}
+.dashboard-account-row>div{min-width:0}
+.dashboard-account-row b,.dashboard-account-row strong{display:block}
+.dashboard-account-row b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dashboard-account-row small,.dashboard-money-card>small{display:block;margin-top:4px;color:var(--muted);font-size:12px}
+.dashboard-account-row strong{text-align:right;white-space:nowrap}
+.dashboard-account-total,.dashboard-budget-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:12px;border-top:1px solid #e8ece7}
+.dashboard-account-total>span,.dashboard-budget-foot>span{color:var(--muted)}
+.dashboard-account-total strong,.dashboard-savings-total strong{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;text-align:right}
+.dashboard-money-empty{display:grid;gap:10px;justify-items:start}
+.dashboard-money-empty p,.dashboard-money-card p{margin:0;color:var(--muted);line-height:1.45}
+.dashboard-pay-total{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0}
+.dashboard-pay-total strong{font-size:27px;line-height:1.2}
+.dashboard-pay-card>p{font-size:13px}
+.dashboard-pay-date{display:grid;gap:3px;margin:14px 0 10px;padding:12px;border-radius:12px;background:#f4f7f2}
+.dashboard-pay-date b{font-size:16px}
+.dashboard-pay-date span{font-size:13px;color:var(--muted);line-height:1.4}
+.dashboard-budget-numbers{display:flex;align-items:baseline;gap:7px;margin:8px 0}
+.dashboard-budget-numbers strong{font-size:24px}
+.dashboard-budget-numbers span,.dashboard-budget-foot span{color:var(--muted)}
+.dashboard-budget-track{height:9px;overflow:hidden;border-radius:999px;background:#e9eee8;margin:10px 0}
+.dashboard-budget-track i{display:block;height:100%;border-radius:inherit;background:var(--green);transition:width .2s ease}
+.dashboard-budget-foot{padding-top:0;border:0}
+.dashboard-budget-foot b{font-size:14px}
+.dashboard-savings-month,.dashboard-savings-total{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid #edf0eb}
+.dashboard-savings-month span,.dashboard-savings-total>span{color:var(--muted);font-size:13px;line-height:1.4}
+.dashboard-savings-month strong{font-size:20px;white-space:nowrap}
+.dashboard-savings-total{border:0}
+.dashboard-savings-total strong{font-size:17px}
+@media(max-width:760px){.dashboard-money-grid{grid-template-columns:minmax(0,1fr);gap:12px}.dashboard-money-card{padding:16px}}
