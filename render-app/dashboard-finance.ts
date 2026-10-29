@@ -1,6 +1,7 @@
 import type {Entry} from './household-data';
 
 export type PayEstimate={date:string;daysUntil:number;label:string};
+type PayEntry=Pick<Entry,'kind'|'label'|'category'|'amount'|'date'|'personId'|'flowType'>;
 
 const normalize=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
 const payrollTerms=/\b(salaire|paie|payroll|remuneration|traitement)\b/;
@@ -9,14 +10,14 @@ const dateUtc=(value:string)=>{const [year,month,day]=value.split('-').map(Numbe
 const isoDate=(value:number)=>new Date(value).toISOString().slice(0,10);
 const median=(values:number[])=>{const sorted=[...values].sort((a,b)=>a-b);return sorted[Math.floor(sorted.length/2)]};
 
-export function estimateNextPayday(entries:Pick<Entry,'kind'|'label'|'category'|'amount'|'date'|'personId'|'flowType'>[],today:string):PayEstimate|null{
- const groups=new Map<string,Entry[]>();
+export function estimateNextPayday(entries:PayEntry[],today:string):PayEstimate|null{
+ const groups=new Map<string,PayEntry[]>();
  for(const entry of entries){
   if(entry.kind!=='income'||(entry.flowType||'standard')!=='standard'||entry.amount<=0||entry.date>today)continue;
   const label=normalize(entry.label),category=normalize(entry.category);
   if(!payrollTerms.test(label)&&!payrollTerms.test(category))continue;
   const key=[entry.personId||'shared',category,label].join('|');
-  groups.set(key,[...(groups.get(key)||[]),entry as Entry]);
+  groups.set(key,[...(groups.get(key)||[]),entry]);
  }
  const estimates:PayEstimate[]=[];
  for(const rows of groups.values()){
