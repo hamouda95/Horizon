@@ -6,7 +6,7 @@ import {estimateNextPayday} from './dashboard-finance';
 import {budgetMonth} from './period';
 
 type Account=Pick<Tables<'bank_accounts'>,'id'|'name'|'account_type'|'currency'|'balance_cents'|'balance_as_of'>;
-type Props={accounts:Account[];entries:Entry[];month:string;spentCents:number;budgetCents:number|null;today:string;onOpenBank:()=>void;onOpenBudget:()=>void};
+type Props={accounts:Account[];accountError:string;entries:Entry[];month:string;spentCents:number;budgetCents:number|null;today:string;onOpenBank:()=>void;onOpenBudget:()=>void};
 const currencyCode=(value:string)=>/^[A-Z]{3}$/.test(value)?value:'EUR';
 const money=(cents:number,currency='EUR')=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:currencyCode(currency),maximumFractionDigits:2}).format(cents/100);
 const dateLabel=(value:string)=>new Date(value+'T12:00:00').toLocaleDateString(appLocale(),{day:'numeric',month:'short',year:'numeric'});
@@ -22,7 +22,7 @@ function amountLines(accounts:Account[],accountType?:string){
 }
 function accountTypeName(value:string){return value==='checking'?'Compte courant':value==='savings'?'Épargne':value==='cash'?'Espèces':value==='crypto'?'Crypto':'Autre compte'}
 
-export default function DashboardMoneyOverview({accounts,entries,month,spentCents,budgetCents,today,onOpenBank,onOpenBudget}:Props){
+export default function DashboardMoneyOverview({accounts,accountError,entries,month,spentCents,budgetCents,today,onOpenBank,onOpenBudget}:Props){
  const currentEntries=entries.filter(entry=>budgetMonth(entry)===month);
  const flows=summarizeFlows(currentEntries);
  const netSavings=flows.savingsDeposits-flows.savingsWithdrawals;
@@ -40,7 +40,7 @@ export default function DashboardMoneyOverview({accounts,entries,month,spentCent
  return <section className="dashboard-money-grid" aria-label="Soldes, paie, budget et épargne">
   <article className="card dashboard-money-card dashboard-account-card">
    <div className="dashboard-money-heading"><div><span className="overline">COMPTES DU FOYER</span><h2>Soldes par compte</h2></div><button type="button" className="textbtn" onClick={onOpenBank}>Gérer</button></div>
-   {!accounts.length?<div className="dashboard-money-empty"><p>Aucun compte bancaire suivi.</p><button type="button" className="secondary" onClick={onOpenBank}>Ajouter un compte</button></div>:<><div className="dashboard-account-list">{accounts.map(account=><div className="dashboard-account-row" key={account.id}><div><b>{account.name}</b><small>{accountTypeName(account.account_type)}{account.balance_as_of?' · au '+dateLabel(account.balance_as_of.slice(0,10)):' · date de relevé inconnue'}</small></div><strong>{account.balance_cents===null?'Solde inconnu':money(Number(account.balance_cents),account.currency)}</strong></div>)}</div>{accounts.some(account=>account.account_type==='checking')&&<div className="dashboard-account-total"><span>Total courant</span><strong>{amountLines(accounts,'checking')}</strong></div>}</>}
+   {accountError?<div className="dashboard-money-empty" role="status"><p>{accountError}</p><button type="button" className="secondary" onClick={onOpenBank}>Ouvrir la banque</button></div>:!accounts.length?<div className="dashboard-money-empty"><p>Aucun compte bancaire suivi.</p><button type="button" className="secondary" onClick={onOpenBank}>Ajouter un compte</button></div>:<><div className="dashboard-account-list">{accounts.map(account=><div className="dashboard-account-row" key={account.id}><div><b>{account.name}</b><small>{accountTypeName(account.account_type)}{account.balance_as_of?' · au '+dateLabel(account.balance_as_of.slice(0,10)):' · date de relevé inconnue'}</small></div><strong>{account.balance_cents===null?'Solde inconnu':money(Number(account.balance_cents),account.currency)}</strong></div>)}</div>{accounts.some(account=>account.account_type==='checking')&&<div className="dashboard-account-total"><span>Total courant</span><strong>{amountLines(accounts,'checking')}</strong></div>}</>}
   </article>
   <article className="card dashboard-money-card dashboard-pay-card">
    <div className="dashboard-money-heading"><div><span className="overline">JUSQU’À LA PAIE</span><h2>{pay?'Prochaine paie estimée':'Reste à tenir'}</h2></div></div>
