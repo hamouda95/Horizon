@@ -1,9 +1,20 @@
-export const navigationSections=[
- {label:'ACCUEIL',pages:['Vue d’ensemble','Budget']},
- {label:'OPÉRATIONS',pages:['Revenus','Dépenses','Banque','Échéances']},
- {label:'OUTILS',pages:['Bilan','Catégories','Objectifs','Documents','Astuces']},
+import {ArrowDownLeft,ArrowUpRight,CalendarDays,ClipboardList,FileText,FolderOpen,Landmark,LayoutDashboard,Sparkles,Tags,Target,Wallet} from 'lucide-react';
+
+export const pageRegistry=[
+ {name:'Vue d’ensemble',section:'ACCUEIL',icon:LayoutDashboard},
+ {name:'Budget',section:'ACCUEIL',icon:Wallet},
+ {name:'Revenus',section:'OPÉRATIONS',icon:ArrowDownLeft},
+ {name:'Dépenses',section:'OPÉRATIONS',icon:ArrowUpRight},
+ {name:'Banque',section:'OPÉRATIONS',icon:Landmark},
+ {name:'Échéances',section:'OPÉRATIONS',icon:CalendarDays},
+ {name:'Bilan',section:'OUTILS',icon:ClipboardList},
+ {name:'Catégories',section:'OUTILS',icon:Tags},
+ {name:'Objectifs',section:'OUTILS',icon:Target},
+ {name:'Documents',section:'OUTILS',icon:FolderOpen},
+ {name:'Astuces',section:'OUTILS',icon:Sparkles},
 ] as const;
-export const defaultNavigation:string[]=navigationSections.flatMap(section=>[...section.pages]);
+export const navigationSections=[...new Set(pageRegistry.map(page=>page.section))].map(label=>({label,pages:pageRegistry.filter(page=>page.section===label).map(page=>page.name)}));
+export const defaultNavigation:string[]=pageRegistry.map(page=>page.name);
 export const pageDescriptions:Record<string,string>={
  'Budget':'Planifiez vos dépenses et votre épargne.',
  'Revenus':'Suivez les revenus du foyer.',
