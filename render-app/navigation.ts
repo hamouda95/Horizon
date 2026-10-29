@@ -3,7 +3,7 @@ export const navigationSections=[
  {label:'OPÉRATIONS',pages:['Revenus','Dépenses','Banque','Échéances']},
  {label:'OUTILS',pages:['Bilan','Catégories','Objectifs','Documents','Astuces']},
 ] as const;
-export const defaultNavigation=navigationSections.flatMap(section=>section.pages);
+export const defaultNavigation:string[]=navigationSections.flatMap(section=>[...section.pages]);
 export const pageDescriptions:Record<string,string>={
  'Budget':'Planifiez vos dépenses et votre épargne.',
  'Revenus':'Suivez les revenus du foyer.',
