@@ -115,6 +115,8 @@
 .dashboard-insights-content{display:grid;gap:14px}
 .dashboard-insights-content .household-people-summary{margin:0}
 .dashboard-insights>summary{display:none}
+.dashboard-month-details>summary{display:none}
+.dashboard-month-details-content{min-width:0}
 @media(max-width:760px){
  .overview-period-mobile{display:flex;justify-content:flex-end;margin:-5px 0 8px}
  .overview-period-secondary{display:none}
@@ -147,6 +149,16 @@
  .dashboard-savings-month span,.dashboard-savings-total>span{font-size:10px}
  .dashboard-savings-month strong{font-size:15px}
  .dashboard-savings-total strong{font-size:12px}
+ .dashboard-month-details:not(.dashboard-month-details-always-open){margin:0 0 10px;border:1px solid #e9eee8;border-radius:10px;background:var(--bg)}
+ .dashboard-month-details>summary{display:flex;align-items:center;gap:7px;padding:10px 12px;list-style:none;cursor:pointer;font-size:12px;font-weight:700;color:var(--ink)}
+ .dashboard-month-details>summary::-webkit-details-marker{display:none}
+ .dashboard-month-details>summary small{margin-left:auto;color:var(--muted);font-size:9px;font-weight:500}
+ .dashboard-month-details>summary::after{content:'+';color:var(--green);font-size:17px}
+ .dashboard-month-details[open]>summary{border-bottom:1px solid #e9eee8}
+ .dashboard-month-details[open]>summary::after{content:'−'}
+ .dashboard-month-details-always-open>summary{display:none}
+ .dashboard-month-details-content{padding:10px}
+ .dashboard-month-details-content .dashboard-split{margin:0}
  .dashboard-insights{margin:0 0 12px;border:1px solid #e9eee8;border-radius:10px;background:var(--bg)}
  .dashboard-insights>summary{display:flex;align-items:center;gap:5px;padding:11px 12px;list-style:none;cursor:pointer;font-size:12px;font-weight:700;color:var(--ink)}
  .dashboard-insights>summary::-webkit-details-marker{display:none}
