@@ -1,6 +1,6 @@
 import {appLocale} from './locale';
 import {useEffect,useMemo,useState} from 'react';
-import {ArrowRight,CalendarClock,Plus} from 'lucide-react';
+import {ArrowRight,Plus} from 'lucide-react';
 import type {Tables} from './database.types';
 import {supabase} from './client';
 
