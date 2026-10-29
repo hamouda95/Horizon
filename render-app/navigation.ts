@@ -1,4 +1,4 @@
-import {ArrowDownLeft,ArrowUpRight,CalendarDays,ClipboardList,FileText,FolderOpen,Landmark,LayoutDashboard,Sparkles,Tags,Target,Wallet} from 'lucide-react';
+import {ArrowDownLeft,ArrowUpRight,CalendarDays,ClipboardList,FolderOpen,Landmark,LayoutDashboard,Sparkles,Tags,Target,Wallet} from 'lucide-react';
 
 export const pageRegistry=[
  {name:'Vue d’ensemble',section:'ACCUEIL',icon:LayoutDashboard},
