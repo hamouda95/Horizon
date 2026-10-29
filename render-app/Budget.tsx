@@ -36,7 +36,7 @@ import {budgetMonth,annualProvision,monthlyForecast,shiftMonth,monthOverview} fr
 import {supabase} from './client';
 import {useEffect,useMemo,useState,useRef} from 'react';
 import type {CSSProperties} from 'react';
-import { LayoutDashboard, ArrowDownLeft, ArrowUpRight, CalendarDays, Target, ClipboardList, FolderOpen, Landmark, FileUp, Plus, Sparkles, ChevronDown, ArrowRight, Wallet, Trash2, X, Menu, SlidersHorizontal, Pencil, Tags, GripVertical, ChevronUp, ChevronDown as DownIcon, Home as HomeIcon, UsersRound, UserPlus, Settings, LogOut, Check } from 'lucide-react';
+import { ArrowDownLeft, ArrowUpRight, FileUp, Plus, Sparkles, ChevronDown, ArrowRight, Wallet, Trash2, X, Menu, Pencil, GripVertical, ChevronUp, ChevronDown as DownIcon, Home as HomeIcon, UsersRound, UserPlus, Settings, LogOut, Check } from 'lucide-react';
 const incomeDefaults=['Salaire','Prime','Aides','Autres revenus'];
 const expenseDefaults=['Logement','Courses','Transport','Factures','Loisirs','Santé','Autres dépenses'];
 const fmt=(n:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(n/100);
