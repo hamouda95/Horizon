@@ -3,6 +3,7 @@ import type {Tables} from './database.types';
 import {appLocale} from './locale';
 import {summarizeFlows} from './flow';
 import {estimateNextPayday} from './dashboard-finance';
+import {budgetMonth} from './period';
 
 type Account=Pick<Tables<'bank_accounts'>,'id'|'name'|'account_type'|'currency'|'balance_cents'|'balance_as_of'>;
 type Props={accounts:Account[];entries:Entry[];month:string;spentCents:number;budgetCents:number|null;today:string;onOpenBank:()=>void;onOpenBudget:()=>void};
@@ -22,7 +23,7 @@ function amountLines(accounts:Account[],accountType?:string){
 function accountTypeName(value:string){return value==='checking'?'Compte courant':value==='savings'?'Épargne':value==='cash'?'Espèces':value==='crypto'?'Crypto':'Autre compte'}
 
 export default function DashboardMoneyOverview({accounts,entries,month,spentCents,budgetCents,today,onOpenBank,onOpenBudget}:Props){
- const currentEntries=entries.filter(entry=>(entry.kind==='income'&&entry.incomeAllocation==='next_month'?new Date(entry.date+'T12:00:00').toISOString().slice(0,7):entry.date.slice(0,7))===month);
+ const currentEntries=entries.filter(entry=>budgetMonth(entry)===month);
  const flows=summarizeFlows(currentEntries);
  const netSavings=flows.savingsDeposits-flows.savingsWithdrawals;
  const pay=estimateNextPayday(entries,today);
