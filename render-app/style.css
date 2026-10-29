@@ -119,3 +119,16 @@
 .nav-group .navlabel{margin-top:4px}
 @media(pointer:coarse){.sidebar nav button.nav-page{min-height:44px}.sidebar nav .nav-grip,.sidebar nav .nav-moves button{min-width:32px;min-height:32px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* Texte d’aide et métadonnées : contraste lisible dans les thèmes clair et sombre */
+.space small,.account small,.sidebottom p,.welcome p,.stat p,.insight p,.bottomnote,.dialog p,
+.tips-intro p,.tip-card p,.tip-card small,.tips-empty p,.tips-foot,.expense-class-values span,
+.month-kind,.rowdesc small,.report-stats span,.page-heading p,.product-empty,.product-footnote,
+.envelope-planner>div:first-child>p,.savings-tracker-head p,.breakdown>p,.donut small,
+.authbox>p,.authbox small,.overview-head p,.overview-note,.stathead,.product-summary p,
+.goal-amounts span,.archived-person,.sharing-row small,.savings-balance small,.bank-manual-note small,
+.bank-preview-title,.consolidated-empty,.household-shared-summary,.household-trigger-label small,
+.household-option-copy small,.household-options-empty,.account-consolidation-header,
+.brand small,.brand .space small,.sidebottom .tipicon,.sidebar nav .nav-grip{color:var(--muted)}
+.sidebar nav .nav-page:not(.active){color:var(--muted)}
+.report-stats .negative{color:#873d2b}
