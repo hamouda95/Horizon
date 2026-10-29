@@ -132,3 +132,8 @@
 .brand small,.brand .space small,.sidebottom .tipicon,.sidebar nav .nav-grip{color:var(--muted)}
 .sidebar nav .nav-page:not(.active){color:var(--muted)}
 .report-stats .negative{color:#873d2b}
+
+.budget-tool{border:1px solid #e9eee8;border-radius:12px;background:#fff;overflow:hidden}
+.budget-tool>summary{padding:15px 18px;cursor:pointer;font-weight:600;color:var(--ink)}
+.budget-tool[open]>summary{border-bottom:1px solid #e9eee8}
+.budget-tool>.card{border:0;border-radius:0;margin:0}
