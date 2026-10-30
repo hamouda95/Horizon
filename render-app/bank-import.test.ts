@@ -18,7 +18,7 @@ test('permet de corriger le mapping et signale les dates et montants invalides',
 
 test('importe QIF et OFX/QFX en conservant identifiant et signe',()=>{
  const qif=parseDelimitedStatement('!Type:Bank\nD27/10/2026\nT-4.25\nPMarket\nN42\n^','statement.qif');assert.equal(qif.transactions[0].amountCents,-425);assert.equal(qif.transactions[0].externalId,'42');
- const ofx=parseDelimitedStatement('<OFX><BANKTRANLIST><STMTTRN><TRNTYPE>DEBIT<DTPOSTED>20261027000000<TRNAMT>-8.50<FITID>abc<NAME>Bus pass</STMTTRN></BANKTRANLIST></OFX>','statement.ofx');assert.equal(ofx.transactions[0].transactionDate,'2026-10-27');assert.equal(ofx.transactions[0].amountCents,-850);assert.equal(ofx.transactions[0].fingerprint,transactionFingerprint('2026-10-27',-850,'EUR','Bus pass','abc'));
+ const ofx=parseDelimitedStatement('<OFX><BANKTRANLIST><STMTTRN><TRNTYPE>DEBIT<DTPOSTED>20261027000000<TRNAMT>-8.50<FITID>abc<NAME>Bus pass</STMTTRN></BANKTRANLIST></OFX>','statement.ofx');assert.equal(ofx.transactions[0].transactionDate,'2026-10-27');assert.equal(ofx.transactions[0].amountCents,-850);assert.equal(ofx.transactions[0].fingerprint,transactionFingerprint('2026-10-27',-850,'EUR','Bus pass','abc')+'|occurrence:1');
 });
 
 test('lit le solde OFX et conserve des doublons identiques comme lignes distinctes à confirmer',()=>{
