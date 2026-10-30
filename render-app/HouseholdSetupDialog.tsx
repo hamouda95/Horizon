@@ -5,7 +5,7 @@ type StringSetter=Dispatch<SetStateAction<string>>;
 type ListSetter=Dispatch<SetStateAction<string[]>>;
 type HouseholdPersonDraft={id?:string;name:string;relationship:'self'|'partner'|'child'|'other';isPrimary?:boolean};
 
-export default function HouseholdSetupDialog({name,setName,incomeTypes,setIncomeTypes,expenseTypes,setExpenseTypes,custom,setCustom,customKind,setCustomKind,people,setPeople,onSubmit,onJoin}:{
+export default function HouseholdSetupDialog({name,setName,incomeTypes,setIncomeTypes,expenseTypes,setExpenseTypes,custom,setCustom,customKind,setCustomKind,people,setPeople,onSubmit,onJoin,saving}:{
  name:string;setName:StringSetter;
  incomeTypes:string[];setIncomeTypes:ListSetter;
  expenseTypes:string[];setExpenseTypes:ListSetter;
@@ -14,6 +14,7 @@ export default function HouseholdSetupDialog({name,setName,incomeTypes,setIncome
  people:HouseholdPersonDraft[];setPeople:Dispatch<SetStateAction<HouseholdPersonDraft[]>>;
  onSubmit:FormEventHandler<HTMLFormElement>;
  onJoin:()=>void;
+ saving:boolean;
 }){
  function addCategory(){
   const value=custom.trim();
@@ -40,7 +41,7 @@ export default function HouseholdSetupDialog({name,setName,incomeTypes,setIncome
    <input maxLength={59} placeholder="Ajouter une catégorie" value={custom} onChange={event=>setCustom(event.target.value)}/>
    <button type="button" className="secondary" onClick={addCategory}>Ajouter</button>
   </div>
-  <button className="primary wide" disabled={!incomeTypes.length||!expenseTypes.length||!people.length||people.some(person=>!person.name.trim())}>Enregistrer mon foyer <ArrowRight size={17}/></button>
+  <button className="primary wide" disabled={saving||!incomeTypes.length||!expenseTypes.length||!people.length||people.some(person=>!person.name.trim())}>{saving?'Enregistrement…':'Enregistrer mon foyer'} <ArrowRight size={17}/></button>
   <button type="button" className="textbtn setup-join-link" onClick={onJoin}>J’ai reçu une invitation · rejoindre un foyer</button>
  </form>;
 }

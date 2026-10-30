@@ -32,8 +32,13 @@ export function estimateNextPayday(entries:PayEntry[],today:string):PayEstimate|
   if(!intervals.every(gap=>gap>=5&&gap<=35))continue;
   const recognizedCadence=intervals.every(gap=>gap>=5&&gap<=9)||intervals.every(gap=>gap>=12&&gap<=18)||intervals.every(gap=>gap>=25&&gap<=35);
   if(!recognizedCadence)continue;
-  let next=dateUtc(latest.date)+cadence*dayMs;
-  while(next<=dateUtc(today))next+=cadence*dayMs;
+  const monthly=intervals.every(gap=>gap>=25&&gap<=35);
+  const lastDate=new Date(dateUtc(latest.date));
+  const targetDay=median(recent.map(row=>Number(row.date.slice(8,10))));
+  const atMonth=(offset:number)=>{const end=new Date(Date.UTC(lastDate.getUTCFullYear(),lastDate.getUTCMonth()+offset+1,0));return Date.UTC(end.getUTCFullYear(),end.getUTCMonth(),Math.min(targetDay,end.getUTCDate()))};
+  let offset=1;
+  let next=monthly?atMonth(offset):dateUtc(latest.date)+cadence*dayMs;
+  while(next<=dateUtc(today))next=monthly?atMonth(++offset):next+cadence*dayMs;
   estimates.push({date:isoDate(next),daysUntil:Math.ceil((next-dateUtc(today))/dayMs),label:latest.label});
  }
  return estimates.sort((a,b)=>a.date.localeCompare(b.date))[0]||null;

@@ -10,7 +10,7 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
  const [home,setHome]=useState<Home|null>(null),[households,setHouseholds]=useState<HouseholdChoice[]>([]),[entries,setEntries]=useState<Entry[]>([]),[loading,setLoading]=useState(true),[error,setError]=useState(''),[refreshVersion,setRefreshVersion]=useState(0);
  const [subcategories,setSubcategories]=useState<{id:string;name:string;category_id:string;active:boolean}[]>([]);
  const [plans,setPlans]=useState<{month:string;income_cents:number;expense_cents:number}[]>([]);
- const loadSequence=useRef(0);
+ const loadSequence=useRef(0),selectedId=useRef<string|null>(null);
  async function load(preferredId?:string){
   const sequence=++loadSequence.current;
   setError('');
@@ -26,7 +26,8 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
    setHouseholds(choices);
    if(!choices.length){setHome(null);setEntries([]);setSubcategories([]);setPlans([]);setRefreshVersion(value=>value+1);setModal('setup');return true}
    let savedId='';try{savedId=localStorage.getItem(`horizon.household.${userId}`)||''}catch{/* le choix reste valable pour cette session */}
-   const selected=choices.find(x=>x.id===(preferredId||savedId))||choices.find(x=>x.role==='owner')||choices[0];
+   const selected=choices.find(x=>x.id===(preferredId||selectedId.current||savedId))||choices.find(x=>x.role==='owner')||choices[0];
+   if(selectedId.current!==selected.id){selectedId.current=selected.id;setHome(null);setEntries([]);setSubcategories([]);setPlans([]);setLoading(true)}
    try{localStorage.setItem(`horizon.household.${userId}`,selected.id)}catch{/* le choix reste valable pour cette session */}
    const [categories,entryRows,budgetRows,subRows,peopleRows]=await Promise.all([
     fetchHouseholdRows('categories','id,name,kind,active',selected.id),
@@ -48,13 +49,13 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
  }
  const loadRef=useRef(load);
  loadRef.current=load;
- function selectHousehold(id:string){if(households.some(x=>x.id===id))void load(id)}
+ function selectHousehold(id:string){if(id!==selectedId.current&&households.some(x=>x.id===id)){selectedId.current=id;setModal('');setHome(null);setEntries([]);setSubcategories([]);setPlans([]);setLoading(true);void loadRef.current(id)}}
  useEffect(()=>{setLoading(true);void load()},[userId]);
  useEffect(()=>{
   const householdId=home?.id;
   if(!householdId)return;
   let timer:ReturnType<typeof setTimeout>|undefined;
-  const refresh=()=>{if(timer)clearTimeout(timer);timer=setTimeout(()=>void loadRef.current(householdId),120)};
+  const refresh=()=>{if(timer)clearTimeout(timer);timer=setTimeout(()=>{if(selectedId.current===householdId)void loadRef.current(householdId)},120)};
   const channel=supabase.channel(`household-sync:${userId}:${householdId}`)
    .on('postgres_changes',{event:'*',schema:'public',table:'households',filter:`id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'categories',filter:`household_id=eq.${householdId}`},refresh)
@@ -66,12 +67,13 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
    .on('postgres_changes',{event:'*',schema:'public',table:'savings_movements',filter:`household_id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'household_savings_goals',filter:`household_id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'household_obligations',filter:`household_id=eq.${householdId}`},refresh)
+   .on('postgres_changes',{event:'*',schema:'public',table:'household_obligation_settlements',filter:`household_id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'household_documents',filter:`household_id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'subcategories',filter:`household_id=eq.${householdId}`},refresh)
    .on('postgres_changes',{event:'*',schema:'public',table:'household_people',filter:`household_id=eq.${householdId}`},refresh)
    .subscribe();
   return ()=>{if(timer)clearTimeout(timer);void supabase.removeChannel(channel)};
  },[userId,home?.id]);
- useEffect(()=>{const refresh=()=>{if(document.visibilityState==='visible'&&!modal&&tab!=='Budget')void load()};window.addEventListener('online',refresh);document.addEventListener('visibilitychange',refresh);return()=>{window.removeEventListener('online',refresh);document.removeEventListener('visibilitychange',refresh)}},[userId,modal,tab]);
+ useEffect(()=>{const refresh=()=>{if(document.visibilityState==='visible'&&!modal)void loadRef.current()};window.addEventListener('online',refresh);document.addEventListener('visibilitychange',refresh);return()=>{window.removeEventListener('online',refresh);document.removeEventListener('visibilitychange',refresh)}},[userId,modal,tab]);
  return {home,households,selectHousehold,entries,loading,error,setError,subcategories,setSubcategories,plans,refreshVersion,load};
 }

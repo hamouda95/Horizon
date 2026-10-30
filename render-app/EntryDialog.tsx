@@ -46,7 +46,7 @@ export default function EntryDialog({kind,setKind,label,setLabel,amount,setAmoun
   {flowType==='standard'&&<label>Fréquence<select value={frequency} onChange={event=>setFrequency(event.target.value as Frequency)}><option value="monthly">Mensuelle</option><option value="annual">Annuelle</option></select></label>}
   {kind==='expense'&&flowType==='standard'&&frequency==='annual'&&<p className="field-help">La dépense reste datée du jour saisi. Sa provision est répartie sur les 12 mois de cette année.</p>}
   {kind==='expense'&&flowType==='standard'&&<p className="field-help">La classification organise vos dépenses ; elle ne crée pas automatiquement de futurs paiements.</p>}
-  {kind==='income'&&<label>Affecter ce revenu au budget<select value={allocation} onChange={event=>setAllocation(event.target.value as Allocation)}><option value="calendar">Mois de la date de versement</option><option value="next_month">Mois suivant le versement</option></select></label>}
+  {kind==='income'&&flowType==='standard'&&<label>Affecter ce revenu au budget<select value={allocation} onChange={event=>setAllocation(event.target.value as Allocation)}><option value="calendar">Mois de la date de versement</option><option value="next_month">Mois suivant le versement</option></select></label>}
   <button className="primary wide" disabled={saving}>{saving?'Enregistrement…':editingId?'Enregistrer les modifications':'Enregistrer l’opération'} <ArrowRight size={17}/></button>
  </form>;
 }

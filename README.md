@@ -11,7 +11,13 @@ Horizon est une application web de suivi budgétaire en français, développée 
 - Vue mensuelle et historique sur 12 mois, budgets globaux et enveloppes par catégorie, objectif d'épargne et suivi des versements/retraits.
 - Actualisation des données au retour dans l'application ou après reconnexion, dans les cas prévus par l'interface.
 
-La synchronisation bancaire et la gestion des fiches de paie restent à construire. Le partage donne aux membres l'accès aux opérations, catégories et budgets du foyer ; seul le propriétaire peut gérer les membres et les paramètres du foyer.
+Les imports manuels de relevés et le suivi des comptes sont disponibles. La connexion bancaire automatique et la gestion spécifique des fiches de paie restent reportées. Le partage donne aux membres l'accès aux opérations, catégories et budgets du foyer ; seul le propriétaire peut gérer les membres et les paramètres du foyer.
+
+## Audit et règles métier
+
+L’[audit du 30 octobre 2026](docs/audit-2026-10-30.md) décrit les corrections, règles de calcul, contrôles de sécurité, preuves de vérification et limites restantes. Le réalisé exclut les opérations futures. Le reste du mois tient compte des remboursements et de l’épargne nette. Les échéances peuvent être rapprochées de dépenses existantes sans double comptage. Le bilan propose un export CSV.
+
+La migration `20261030092831_household_budget_integrity.sql` doit précéder le frontend correspondant : elle ajoute l’enregistrement atomique du foyer et le rapprochement des échéances. Les opérations du budget restent en EUR ; les imports en devise étrangère sont refusés en l’absence de conversion explicite.
 
 ## Organisation
 

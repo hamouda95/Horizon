@@ -153,6 +153,7 @@ export default function HouseholdBankingPage({householdId,userId,categories,subc
  async function importRows(){
   const rows=parsed.filter(row=>!row.error&&!ignored.has(row.rowNumber)&&(!existingFingerprints.has(row.fingerprint)||pendingFingerprints.has(row.fingerprint)));
   if(!rows.length){setError('Aucune nouvelle opération valide à importer.');return}
+  if(rows.some(row=>row.currency!=='EUR')){setError('Le budget du foyer est en euros. Les opérations en devise étrangère nécessitent une conversion avant import.');return}
   if(!ownerPersonChoice){setError('Choisissez le titulaire du compte avant de valider.');return}
   if(rows.some(row=>!categoryChoice[row.rowNumber])){setError('Choisissez une catégorie pour chaque opération sélectionnée.');return}
   setBusy(true);setError('');setNotice('');let imported=0,duplicates=0,learnedCount=0,learningConflictCount=0,learningError=false;

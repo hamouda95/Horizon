@@ -24,7 +24,7 @@ function accountTypeName(value:string){return value==='checking'?'Compte courant
 function accountDetail(account:Account){const type=accountTypeName(account.account_type);const hasTypeInName=account.name.toLocaleLowerCase(appLocale()).includes(type.toLocaleLowerCase(appLocale()));return [hasTypeInName?'':type,account.balance_as_of?'au '+dateLabel(account.balance_as_of.slice(0,10)):'date de relevé inconnue'].filter(Boolean).join(' · ')}
 
 export default function DashboardMoneyOverview({accounts,accountError,entries,month,spentCents,budgetCents,today,onOpenBank,onOpenBudget}:Props){
- const currentEntries=entries.filter(entry=>budgetMonth(entry)===month);
+ const currentEntries=entries.filter(entry=>budgetMonth(entry)===month&&entry.date<=today);
  const flows=summarizeFlows(currentEntries);
  const netSavings=flows.savingsDeposits-flows.savingsWithdrawals;
  const pay=estimateNextPayday(entries,today);

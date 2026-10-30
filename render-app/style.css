@@ -203,3 +203,5 @@
 [data-theme="dark"] .budget-tool{background:#19221c;border-color:#334638}
 [data-theme="dark"] .budget-tool[open]>summary{border-color:#334638}
 @media(prefers-color-scheme:dark){[data-theme="system"] .budget-tool{background:#19221c;border-color:#334638}[data-theme="system"] .budget-tool[open]>summary{border-color:#334638}}
+
+.bill-reconcile{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.bill-reconcile select{min-width:0;max-width:100%;flex:1;padding:8px;border:1px solid #dce5de;border-radius:8px;background:var(--bg);color:var(--ink)}
