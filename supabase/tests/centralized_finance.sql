@@ -1,0 +1,41 @@
+begin;
+insert into auth.users(id,email) values('f4000000-0000-4000-8000-000000000001','finance-owner@example.invalid'),('f4000000-0000-4000-8000-000000000002','finance-other@example.invalid');
+set local role authenticated;
+select set_config('request.jwt.claim.sub','f4000000-0000-4000-8000-000000000001',true);
+do $$
+declare h uuid;a uuid;l uuid;c uuid;income_category uuid;e uuid;advance uuid;rejected boolean;v bigint;rule_month date:=date_trunc('month',current_date)::date;
+begin
+ h:=public.configure_household_with_accounts(null,'Finance fixture','["Salaire"]','["Courses"]','[{"name":"Moi","relationship":"self","isPrimary":true}]',jsonb_build_array(jsonb_build_object('name','Cash','account_type','cash','balance_cents',50000,'balance_date',(current_date-1)::text)),null);
+ select id into a from public.bank_accounts where household_id=h;select id into c from public.categories where household_id=h and kind='expense';select id into income_category from public.categories where household_id=h and kind='income';
+ insert into public.entries(household_id,category_id,kind,label,amount_cents,entry_date) values(h,income_category,'income','Existing repayment',60000,current_date) returning id into e;
+ l:=public.create_household_loan(h,'Fictional friend',100000,null,'Unknown original date',e,a,'cash');
+ set constraints all immediate;
+ if not exists(select 1 from public.entries where id=e and loan_id=l and flow_type='loan') then raise exception 'Existing repayment not reclassified';end if;
+ select effective_balance_cents into v from public.financial_accounts where id=a;if v<>110000 then raise exception 'Repayment not in cash exactly once: %',v;end if;
+ insert into public.entries(household_id,category_id,kind,label,amount_cents,entry_date,flow_type,loan_id,account_id,payment_method) values(h,c,'expense','New advance',10000,current_date,'loan',l,a,'cash') returning id into advance;
+ select effective_balance_cents into v from public.financial_accounts where id=a;if v<>100000 then raise exception 'Advance account mismatch';end if;
+ rejected:=false;begin update public.entries set amount_cents=120000 where id=e;exception when check_violation then rejected:=true;end;if not rejected then raise exception 'Overpayment accepted';end if;
+ rejected:=false;begin update public.household_loans set opening_principal_cents=50000 where id=l;exception when check_violation then rejected:=true;end;if not rejected then raise exception 'Opening history mutable';end if;
+ update public.entries set amount_cents=50000 where id=e;
+ select effective_balance_cents into v from public.financial_accounts where id=a;if v<>90000 then raise exception 'Edited repayment counted twice';end if;
+ delete from public.entries where id=e;
+ select effective_balance_cents into v from public.financial_accounts where id=a;if v<>40000 then raise exception 'Deleted repayment persisted in balance';end if;
+ if (select count(*) from public.financial_entry_history where household_id=h and entry_id=e)<>4 then raise exception 'Change history incomplete';end if;
+ perform public.import_bank_transactions(a,jsonb_build_array(jsonb_build_object('fingerprint','finance-import','transaction_date',current_date,'label','Fictional shop','amount_cents',-100,'currency','EUR','category_id',c,'flow_type','standard')));
+ perform public.import_bank_transactions(a,jsonb_build_array(jsonb_build_object('fingerprint','finance-import-other-format','external_id','ofx-reference','transaction_date',current_date,'label','Fictional shop','amount_cents',-100,'currency','EUR','category_id',c,'flow_type','standard')));
+ select effective_balance_cents into v from public.financial_accounts where id=a;if v<>39900 then raise exception 'Imported movement counted twice';end if;
+ perform public.bulk_manage_entries(h,array[(select id from public.entries where household_id=h and label='Fictional shop')],'delete');
+ select effective_balance_cents into v from public.financial_accounts where id=a;if v<>40000 then raise exception 'Deleted import persisted in balance';end if;
+ -- Snapshot includes all movements on the stated closing date.
+ update public.bank_accounts set balance_cents=70000,balance_as_of=current_date::timestamp at time zone 'UTC' where id=a;
+ select effective_balance_cents into v from public.financial_accounts where id=a;if v<>70000 then raise exception 'Snapshot day counted again';end if;
+ perform public.configure_category_budgets(h,rule_month,jsonb_build_array(jsonb_build_object('category_id',c,'cadence','monthly','amount_cents',35000)),false);
+ perform public.configure_category_budgets(h,(rule_month+interval '1 month')::date,jsonb_build_array(jsonb_build_object('category_id',c,'cadence','annual','amount_cents',500001)),false);
+ if (select count(*) from public.category_budget_rules where household_id=h)<>2 then raise exception 'Rule history lost';end if;
+ rejected:=false;begin perform public.configure_category_budgets(h,(rule_month-interval '1 month')::date,jsonb_build_array(jsonb_build_object('category_id',c,'cadence','monthly','amount_cents',10)),false);exception when invalid_parameter_value then rejected:=true;end;if not rejected then raise exception 'Past rules modified';end if;
+ perform set_config('request.jwt.claim.sub','f4000000-0000-4000-8000-000000000002',true);
+ if exists(select 1 from public.household_loans where id=l) or exists(select 1 from public.financial_accounts where id=a) or exists(select 1 from public.financial_entry_history where household_id=h) then raise exception 'Financial data leaked across households';end if;
+ rejected:=false;begin perform public.create_household_loan(h,'Wrong household',100,null,'');exception when insufficient_privilege then rejected:=true;end;if not rejected then raise exception 'Unauthorized loan creation';end if;
+end;
+$$;
+rollback;

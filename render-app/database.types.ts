@@ -14,6 +14,10 @@ export type Database = {
   }
   public: {
     Tables: {
+      household_loans:{Row:{id:string;household_id:string;borrower:string;opening_principal_cents:number;opened_on:string|null;notes:string;created_at:string};Insert:{id?:string;household_id:string;borrower:string;opening_principal_cents?:number;opened_on?:string|null;notes?:string};Update:{borrower?:string;notes?:string};Relationships:[]}
+      category_budget_rules:{Row:{id:string;revision:number;household_id:string;category_id:string;kind:string;effective_month:string;cadence:string;amount_cents:number;enabled:boolean;created_at:string};Insert:{household_id:string;category_id:string;effective_month:string;cadence:string;amount_cents:number;enabled?:boolean};Update:never;Relationships:[]}
+      financial_entry_history:{Row:{id:string;household_id:string;entry_id:string;operation:string;changed_at:string;actor_id:string|null;old_data:Json|null;new_data:Json|null};Insert:never;Update:never;Relationships:[]}
+
       household_obligation_settlements: {
         Row: { id: string; household_id: string; obligation_id: string; entry_id: string; settled_month: string; created_at: string }
         Insert: { id?: string; household_id: string; obligation_id: string; entry_id: string; settled_month: string; created_at?: string }
@@ -214,6 +218,7 @@ export type Database = {
       }
       entries: {
         Row: {
+          account_id:string|null;loan_id:string|null;payment_method:string|null;
           amount_cents: number
           bank_transaction_id: string | null
           category_id: string
@@ -231,6 +236,7 @@ export type Database = {
           flow_type: string
         }
         Insert: {
+          account_id?:string|null;loan_id?:string|null;payment_method?:string|null;
           amount_cents: number
           bank_transaction_id?: string | null
           category_id: string
@@ -248,6 +254,7 @@ export type Database = {
           flow_type?: string
         }
         Update: {
+          account_id?:string|null;loan_id?:string|null;payment_method?:string|null;
           amount_cents?: number
           bank_transaction_id?: string | null
           category_id?: string
@@ -808,9 +815,12 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      financial_accounts:{Row:Database['public']['Tables']['bank_accounts']['Row'] & {effective_balance_cents:number|null};Relationships:[]}
     }
     Functions: {
+      create_household_loan:{Args:{p_household_id:string;p_borrower:string;p_opening_cents:number;p_opened_on:string|null;p_notes:string;p_existing_entry_id?:string|null;p_account_id?:string|null;p_payment_method?:string|null};Returns:string}
+      configure_category_budgets:{Args:{p_household_id:string;p_effective_month:string;p_rules:Json;p_replace_override?:boolean};Returns:number}
+
       bank_duplicate_count: {Args:{p_household_id:string};Returns:number};
       ensure_classification_reference: { Args: { p_household_id: string; p_definitions: Json }; Returns: Json }
       resolve_bank_duplicates: { Args: { p_household_id: string; p_keep_ids: string[] }; Returns: number }
