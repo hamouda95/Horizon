@@ -24,7 +24,7 @@ export function inferStatementFlowType(row:StatementTransaction,accountType?:str
  if(/remboursement|rembourse|refund|\bavoir\b|cpam|securite sociale|complementaire sante/.test(text))return 'refund';
  if(/salaire|payroll|paie|virement employeur|remuneration|loyer|revenu locatif|rent/.test(text))return 'standard';
  // Unrecognized savings-account movements need review rather than being counted as income.
- if(accountType==='savings')return 'review';
+ if(accountType==='savings'||accountType==='investment'||accountType==='crypto'||accountType==='credit')return 'review';
  return row.amountCents>0?'review':'standard';
 }
 const emptyMapping:CsvMapping={date:'',label:'',amount:'',debit:'',credit:'',valueDate:'',reference:'',currency:'',suggestedLabel:'',category:'',parentCategory:'',balance:''};
