@@ -1,5 +1,5 @@
 import type {FlowType} from './flow';
-export function savingsBudget(income:number,expense:number,rateBps:number|null){if(rateBps===null||income<=0)return null;const savings=Math.round(income*rateBps/10000),spending=income-savings;return {savings,spending,remaining:spending-expense,consumed:spending>0?expense/spending*100:null}}
+export function savingsBudget(income:number,expense:number,rateBps:number|null){if(rateBps===null||!Number.isSafeInteger(income)||income<=0||!Number.isSafeInteger(expense)||expense<0||!Number.isInteger(rateBps)||rateBps<0||rateBps>10000)return null;const savings=Math.round(income*rateBps/10000),spending=income-savings;return {savings,spending,remaining:spending-expense,consumed:spending>0?expense/spending*100:null}}
 export type MonthlyBudgetStatus={spentCents:number;budgetCents:number;remainingCents:number;percent:number|null;thresholdReached:boolean;overBudget:boolean};
 export function monthlyBudgetStatus(spentCents:number,budgetCents:number|null,thresholdPercent=80):MonthlyBudgetStatus|null{
  if(budgetCents===null||!Number.isSafeInteger(spentCents)||spentCents<0||!Number.isSafeInteger(budgetCents)||budgetCents<0||!Number.isInteger(thresholdPercent)||thresholdPercent<1||thresholdPercent>100)return null;

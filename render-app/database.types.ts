@@ -14,6 +14,13 @@ export type Database = {
   }
   public: {
     Tables: {
+      household_obligation_settlements: {
+        Row: { id: string; household_id: string; obligation_id: string; entry_id: string; settled_month: string; created_at: string }
+        Insert: { id?: string; household_id: string; obligation_id: string; entry_id: string; settled_month: string; created_at?: string }
+        Update: { id?: string; household_id?: string; obligation_id?: string; entry_id?: string; settled_month?: string; created_at?: string }
+        Relationships: []
+      }
+
       bank_accounts: {
         Row: {
           account_type: string
@@ -801,6 +808,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      configure_household: {
+        Args: { p_household_id: string | null; p_name: string; p_income_types: Json; p_expense_types: Json; p_people: Json }
+        Returns: string
+      }
       accept_household_invite: {
         Args: { p_token: string }
         Returns: {

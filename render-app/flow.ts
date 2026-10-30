@@ -14,9 +14,9 @@ export function flowTypeLabel(value:FlowType,kind:'income'|'expense'){
  return flowTypeLabels[value];
 }
 export type FlowEntry={kind:'income'|'expense';amount:number;flowType?:FlowType};
-export type FlowTotals={income:number;expense:number;refundsReceived:number;refundsReversed:number;transfersReceived:number;transfersSent:number;savingsDeposits:number;savingsWithdrawals:number;needsReviewReceived:number;needsReviewSent:number;confirmedBalance:number};
+export type FlowTotals={income:number;expense:number;refundsReceived:number;refundsReversed:number;transfersReceived:number;transfersSent:number;savingsDeposits:number;savingsWithdrawals:number;needsReviewReceived:number;needsReviewSent:number;confirmedBalance:number;availableBalance:number};
 export function summarizeFlows(entries:FlowEntry[]):FlowTotals{
- const totals:FlowTotals={income:0,expense:0,refundsReceived:0,refundsReversed:0,transfersReceived:0,transfersSent:0,savingsDeposits:0,savingsWithdrawals:0,needsReviewReceived:0,needsReviewSent:0,confirmedBalance:0};
+ const totals:FlowTotals={income:0,expense:0,refundsReceived:0,refundsReversed:0,transfersReceived:0,transfersSent:0,savingsDeposits:0,savingsWithdrawals:0,needsReviewReceived:0,needsReviewSent:0,confirmedBalance:0,availableBalance:0};
  for(const entry of entries){
   if(!Number.isSafeInteger(entry.amount)||entry.amount<0)continue;
   const type=entry.flowType||'standard';
@@ -33,5 +33,6 @@ export function summarizeFlows(entries:FlowEntry[]):FlowTotals{
   }
  }
  totals.confirmedBalance=totals.income+totals.refundsReceived-totals.expense-totals.refundsReversed;
+ totals.availableBalance=totals.confirmedBalance-totals.savingsDeposits+totals.savingsWithdrawals;
  return totals;
 }

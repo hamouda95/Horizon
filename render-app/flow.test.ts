@@ -19,3 +19,7 @@ describe('summarizeFlows',()=>{
   expect(summarizeFlows([{kind:'income',amount:-1},{kind:'income',amount:Number.MAX_SAFE_INTEGER+1}]).income).toBe(0);
  });
 });
+
+it('déduit les versements et ajoute les retraits au disponible sans changer les revenus',()=>{
+ expect(summarizeFlows([{kind:'income',amount:300000},{kind:'expense',amount:100000},{kind:'expense',amount:50000,flowType:'savings'},{kind:'income',amount:10000,flowType:'savings'},{kind:'income',amount:20000,flowType:'refund'},{kind:'expense',amount:999999,flowType:'transfer'}])).toMatchObject({income:300000,expense:100000,confirmedBalance:220000,availableBalance:180000});
+});
