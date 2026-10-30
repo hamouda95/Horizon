@@ -5,6 +5,7 @@ import type {Session} from '@supabase/supabase-js';
 import {supabase,configured} from './client';
 const Budget=lazy(()=>import('./Budget'));
 import './style.css';
+import './workspace.css';
 import ErrorBoundary from './ErrorBoundary';
 function localToday(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function App(){const [session,setSession]=useState<Session|null>(null);const [ready,setReady]=useState(false);const [mode,setMode]=useState<'login'|'signup'|'reset'|'update-password'>('login');const [email,setEmail]=useState('');const [password,setPassword]=useState('');const [passwordConfirm,setPasswordConfirm]=useState('');const [showPassword,setShowPassword]=useState(false),[firstName,setFirstName]=useState(''),[lastName,setLastName]=useState(''),[birthDate,setBirthDate]=useState('');const [notice,setNotice]=useState('');const [busy,setBusy]=useState(false);
