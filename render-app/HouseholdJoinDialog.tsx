@@ -1,3 +1,4 @@
+import {displayText} from './text';
 import {useState} from 'react';
 import {ArrowRight, Link2} from 'lucide-react';
 import {supabase} from './client';
@@ -18,5 +19,5 @@ export default function HouseholdJoinDialog({onJoined}:{onJoined:(householdId:st
    await onJoined(result.household_id,result.household_name);
   }catch(caught){setError((caught as Error).message||'Impossible de rejoindre ce foyer. Vérifiez le lien et réessayez.')}finally{setBusy(false)}
  }
- return <form onSubmit={join}><span className="overline">REJOINDRE UN FOYER</span><h2>Votre place vous attend</h2><p>Collez le lien reçu d’un proche pour accéder à son budget partagé. Votre foyer actuel reste inchangé ; vous pourrez choisir entre les foyers depuis l’icône du foyer.</p><label>Lien ou code d’invitation<div className="join-link-field"><Link2 size={17}/><input autoFocus required value={value} onChange={event=>setValue(event.target.value)} placeholder="https://…?invite=…" autoComplete="off"/></div></label>{error&&<div className="error" role="alert">{error}</div>}<p className="field-help">Une invitation est personnelle si l’expéditeur a indiqué votre adresse. Chaque lien expire après 7 jours.</p><button className="primary wide" disabled={busy||!value.trim()}>{busy?'Vérification…':'Rejoindre ce foyer'} <ArrowRight size={17}/></button></form>;
+ return <form onSubmit={join}><span className="overline">Rejoindre un foyer</span><h2>Votre place vous attend</h2><p>Collez le lien reçu d’un proche pour accéder à son budget partagé. Votre foyer actuel reste inchangé ; vous pourrez choisir entre les foyers depuis l’icône du foyer.</p><label>Lien ou code d’invitation<div className="join-link-field"><Link2 size={17}/><input autoFocus required value={value} onChange={event=>setValue(event.target.value)} placeholder="Https://…?invite=…" autoComplete="off"/></div></label>{error&&<div className="error" role="alert">{displayText(error)}</div>}<p className="field-help">Une invitation est personnelle si l’expéditeur a indiqué votre adresse. Chaque lien expire après 7 jours.</p><button className="primary wide" disabled={busy||!value.trim()}>{busy?'Vérification…':'Rejoindre ce foyer'} <ArrowRight size={17}/></button></form>;
 }

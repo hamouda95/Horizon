@@ -1,3 +1,4 @@
+import {displayText,plural} from './text';
 import type {Entry} from './household-data';
 import type {Tables} from './database.types';
 import {appLocale} from './locale';
@@ -40,25 +41,25 @@ export default function DashboardMoneyOverview({accounts,accountError,entries,mo
  const monthSavingTotal=netSavings<0?'- '+money(-netSavings):money(netSavings);
  return <section className="dashboard-money-grid" aria-label="Soldes, paie, budget et épargne">
   <article className="card dashboard-money-card dashboard-account-card">
-   <div className="dashboard-money-heading"><div><span className="overline">COMPTES DU FOYER</span><h2>Soldes par compte</h2></div><button type="button" className="textbtn" onClick={onOpenBank}>Gérer</button></div>
-   {accountError?<div className="dashboard-money-empty" role="status"><p>{accountError}</p><button type="button" className="secondary" onClick={onOpenBank}>Ouvrir la banque</button></div>:!accounts.length?<div className="dashboard-money-empty"><p>Aucun compte bancaire suivi.</p><button type="button" className="secondary" onClick={onOpenBank}>Ajouter un compte</button></div>:<><div className="dashboard-account-list">{accounts.map(account=><div className="dashboard-account-row" key={account.id}><div><b>{account.name}</b><small>{accountDetail(account)}</small></div><strong>{account.balance_cents===null?'Solde inconnu':money(Number(account.balance_cents),account.currency)}</strong></div>)}</div>{accounts.some(account=>account.account_type==='checking')&&<div className="dashboard-account-total"><span>Total courant</span><strong>{amountLines(accounts,'checking')}</strong></div>}</>}
+   <div className="dashboard-money-heading"><div><span className="overline">Comptes du foyer</span><h2>Soldes par compte</h2></div><button type="button" className="textbtn" onClick={onOpenBank}>Gérer</button></div>
+   {accountError?<div className="dashboard-money-empty" role="status"><p>{accountError}</p><button type="button" className="secondary" onClick={onOpenBank}>Ouvrir la banque</button></div>:!accounts.length?<div className="dashboard-money-empty"><p>Aucun compte bancaire suivi.</p><button type="button" className="secondary" onClick={onOpenBank}>Ajouter un compte</button></div>:<><div className="dashboard-account-list">{accounts.map(account=><div className="dashboard-account-row" key={account.id}><div><b>{displayText(account.name)}</b><small>{accountDetail(account)}</small></div><strong>{account.balance_cents===null?'Solde inconnu':money(Number(account.balance_cents),account.currency)}</strong></div>)}</div>{accounts.some(account=>account.account_type==='checking')&&<div className="dashboard-account-total"><span>Total courant</span><strong>{amountLines(accounts,'checking')}</strong></div>}</>}
   </article>
   <article className="card dashboard-money-card dashboard-pay-card">
-   <div className="dashboard-money-heading"><div><span className="overline">JUSQU’À LA PAIE</span><h2>{pay?'À tenir jusqu’à la paie':'Solde des comptes courants'}</h2></div></div>
+   <div className="dashboard-money-heading"><div><span className="overline">Jusqu’à la paie</span><h2>{pay?'À tenir jusqu’à la paie':'Solde des comptes courants'}</h2></div></div>
    <div className="dashboard-pay-total">{checking.length?checking.map(([currency,total])=><strong key={currency}>{money(total,currency)}</strong>):<strong>—</strong>}</div>
-   <p>Solde cumulé des comptes courants{checkingMissing?'; '+checkingMissing+' solde(s) inconnu(s)':''}.</p>
-   {pay?<div className="dashboard-pay-date"><b>{pay.daysUntil===0?'Aujourd’hui':pay.daysUntil===1?'Demain':'Dans '+pay.daysUntil+' jours'}</b><span>Paie estimée le {dateLabel(pay.date)} · « {pay.label} »</span></div>:<div className="dashboard-pay-date"><b>Paie non estimée</b><span>Classez deux versements récurrents en « Salaire » pour l’estimer.</span></div>}
+   <p>Solde cumulé des comptes courants{checkingMissing?'; '+plural(checkingMissing,'solde inconnu','soldes inconnus'):''}.</p>
+   {pay?<div className="dashboard-pay-date"><b>{pay.daysUntil===0?'Aujourd’hui':pay.daysUntil===1?'Demain':'Dans '+pay.daysUntil+' jours'}</b><span>Paie estimée le {dateLabel(pay.date)} · « {displayText(pay.label)} »</span></div>:<div className="dashboard-pay-date"><b>Paie non estimée</b><span>Classez deux versements récurrents en « Salaire » pour l’estimer.</span></div>}
    <small>Les paiements à venir ne sont pas déduits du solde.</small>
   </article>
   <article className="card dashboard-money-card dashboard-budget-card">
-   <div className="dashboard-money-heading"><div><span className="overline">BUDGET · {monthLabel(month)}</span><h2>Vos sorties d’argent</h2></div><button type="button" className="textbtn" onClick={onOpenBudget}>{budgetCents===null?'Définir':'Modifier'}</button></div>
+   <div className="dashboard-money-heading"><div><span className="overline">Budget · {monthLabel(month)}</span><h2>Vos sorties d’argent</h2></div><button type="button" className="textbtn" onClick={onOpenBudget}>{budgetCents===null?'Définir':'Modifier'}</button></div>
    {budgetCents===null?<div className="dashboard-money-empty"><p>Ajoutez un plafond mensuel pour suivre ce qu’il vous reste.</p><button type="button" className="secondary" onClick={onOpenBudget}>Définir le budget</button></div>:<><div className="dashboard-budget-numbers"><strong>{money(spentCents)}</strong><span>sur {money(budgetCents)}</span></div><div className="dashboard-budget-track" role="progressbar" aria-label="Budget mensuel dépensé" aria-valuemin={0} aria-valuemax={budgetCents} aria-valuenow={Math.min(spentCents,budgetCents)}><i style={{width:Math.max(0,Math.min(100,percent||0))+'%'}}/></div><div className="dashboard-budget-foot"><b>{percent===null?'—':Math.round(percent)+' %'}</b><span>{budgetRemaining!==null&&budgetRemaining<0?'Dépassement de '+money(-budgetRemaining):'Reste '+money(budgetRemaining||0)}</span></div><small>Seules les sorties de consommation confirmées sont comptées.</small></>}
   </article>
   <article className="card dashboard-money-card dashboard-savings-card">
-   <div className="dashboard-money-heading"><div><span className="overline">ÉPARGNE · {monthLabel(month)}</span><h2>Votre épargne</h2></div></div>
+   <div className="dashboard-money-heading"><div><span className="overline">Épargne · {monthLabel(month)}</span><h2>Votre épargne</h2></div></div>
    <div className="dashboard-savings-month"><span>Mouvements nets du mois</span><strong className={netSavings<0?'negative':'positive'}>{monthSavingTotal}</strong></div>
    <div className="dashboard-savings-total"><span>Solde cumulé des livrets{latestSavingsDate?' · relevé au '+dateLabel(latestSavingsDate.slice(0,10)):''}</span><strong>{savingTotals.length?savingTotals.map(([currency,total])=><span key={currency}>{money(total,currency)}</span>):'—'}</strong></div>
-   {savingsMissing>0&&<small>{savingsMissing} solde(s) d’épargne non renseigné(s).</small>}
+   {savingsMissing>0&&<small>{plural(savingsMissing,'solde d’épargne non renseigné','soldes d’épargne non renseignés')}.</small>}
    {!savingAccounts.length&&<button type="button" className="textbtn" onClick={onOpenBank}>Ajouter un livret</button>}
    <small>Le mouvement du mois vient des opérations classées « épargne ».</small>
   </article>
