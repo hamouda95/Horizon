@@ -808,6 +808,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      merge_import_accounts: { Args: { p_source_id: string; p_target_id: string }; Returns: Json }
       configure_household: {
         Args: { p_household_id: string | null; p_name: string; p_income_types: Json; p_expense_types: Json; p_people: Json }
         Returns: string
