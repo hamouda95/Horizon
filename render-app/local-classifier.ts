@@ -8,12 +8,14 @@ export type ClassificationExample = {
   kind: ClassificationKind;
   categoryId: string;
   subcategoryId?: string | null;
+  flowType?: string;
 };
 
 export type ClassificationOption = {
   id: string;
   kind: string;
   active: boolean;
+  name?: string;
 };
 
 export type LocalClassification = {
@@ -50,7 +52,9 @@ export function createHouseholdClassifier(
   const merchantCategories = new Map<string, Set<string>>();
 
   for (const example of examples) {
-    if (!activeIds.has(example.categoryId)) continue;
+    if (!activeIds.has(example.categoryId)||example.flowType&&example.flowType!=='standard') continue;
+    const category=categories.find(c=>c.id===example.categoryId);
+    if(category?.name&&/^(autres?|other|non class|non categor)/i.test(category.name.normalize('NFD').replace(/[\u0300-\u036f]/g,'')))continue;
     const merchantKey = cardMerchantKey(example.label);
     if (merchantKey) {
       const key = `${example.kind}:${merchantKey.replace(/\s+/g, '')}`;
