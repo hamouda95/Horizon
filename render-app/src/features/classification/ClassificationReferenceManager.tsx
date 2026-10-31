@@ -69,7 +69,7 @@ export default function ClassificationReferenceManager({householdId,userId,categ
  return <details className="card product-panel" open={open}><summary>Règles de catégorisation du foyer</summary>
   <p>Quand le libellé d’une opération contient l’expression d’une règle, Horizon propose sa catégorie et sa nature. La règle la plus précise l’emporte, et les règles du foyer passent avant le dictionnaire général.</p>
   {error&&<p className="error" role="alert">{displayText(error)}</p>}{notice&&<p role="status">{displayText(notice)}</p>}
-  <form onSubmit={e=>{e.preventDefault();void save()}} className="manual-account-form"><h3>{editing?'Modifier la règle':'Ajouter une règle'}</h3>
+  <form onSubmit={e=>{e.preventDefault();void save()}} className="product-form rules-form"><h3>{editing?'Modifier la règle':'Ajouter une règle'}</h3>
    <label>Le libellé contient<input value={phrase} maxLength={120} required placeholder="ex. Carrefour, EDF, Netflix" onChange={e=>setPhrase(e.target.value)}/></label>
    <label>Type<select value={kind} onChange={e=>{setKind(e.target.value as 'income'|'expense');setCategory('');setSubcategory('')}}><option value="expense">Dépense</option><option value="income">Revenu</option></select></label>
    <label>Catégorie<select value={category} required onChange={e=>{setCategory(e.target.value);setSubcategory('')}}><option value="">Choisir</option>{categories.filter(c=>c.active&&c.kind===kind).map(c=><option value={c.id} key={c.id}>{displayText(c.name)}</option>)}</select></label>

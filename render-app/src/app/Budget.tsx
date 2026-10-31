@@ -64,7 +64,7 @@ export default function Budget({user,onSignOut}:{user:User;onSignOut:()=>void}){
  const {loans,home,households,selectHousehold,entries,loading,error,setError,subcategories,setSubcategories,plans,refreshVersion,load}=useHouseholdData(userId,modal,tab,setModal);
  const routeStarted=useRef(false);
  useEffect(()=>{const readRoute=()=>setTab(pageFromHash(window.location.hash));window.addEventListener('popstate',readRoute);window.addEventListener('hashchange',readRoute);return()=>{window.removeEventListener('popstate',readRoute);window.removeEventListener('hashchange',readRoute)}},[]);
- useEffect(()=>{const hash=hashForPage(tab);if(window.location.hash!==hash){if(routeStarted.current)window.history.pushState(null,'',hash);else window.history.replaceState(null,'',hash)}routeStarted.current=true;window.scrollTo({top:0,behavior:'auto'})},[tab]);
+ useEffect(()=>{setNotice('')},[tab]);useEffect(()=>{const hash=hashForPage(tab);if(window.location.hash!==hash){if(routeStarted.current)window.history.pushState(null,'',hash);else window.history.replaceState(null,'',hash)}routeStarted.current=true;window.scrollTo({top:0,behavior:'auto'})},[tab]);
  const categoryBudgets=useCategoryBudgets(home?.id||'',refreshVersion,month);
  const [duplicateState,setDuplicateState]=useState({householdId:'',count:0,error:''});
  useEffect(()=>{let active=true;const householdId=home?.id||'';setDuplicateState({householdId,count:0,error:''});if(householdId)void supabase.rpc('bank_duplicate_count',{p_household_id:householdId}).then(({data,error})=>{if(active)setDuplicateState({householdId,count:data||0,error:error?'La vérification des doublons est indisponible.':''})});return()=>{active=false}},[home?.id,refreshVersion]);
