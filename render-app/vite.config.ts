@@ -1,5 +1,5 @@
 import {defineConfig,loadEnv} from 'vite';
-import {browserPolicy,isPublishableKey} from './public-config.ts';
+import {browserPolicy,isPublishableKey} from './src/lib/public-config.ts';
 
 export default defineConfig(({mode,command})=>{
  const env={...loadEnv(mode,process.cwd(),'VITE_'),...process.env};

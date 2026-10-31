@@ -1,0 +1,11 @@
+import {createElement} from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+import {expect,it} from 'vitest';
+import CompactOverview from './CompactOverview';
+import type {Entry} from '../../hooks/household-data';
+const entry=(flowType:Entry['flowType'],amount:number):Entry=>({id:flowType,amount,kind:'income',label:'Fixture',date:'2026-10-30',flowType,frequency:'monthly',incomeAllocation:'calendar',category:'Salaire',categoryId:'c',subcategoryId:null,bankTransactionId:null,personId:null,expenseType:null});
+it('résume budget et comptes sans cacher les crédits à vérifier ni assimiler un solde inconnu à zéro',()=>{
+ const html=renderToStaticMarkup(createElement(CompactOverview,{accounts:[{id:'a',name:'Livret',account_type:'savings',currency:'EUR',balance_cents:null,balance_as_of:null}],accountError:'',entries:[entry('standard',250000),entry('review',100000)],month:'2026-10',setMonth:()=>{},budgetCents:100000,today:'2026-10-30',loading:false,onBank:()=>{},onBudget:()=>{},onIncome:()=>{},onExpenses:()=>{},onReport:()=>{}}));
+ expect(html).toContain('Total par compte');expect(html).toContain('Où en est le budget');expect(html).toContain('2 500,00');expect(html).toContain('1 entrée à vérifier');expect(html).toContain('Solde à renseigner');expect(html).not.toContain('Dernières opérations');expect(html).not.toContain('Paie estimée');
+});
+it('affiche chaque catégorie active, même vide, et les banques dans leur type de compte',()=>{const html=renderToStaticMarkup(createElement(CompactOverview,{accounts:[{id:'a',name:'Courant',source_name:'Banque exemple',account_type:'checking',currency:'EUR',balance_cents:10000,balance_as_of:'2026-10-30'},{id:'b',name:'Livret',source_name:'Autre banque',account_type:'savings',currency:'EUR',balance_cents:20000,balance_as_of:'2026-10-30'}],categories:Array.from({length:9},(_,i)=>({id:String(i),name:'Catégorie '+i,kind:'expense',active:true})),accountError:'',entries:[],month:'2026-10',setMonth:()=>{},budgetCents:null,today:'2026-10-30',loading:false,onBank:()=>{},onBudget:()=>{},onIncome:()=>{},onExpenses:()=>{},onReport:()=>{}}));for(let i=0;i<9;i++)expect(html).toContain('Catégorie '+i);expect(html).toContain('Banque exemple');expect(html).toContain('Autre banque');expect(html).not.toContain('Voir les 9 catégories');expect(html).toContain('Plafond non défini')});

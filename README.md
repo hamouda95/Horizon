@@ -21,7 +21,13 @@ La migration `20261030092831_household_budget_integrity.sql` doit précéder le 
 
 ## Organisation
 
-- `render-app/` : application React/Vite déployée.
+- `render-app/` : application React/Vite déployée. Le code est dans `render-app/src/` :
+  - `app/` : coquille de l'application (navigation, préférences, notifications) ;
+  - `components/` : composants d'interface partagés ;
+  - `hooks/` : chargement et synchronisation des données du foyer ;
+  - `lib/` : client Supabase, types, montants, dates, périodes et calculs financiers ;
+  - `features/<domaine>/` : une page métier par dossier (overview, operations, banking, classification, budget, categories, household, obligations, goals, documents, loans, reports), avec ses tests ;
+  - `styles/` : feuilles de style.
 - `database/applied/` : archives des migrations initiales, à utiliser avec l'historique réel Supabase.
 - `supabase/migrations/` : migrations de partage et de synchronisation appliquées en production.
 - `supabase/tests/household_sharing.sql` : scénarios RLS transactionnels annulés après vérification.
