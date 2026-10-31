@@ -1,3 +1,4 @@
+import {bankKey,bankName} from './account-organization';
 export type BudgetTone='green'|'orange'|'light-green'|'red'|'unset';
 export function categoryBudgetProgress(spent:number,limit:number|null){
  if(limit===null)return {percent:null,tone:'unset' as BudgetTone,remaining:null};
@@ -16,7 +17,7 @@ export function budgetPercentLabel(percent:number,locale='fr-FR'){
 export function banksByAccountType(accounts:{name:string;source_name?:string|null;account_type:string;currency:string;balance_cents:number|null}[],types:string[],currency:string){
  const groups=new Map<string,{bank:string;known:number;knownCount:number;missing:number;count:number}>();
  for(const a of accounts.filter(a=>types.includes(a.account_type)&&a.currency===currency)){
-  const bank=a.source_name?.trim()||a.name,key=bank.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('fr-FR').replace(/\s+/g,' ');
+  const bank=bankName(a.source_name?.trim()||a.name),key=bankKey(bank);
   const row=groups.get(key)||{bank,known:0,knownCount:0,missing:0,count:0};row.count++;
   if(a.balance_cents===null)row.missing++;else{row.known+=a.balance_cents;row.knownCount++}groups.set(key,row);
  }
