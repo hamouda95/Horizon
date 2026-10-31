@@ -1,3 +1,4 @@
+import {expect} from 'vitest';
 import {test} from 'vitest';import {strict as assert} from 'node:assert';
 import {parseDelimitedStatement,parseCsvTransactions,transactionFingerprint,inferStatementFlowType,type StatementTransaction} from './bank-import.ts';
 
@@ -75,4 +76,11 @@ test('importe un relevé CAMT.053 avec date, sens, devise et solde final',()=>{
 test('détecte un fichier TSV sans mapping spécifique',()=>{
  const preview=parseDelimitedStatement('Date\tLibellé\tMontant\n2026-10-27\tBus\t-2,50','operations.tsv');
  assert.equal(preview.transactions[0].amountCents,-250);
+});
+
+test('ne confond jamais la colonne crédit Fortuneo avec un solde',()=>{
+ const preview=parseDelimitedStatement('Date opération;Date valeur;libellé;Débit;Crédit;\n30/10/2026;30/10/2026;Virement exemple;;276,51;\n29/10/2026;29/10/2026;Virement exemple;;20;\n27/10/2026;27/10/2026;Magasin;-3,30;;','example.csv');
+ expect(preview.mapping.balance).toBe('');
+ expect(preview.transactions.map(r=>r.amountCents)).toEqual([27651,2000,-330]);
+ expect(preview.transactions.every(r=>r.balanceCents===undefined)).toBe(true);
 });
