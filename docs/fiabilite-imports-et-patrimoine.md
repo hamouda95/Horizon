@@ -10,7 +10,7 @@ Dans **Comptes et avoirs → Doublons à vérifier**, choisir les groupes et la 
 
 ## Référentiel de catégorisation
 
-Le dictionnaire initial est dans `render-app/classification-reference.ts` : supermarchés, alimentation, loyers entrants/sortants, salaires, aides, énergie, télécoms, assurances, transports, santé, abonnements, impôts, remboursements, revenus de placements. Les mots sont recherchés dans le libellé complet et les indications de catégorie du relevé. La phrase la plus précise est prioritaire. Une règle du foyer confirmée prévaut sur ce dictionnaire.
+Le dictionnaire initial est dans `render-app/src/features/classification/classification-reference.ts` : supermarchés, alimentation, loyers entrants/sortants, salaires, aides, énergie, télécoms, assurances, transports, santé, abonnements, impôts, remboursements, revenus de placements. Les mots sont recherchés dans le libellé complet et les indications de catégorie du relevé. La phrase la plus précise est prioritaire. Une règle du foyer confirmée prévaut sur ce dictionnaire.
 
 Dans **Comptes et avoirs → Dictionnaire de catégorisation**, consulter le référentiel, compléter les catégories et sous-catégories manquantes puis ajouter ou modifier une correspondance du foyer. Les catégories archivées ne sont pas réactivées. Les opérations anciennes sont corrigées dans la revue de catégorisation après sélection ; une nouvelle règle ne réécrit pas silencieusement leur historique. Toute proposition reste à vérifier.
 
