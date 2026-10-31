@@ -14,7 +14,9 @@ it('refuse les archives sans relevé ou excessivement décompressées',()=>{
 it('extrait les colonnes débit et crédit du PDF sans importer ses totaux',()=>{
  const p=pdfStatementPreview([[{str:'Débit',x:400,y:100},{str:'Crédit',x:500,y:100},{str:'30/10/2026',x:10,y:90},{str:'Magasin exemple',x:100,y:90},{str:'12,50',x:400,y:90},{str:'31/10/2026',x:10,y:80},{str:'Virement exemple',x:100,y:80},{str:'50,00',x:500,y:80},{str:'31/10/2026 Solde 301,72',x:10,y:70}]]);
  expect(p.transactions.map(r=>r.amountCents)).toEqual([-1250,5000]);
- expect(p.transactions.every(r=>r.balanceCents===undefined&&!r.error)).toBe(true);
+ expect(p.transactions.every(r=>!r.error)).toBe(true);
+ // The closing balance line is kept as a snapshot on the last operation it follows.
+ expect(p.transactions.map(r=>[r.balanceCents,r.balanceDate])).toEqual([[undefined,undefined],[30172,'2026-10-31']]);
 });
 it('signale les montants ambigus et refuse un PDF sans texte exploitable',()=>{
  expect(pdfStatementPreview([[{str:'30/10/2026 Magasin exemple 12,50',x:0,y:0}]]).transactions[0].error).toMatch(/vérifier/);

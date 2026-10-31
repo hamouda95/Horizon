@@ -10,3 +10,6 @@ npm-debug.log*
 supabase/.temp/
 
 .horizon-preview/
+
+# Relevés bancaires réels utilisés pour tester les imports : jamais versionnés
+echantillons/
