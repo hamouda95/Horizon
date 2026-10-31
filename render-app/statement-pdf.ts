@@ -1,7 +1,10 @@
+import {investmentStatement} from './asset-valuation';
 import {type StatementPreview,parseDelimitedStatement} from './bank-import';
 export type PdfTextItem={str:string;x:number;y:number};
 const fold=(s:string)=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 export function pdfStatementPreview(pages:PdfTextItem[][]):StatementPreview{
+ const textLines=pages.flatMap(items=>{const rows=new Map<number,PdfTextItem[]>();for(const item of items){const y=Math.round(item.y/3)*3;rows.set(y,[...(rows.get(y)||[]),item])}return [...rows].sort((a,b)=>b[0]-a[0]).map(([,r])=>r.sort((a,b)=>a.x-b.x).map(i=>i.str).join(' ').trim())});
+ const valuation=investmentStatement(textLines);if(valuation){const empty=parseDelimitedStatement('Date;Libellé;Montant','empty.csv');return {...empty,format:'pdf',transactions:[],assetValuation:valuation}}
  const records:string[][]=[];let debitX:number|undefined,creditX:number|undefined;
  for(const items of pages){
   if(items.some(i=>/\b(?:USD|GBP|CHF|CAD|JPY)\b|[$£]/.test(i.str)))throw Error('Ce relevé PDF semble être dans une autre devise. Importez un export bancaire indiquant la devise.');
