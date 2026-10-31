@@ -10,3 +10,15 @@ export function obligationsForMonth<T extends ObligationSchedule>(rows:T[],settl
   return {...row,day,dueDate,settlement,status:settlement?'paid' as const:dueDate<today?'overdue' as const:'pending' as const};
  }).sort((a,b)=>a.dueDate.localeCompare(b.dueDate));
 }
+
+type PaymentCandidate={id:string;date:string;amount:number};
+const dayDistance=(a:string,b:string)=>Math.abs(Date.parse(a+'T12:00:00Z')-Date.parse(b+'T12:00:00Z'))/86400000;
+/** Orders the expenses that could settle a bill: close amount and date first, then the rest of the surrounding two months. */
+export function rankPaymentCandidates<T extends PaymentCandidate>(candidates:T[],amountCents:number,dueDate:string,{maxSuggestions=3,windowDays=62}={}){
+ const tolerance=Math.max(100,Math.round(amountCents*0.1));
+ const near=candidates.filter(c=>dayDistance(c.date,dueDate)<=windowDays);
+ const score=(c:T)=>Math.abs(c.amount-amountCents)/Math.max(amountCents,1)+dayDistance(c.date,dueDate)/30;
+ const suggested=near.filter(c=>Math.abs(c.amount-amountCents)<=tolerance&&dayDistance(c.date,dueDate)<=15).sort((a,b)=>score(a)-score(b)).slice(0,maxSuggestions);
+ const others=near.filter(c=>!suggested.includes(c)).sort((a,b)=>b.date.localeCompare(a.date));
+ return {suggested,others,hidden:candidates.length-near.length};
+}
