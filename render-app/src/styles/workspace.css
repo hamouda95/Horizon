@@ -23,3 +23,16 @@ body *{text-transform:none!important}
 .rules-form button{align-self:end}
 .bank-manual-balance{display:grid;gap:4px;margin-top:6px}
 .bank-manual-balance input{max-width:220px}
+.balance-check{grid-column:1/-1;display:grid;gap:8px;padding:12px;border:1px solid var(--line,#dfe6df);border-radius:10px;background:var(--surface-soft,#f6f8f5);font-size:13px}
+.balance-check h3{margin:0;font-size:14px}
+.balance-check p{margin:0}
+.balance-check-list{list-style:none;margin:0;padding:0;max-height:180px;overflow:auto;display:grid;gap:2px}
+.balance-check-list li{display:grid;grid-template-columns:84px 1fr auto;gap:8px;padding:3px 0;border-bottom:1px solid var(--line,#e8ede8)}
+.balance-check-list li span:nth-child(2){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.balance-check-totals{display:grid;gap:4px;margin:0}
+.balance-check-totals div{display:flex;justify-content:space-between;gap:8px}
+.balance-check-totals dd{margin:0;font-weight:600}
+.balance-check-ok{color:#2f6b4f}
+.balance-check-gap{color:#b3412f}
+.balance-check-confirm{display:flex;gap:8px;align-items:flex-start;font-weight:600}
+.balance-check-confirm input{width:auto;min-width:0;height:auto;margin-top:2px;flex:none}
