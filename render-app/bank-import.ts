@@ -1,9 +1,10 @@
+import type {AssetValuation} from './asset-valuation';
 import type {FlowType} from './flow';
 import {strFromU8,unzipSync} from 'fflate';
 
 export type CsvMapping={date:string;label:string;amount:string;debit:string;credit:string;valueDate:string;reference:string;currency:string;suggestedLabel:string;category:string;parentCategory:string;balance:string};
 export type StatementTransaction={rowNumber:number;transactionDate:string;valueDate:string|null;label:string;suggestedLabel?:string;categoryHint?:string;parentCategoryHint?:string;amountCents:number;currency:string;externalId:string|null;fingerprint:string;possibleDuplicate?:boolean;balanceCents?:number;balanceDate?:string;error?:string};
-export type StatementPreview={format:'csv'|'xlsx'|'ofx'|'qif'|'camt'|'pdf';headers:string[];records:string[][];mapping:CsvMapping;transactions:StatementTransaction[];hasHeaders?:boolean};
+export type StatementPreview={assetValuation?:AssetValuation;format:'csv'|'xlsx'|'ofx'|'qif'|'camt'|'pdf';headers:string[];records:string[][];mapping:CsvMapping;transactions:StatementTransaction[];hasHeaders?:boolean};
 export type BalanceReconciliation={
  checkedIntervals:number;
  matchedIntervals:number;

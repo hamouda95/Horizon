@@ -29,6 +29,7 @@ export type Database = {
         Row: {
           account_type: string
           balance_as_of: string | null
+          valuation_details: Json | null
           balance_cents: number | null
           created_at: string
           currency: string
@@ -47,6 +48,7 @@ export type Database = {
         Insert: {
           account_type: string
           balance_as_of?: string | null
+          valuation_details?: Json | null
           balance_cents?: number | null
           created_at?: string
           currency?: string
@@ -65,6 +67,7 @@ export type Database = {
         Update: {
           account_type?: string
           balance_as_of?: string | null
+          valuation_details?: Json | null
           balance_cents?: number | null
           created_at?: string
           currency?: string
