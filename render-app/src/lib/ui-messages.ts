@@ -8047,5 +8047,33 @@ export const uiMessages:Record<string,{en:string;ar:string}>={
  "Solde au {0}": {
   "en": "Balance on {0}",
   "ar": "الرصيد في {0}"
+ },
+ "Compte crédité": {
+  "en": "Credited account",
+  "ar": "الحساب المُودَع فيه"
+ },
+ "Reçue par": {
+  "en": "Received by",
+  "ar": "استلمها"
+ },
+ "Dépense courante": {
+  "en": "Everyday expense",
+  "ar": "مصروف جارٍ"
+ },
+ "Paiement": {
+  "en": "Payment",
+  "ar": "الدفع"
+ },
+ "Compter au budget de": {
+  "en": "Count in the budget of",
+  "ar": "احتسابه في ميزانية"
+ },
+ "Mois du versement": {
+  "en": "Month of payment",
+  "ar": "شهر الدفع"
+ },
+ "Provision répartie sur les 12 mois de l’année.": {
+  "en": "Provision spread over the 12 months of the year.",
+  "ar": "مخصص موزع على أشهر السنة الاثني عشر."
  }
 };
