@@ -7495,5 +7495,241 @@ export const uiMessages:Record<string,{en:string;ar:string}>={
  "{0} / an": {
   "en": "{0} / year",
   "ar": "{0} / سنة"
+ },
+ "Sécurité": {
+  "en": "Security",
+  "ar": "الأمان"
+ },
+ "Votre compte": {
+  "en": "Your account",
+  "ar": "حسابك"
+ },
+ "Protégez l’accès à votre budget et voyez comment vos données sont protégées.": {
+  "en": "Protect access to your budget and see how your data is protected.",
+  "ar": "احمِ الوصول إلى ميزانيتك واطّلع على طريقة حماية بياناتك."
+ },
+ "Double authentification": {
+  "en": "Two-step verification",
+  "ar": "التحقق بخطوتين"
+ },
+ "Activée": {
+  "en": "On",
+  "ar": "مفعّل"
+ },
+ "Désactivée": {
+  "en": "Off",
+  "ar": "غير مفعّل"
+ },
+ "En plus du mot de passe, un code à 6 chiffres généré par une application d’authentification (Google Authenticator, Microsoft Authenticator, 1Password…) est demandé à chaque connexion.": {
+  "en": "On top of your password, a 6-digit code from an authenticator app (Google Authenticator, Microsoft Authenticator, 1Password…) is asked at each sign-in.",
+  "ar": "إضافة إلى كلمة المرور، يُطلب عند كل تسجيل دخول رمز من 6 أرقام يولّده تطبيق مصادقة (Google Authenticator أو Microsoft Authenticator أو 1Password…)."
+ },
+ "Scannez ce QR code avec votre application d’authentification.": {
+  "en": "Scan this QR code with your authenticator app.",
+  "ar": "امسح رمز QR هذا بتطبيق المصادقة."
+ },
+ "Saisissez le code à 6 chiffres qu’elle affiche.": {
+  "en": "Enter the 6-digit code it shows.",
+  "ar": "أدخل الرمز المكوّن من 6 أرقام الذي يعرضه."
+ },
+ "QR code de la double authentification": {
+  "en": "Two-step verification QR code",
+  "ar": "رمز QR للتحقق بخطوتين"
+ },
+ "Ou saisissez cette clé :": {
+  "en": "Or enter this key:",
+  "ar": "أو أدخل هذا المفتاح:"
+ },
+ "Code de vérification": {
+  "en": "Verification code",
+  "ar": "رمز التحقق"
+ },
+ "Activer": {
+  "en": "Turn on",
+  "ar": "تفعيل"
+ },
+ "Désactiver": {
+  "en": "Turn off",
+  "ar": "إلغاء التفعيل"
+ },
+ "Activer la double authentification": {
+  "en": "Turn on two-step verification",
+  "ar": "تفعيل التحقق بخطوتين"
+ },
+ "Lien sécurisé envoyé par e-mail": {
+  "en": "Secure link sent by email",
+  "ar": "رابط آمن يُرسل عبر البريد الإلكتروني"
+ },
+ "Changer mon mot de passe": {
+  "en": "Change my password",
+  "ar": "تغيير كلمة المرور"
+ },
+ "Appareils connectés": {
+  "en": "Signed-in devices",
+  "ar": "الأجهزة المتصلة"
+ },
+ "Téléphone perdu, ordinateur partagé…": {
+  "en": "Lost phone, shared computer…",
+  "ar": "هاتف ضائع، حاسوب مشترك…"
+ },
+ "Déconnecter tous mes appareils": {
+  "en": "Sign out of all my devices",
+  "ar": "تسجيل الخروج من كل أجهزتي"
+ },
+ "Comment vos données sont protégées": {
+  "en": "How your data is protected",
+  "ar": "كيف تُحمى بياناتك"
+ },
+ "Connexion chiffrée · Données en Europe · Aucun accès à votre banque": {
+  "en": "Encrypted connection · Data in Europe · No access to your bank",
+  "ar": "اتصال مشفّر · بيانات في أوروبا · لا وصول إلى بنكك"
+ },
+ "Vérification en deux étapes.": {
+  "en": "Two-step verification.",
+  "ar": "التحقق بخطوتين."
+ },
+ "Saisissez le code à 6 chiffres affiché par votre application d’authentification.": {
+  "en": "Enter the 6-digit code shown by your authenticator app.",
+  "ar": "أدخل الرمز المكوّن من 6 أرقام الذي يعرضه تطبيق المصادقة."
+ },
+ "Vérifier": {
+  "en": "Verify",
+  "ar": "تحقّق"
+ },
+ "Se connecter avec un autre compte": {
+  "en": "Sign in with another account",
+  "ar": "تسجيل الدخول بحساب آخر"
+ },
+ "Connexion par e-mail.": {
+  "en": "Sign in by email.",
+  "ar": "تسجيل الدخول عبر البريد الإلكتروني."
+ },
+ "Recevez un lien de connexion à usage unique, sans mot de passe.": {
+  "en": "Get a one-time sign-in link, no password needed.",
+  "ar": "احصل على رابط دخول صالح لمرة واحدة، دون كلمة مرور."
+ },
+ "Recevoir le lien de connexion": {
+  "en": "Send me the sign-in link",
+  "ar": "أرسل لي رابط الدخول"
+ },
+ "ou": {
+  "en": "or",
+  "ar": "أو"
+ },
+ "Google": {
+  "en": "Google",
+  "ar": "Google"
+ },
+ "Lien par e-mail": {
+  "en": "Email link",
+  "ar": "رابط بالبريد"
+ },
+ "Si un compte correspond à cette adresse, un lien de connexion vient d’être envoyé. Ouvrez-le sur cet appareil : il est valable une heure et ne sert qu’une fois.": {
+  "en": "If an account matches this address, a sign-in link has just been sent. Open it on this device: it is valid for one hour and works only once.",
+  "ar": "إذا كان هناك حساب مرتبط بهذا العنوان، فقد أُرسل رابط دخول. افتحه على هذا الجهاز: صالح لمدة ساعة ولمرة واحدة فقط."
+ },
+ "Adresse e-mail ou mot de passe incorrect.": {
+  "en": "Incorrect email address or password.",
+  "ar": "البريد الإلكتروني أو كلمة المرور غير صحيحة."
+ },
+ "Aucune application d’authentification n’est liée à ce compte.": {
+  "en": "No authenticator app is linked to this account.",
+  "ar": "لا يوجد تطبيق مصادقة مرتبط بهذا الحساب."
+ },
+ "Code incorrect ou expiré. Saisissez le code affiché maintenant dans votre application.": {
+  "en": "Incorrect or expired code. Enter the code your app shows now.",
+  "ar": "رمز غير صحيح أو منتهي الصلاحية. أدخل الرمز الظاهر الآن في تطبيقك."
+ },
+ "Double authentification activée. Le code vous sera demandé à chaque nouvelle connexion.": {
+  "en": "Two-step verification is on. The code will be asked at each new sign-in.",
+  "ar": "تم تفعيل التحقق بخطوتين. سيُطلب الرمز عند كل تسجيل دخول جديد."
+ },
+ "Double authentification désactivée.": {
+  "en": "Two-step verification is off.",
+  "ar": "تم إلغاء التحقق بخطوتين."
+ },
+ "Un lien pour choisir un nouveau mot de passe a été envoyé à {0}.": {
+  "en": "A link to choose a new password was sent to {0}.",
+  "ar": "أُرسل رابط لاختيار كلمة مرور جديدة إلى {0}."
+ },
+ "La demande n’a pas abouti.": {
+  "en": "The request did not go through.",
+  "ar": "لم يكتمل الطلب."
+ },
+ "Très faible": {
+  "en": "Very weak",
+  "ar": "ضعيفة جدا"
+ },
+ "Faible": {
+  "en": "Weak",
+  "ar": "ضعيفة"
+ },
+ "Moyen": {
+  "en": "Fair",
+  "ar": "متوسطة"
+ },
+ "Bon": {
+  "en": "Good",
+  "ar": "جيدة"
+ },
+ "Excellent": {
+  "en": "Excellent",
+  "ar": "ممتازة"
+ },
+ "12 caractères minimum.": {
+  "en": "At least 12 characters.",
+  "ar": "12 حرفا على الأقل."
+ },
+ "Évitez les mots courants, les suites et votre adresse e-mail.": {
+  "en": "Avoid common words, sequences and your email address.",
+  "ar": "تجنّب الكلمات الشائعة والتسلسلات وعنوان بريدك."
+ },
+ "Allongez-le : une phrase de quelques mots est facile à retenir.": {
+  "en": "Make it longer: a phrase of a few words is easy to remember.",
+  "ar": "اجعلها أطول: عبارة من بضع كلمات سهلة التذكر."
+ },
+ "Mot de passe solide.": {
+  "en": "Strong password.",
+  "ar": "كلمة مرور قوية."
+ },
+ "Connexion chiffrée": {
+  "en": "Encrypted connection",
+  "ar": "اتصال مشفّر"
+ },
+ "Tout ce qui circule entre votre appareil et Horizon est chiffré (HTTPS).": {
+  "en": "Everything between your device and Horizon is encrypted (HTTPS).",
+  "ar": "كل ما يمرّ بين جهازك وHorizon مشفّر (HTTPS)."
+ },
+ "Données hébergées en Europe": {
+  "en": "Data hosted in Europe",
+  "ar": "بيانات مستضافة في أوروبا"
+ },
+ "Votre budget est stocké dans l’Union européenne (Irlande), sauvegardé et chiffré au repos.": {
+  "en": "Your budget is stored in the European Union (Ireland), backed up and encrypted at rest.",
+  "ar": "تُخزَّن ميزانيتك في الاتحاد الأوروبي (أيرلندا)، مع نسخ احتياطي وتشفير أثناء التخزين."
+ },
+ "Foyer cloisonné": {
+  "en": "Isolated household",
+  "ar": "أسرة معزولة"
+ },
+ "Chaque foyer est isolé dans la base : seuls ses membres voient ses comptes et opérations.": {
+  "en": "Each household is isolated in the database: only its members see its accounts and transactions.",
+  "ar": "كل أسرة معزولة في قاعدة البيانات: لا يرى حساباتها وعملياتها إلا أفرادها."
+ },
+ "Aucun accès à votre banque": {
+  "en": "No access to your bank",
+  "ar": "لا وصول إلى بنكك"
+ },
+ "Horizon ne demande jamais vos identifiants bancaires : vous importez vous-même vos relevés.": {
+  "en": "Horizon never asks for your bank login: you import your statements yourself.",
+  "ar": "لا يطلب Horizon أبدا بيانات دخولك البنكية: أنت من يستورد كشوفاتك."
+ },
+ "Mot de passe protégé": {
+  "en": "Protected password",
+  "ar": "كلمة مرور محمية"
+ },
+ "Votre mot de passe n’est jamais stocké en clair ; la double authentification est disponible.": {
+  "en": "Your password is never stored in plain text; two-step verification is available.",
+  "ar": "لا تُخزَّن كلمة مرورك أبدا كنص واضح؛ والتحقق بخطوتين متاح."
  }
 };
