@@ -1,3 +1,4 @@
+import InfoTip from '../../components/InfoTip';
 import {displayText,plural} from '../../lib/text';
 import {useCallback,useEffect,useMemo,useState} from 'react';
 import {classificationReference,referenceTaxonomy} from './classification-reference';
@@ -68,7 +69,7 @@ export default function ClassificationReferenceManager({householdId,userId,categ
 
  const allShownSelected=shown.length>0&&shown.every(r=>selected.has(ruleKey(r)));
  return <details className="card product-panel" open={open}><summary>Règles de catégorisation du foyer</summary>
-  <p>Quand le libellé d’une opération contient l’expression d’une règle, Horizon propose sa catégorie et sa nature. La règle la plus précise l’emporte, et les règles du foyer passent avant le dictionnaire général.</p>
+  <InfoTip>Quand le libellé d’une opération contient l’expression d’une règle, Horizon propose sa catégorie et sa nature. La règle la plus précise l’emporte, et les règles du foyer passent avant le dictionnaire général.</InfoTip>
   {error&&<p className="error" role="alert">{displayText(error)}</p>}{notice&&<p role="status">{displayText(notice)}</p>}
   <form onSubmit={e=>{e.preventDefault();void save()}} className="product-form rules-form"><h3>{editing?'Modifier la règle':'Ajouter une règle'}</h3>
    <label>Le libellé contient<input value={phrase} maxLength={120} required placeholder="ex. Carrefour, EDF, Netflix" onChange={e=>setPhrase(e.target.value)}/></label>

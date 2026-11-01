@@ -1,3 +1,4 @@
+import InfoTip from './InfoTip';
 import {useState} from 'react';
 import {appCurrency} from '../lib/currency';
 import {appLocale} from '../lib/locale';
@@ -51,6 +52,6 @@ export default function CategoryDonut({title,overline,items,kind,caption,selecte
    <ul className="donut-legend">{arcs.map(a=>{const pct=Math.round(a.amount/total*100),content=<><i style={{background:a.color}}/><span>{displayText(a.name)}</span><b>{money(a.amount)}</b><small>{pct} %</small></>;
     return <li key={a.name} onMouseEnter={()=>setHover(a.name)} onMouseLeave={()=>setHover(null)}>{onSelect&&a.name!==OTHER?<button type="button" className={selected===a.name?'selected':''} aria-pressed={selected===a.name} onClick={()=>pick(a.name)}>{content}</button>:<div>{content}</div>}</li>})}</ul>
   </div>}
-  {caption&&total>0&&<p className="chart-caption">{caption}</p>}
+  {caption&&total>0&&<InfoTip>{caption}</InfoTip>}
  </section>;
 }
