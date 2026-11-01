@@ -52,3 +52,4 @@ body *{text-transform:none!important}
 .quick-add-kind{grid-column:1/-1;display:flex;gap:8px}
 .quick-add-kind button{flex:1;padding:8px;border:1px solid var(--line,#dfe6df);border-radius:8px;background:transparent;cursor:pointer}
 .quick-add-kind button.selected{background:var(--accent,#315e4d);color:#fff}
+.goal-plan{display:block;margin-top:4px}
