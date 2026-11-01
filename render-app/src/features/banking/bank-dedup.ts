@@ -14,3 +14,22 @@ export function repeatedUserOperations(accounts:Account[],transactions:Transacti
  for(const t of transactions)if(ids.has(t.bank_account_id)){if(seen.has(canonicalFingerprint(t.fingerprint)))duplicates++;else seen.add(canonicalFingerprint(t.fingerprint))}
  return duplicates;
 }
+
+type Booked={id:string;bank_account_id:string;canonical_key:string;label:string;transaction_date:string};
+const dayAfter=(date:string)=>{const d=new Date(date+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+1);return d.toISOString().slice(0,10)};
+/** The same card payment exported twice with booking dates one day apart: its label carries the purchase
+ * date ("CARTE 19/09 …"), so equal amounts and labels one day apart are one operation, not two. */
+export function shiftedDuplicatePairs<T extends Booked>(transactions:T[]):Array<[T,T]>{
+ const groups=new Map<string,T[]>();
+ for(const t of transactions){if(!/\b\d{2}\/\d{2}\b/.test(t.label))continue;const key=t.bank_account_id+'|'+t.canonical_key.replace(/^[^|]*\|/,'');groups.set(key,[...(groups.get(key)||[]),t])}
+ const pairs:Array<[T,T]>=[];
+ for(const rows of groups.values()){
+  const byDate=new Map<string,T[]>();for(const t of rows)byDate.set(t.transaction_date,[...(byDate.get(t.transaction_date)||[]),t]);
+  const used=new Set<string>();
+  for(const date of [...byDate.keys()].sort()){
+   const later=(byDate.get(dayAfter(date))||[]).filter(t=>!used.has(t.id));
+   for(const first of byDate.get(date)!.filter(t=>!used.has(t.id))){const second=later.find(t=>!used.has(t.id));if(!second)break;used.add(first.id);used.add(second.id);pairs.push([first,second])}
+  }
+ }
+ return pairs;
+}

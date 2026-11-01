@@ -3352,9 +3352,9 @@ export const uiMessages:Record<string,{en:string;ar:string}>={
   "en": "Duplicates to check ·",
   "ar": "تكرارات للتحقق منها ·"
  },
- "Même compte, date, montant et libellé normalisé. Vérifiez les opérations : deux achats identiques peuvent être réels. Choisissez la ligne à conserver ; sa catégorie sera gardée.": {
-  "en": "Same account, date, amount and normalised description. Check the transactions: two identical purchases may be genuine. Choose the line to keep; its category will be kept.",
-  "ar": "نفس الحساب والتاريخ والمبلغ والتسمية بعد التوحيد. تحقق من المعاملات : قد تكون عمليتا شراء متطابقتان حقيقيتين. اختر السطر الذي تريد الاحتفاظ به ؛ ستُحفظ فئته."
+ "Même compte, montant et libellé normalisé, à la même date ou à un jour d’écart pour un paiement par carte exporté deux fois. Vérifiez les opérations : deux achats identiques peuvent être réels. Choisissez la ligne à conserver ; sa catégorie sera gardée.": {
+  "en": "Same account, amount and normalised description, on the same date or one day apart for a card payment exported twice. Check the transactions: two identical purchases may be genuine. Choose the line to keep; its category will be kept.",
+  "ar": "نفس الحساب والمبلغ والتسمية بعد التوحيد، في نفس التاريخ أو بفارق يوم واحد لدفعة بالبطاقة صُدّرت مرتين. تحقق من المعاملات : قد تكون عمليتا شراء متطابقتان حقيقيتين. اختر السطر الذي تريد الاحتفاظ به ؛ ستُحفظ فئته."
  },
  "Sélectionner les": {
   "en": "Select the",
