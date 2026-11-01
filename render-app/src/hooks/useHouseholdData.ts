@@ -8,7 +8,7 @@ import {importanceByCategory,orderByImportance} from '../features/categories/cat
 import {localToday} from '../lib/dates';
 import type {Entry,Home} from './household-data';
 
-export type HouseholdChoice={id:string;name:string;role:'owner'|'member';savingsRate:number|null};
+export type HouseholdChoice={id:string;name:string;role:'owner'|'member';savingsRate:number|null;currency:string};
 
 export function useHouseholdData(userId:string,modal:string,tab:string,setModal:Dispatch<SetStateAction<string>>){
  const [home,setHome]=useState<Home|null>(null),[households,setHouseholds]=useState<HouseholdChoice[]>([]),[entries,setEntries]=useState<Entry[]>([]),[loading,setLoading]=useState(true),[error,setError]=useState(''),[refreshVersion,setRefreshVersion]=useState(0);
@@ -20,12 +20,12 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
   const sequence=++loadSequence.current;
   setError('');
   try{
-   const {data:members,error:memberError}=await supabase.from('household_members').select('household_id,role,households!inner(id,name,savings_rate_bps)').eq('user_id',userId).order('joined_at',{ascending:true});
+   const {data:members,error:memberError}=await supabase.from('household_members').select('household_id,role,households!inner(id,name,savings_rate_bps,currency)').eq('user_id',userId).order('joined_at',{ascending:true});
    if(memberError)throw memberError;
    const choices=(members||[]).flatMap(row=>{
     const related=row.households;
     const h=Array.isArray(related)?related[0]:related;
-    return h?[{id:h.id,name:h.name,role:row.role==='owner'?'owner' as const:'member' as const,savingsRate:h.savings_rate_bps}]:[];
+    return h?[{id:h.id,name:h.name,role:row.role==='owner'?'owner' as const:'member' as const,savingsRate:h.savings_rate_bps,currency:h.currency||'EUR'}]:[];
    });
    if(sequence!==loadSequence.current)return true;
    setHouseholds(choices);
@@ -54,7 +54,7 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
    const sortedCategories=orderByImportance(categories,importance),sortedSubcategories=orderByImportance(subRows,importance);
    setSubcategories(sortedSubcategories);setPlans(budgetRows);
    const people=(peopleRows.data||[]).map(x=>({id:x.id,name:x.name,relationship:x.relationship as 'self'|'partner'|'child'|'other',isPrimary:x.is_primary,active:x.active,sortOrder:x.sort_order}));
-   setHome({id:selected.id,name:selected.name,role:selected.role,savingsRate:selected.savingsRate,incomeTypes:JSON.stringify(categories.filter(x=>x.active&&x.kind==='income').map(x=>x.name)),expenseTypes:JSON.stringify(categories.filter(x=>x.active&&x.kind==='expense').map(x=>x.name)),categories:sortedCategories,people});
+   setHome({id:selected.id,name:selected.name,role:selected.role,savingsRate:selected.savingsRate,currency:selected.currency,incomeTypes:JSON.stringify(categories.filter(x=>x.active&&x.kind==='income').map(x=>x.name)),expenseTypes:JSON.stringify(categories.filter(x=>x.active&&x.kind==='expense').map(x=>x.name)),categories:sortedCategories,people});
    setEntries(entryRows.map(x=>({id:x.id,kind:x.kind,label:x.label,category:categories.find(c=>c.id===x.category_id)?.name||'Autre',amount:Number(x.amount_cents),date:x.entry_date,frequency:x.frequency,incomeAllocation:x.income_allocation,expenseType:x.expense_type,flowType:x.flow_type,categoryId:x.category_id,subcategoryId:x.subcategory_id,bankTransactionId:x.bank_transaction_id,personId:x.person_id,accountId:x.account_id,loanId:x.loan_id,paymentMethod:x.payment_method,subcategory:subRows.find(y=>y.id===x.subcategory_id)?.name})));
    setRefreshVersion(value=>value+1);
    return true;

@@ -1,3 +1,4 @@
+import {appCurrency} from '../../lib/currency';
 import {displayText} from '../../lib/text';
 import {localToday} from '../../lib/dates';
 import {collectPages} from '../../lib/pagination';
@@ -14,7 +15,7 @@ import {supabase} from '../../lib/client';
 
 type Category={id:string;name:string};
 type Obligation=Pick<Tables<'household_obligations'>,'id'|'category_id'|'title'|'amount_cents'|'frequency'|'due_day'|'due_month'|'note'|'active'>;
-const fmt=(cents:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR'}).format(cents/100);
+const fmt=(cents:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:appCurrency()}).format(cents/100);
 const monthName=(month:number)=>new Date(2026,month-1,1).toLocaleDateString(appLocale(),{month:'long'});
 
 export default function HouseholdObligationsPage({householdId,categories,month,setMonth,refreshVersion,entries}:{householdId:string;categories:Category[];month:string;setMonth:Dispatch<SetStateAction<string>>;refreshVersion:number;entries:Entry[]}){

@@ -1,3 +1,4 @@
+import {appCurrency} from '../../lib/currency';
 import {displayText,plural} from '../../lib/text';
 import {ModuleHeader,MetricStrip} from '../../components/ModuleUI';
 import EntryChangeHistory from './EntryChangeHistory';
@@ -12,7 +13,7 @@ import {appLocale} from '../../lib/locale';
 import {supabase} from '../../lib/client';
 import PeriodControl from '../../components/PeriodControl';
 type Category={id:string;name:string;kind:string;active:boolean};
-const money=(n:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR'}).format(n/100);
+const money=(n:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:appCurrency()}).format(n/100);
 const normalize=(text:string)=>text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 export default function OperationsPage({householdId,entries,categories,people,month,setMonth,kind,onEdit,onAdd,onChanged}:{householdId:string;entries:Entry[];categories:Category[];people:HouseholdPerson[];month:string;setMonth:Dispatch<SetStateAction<string>>;kind?:'income'|'expense';onEdit:(entry:Entry)=>void;onAdd?:()=>void;onChanged:()=>Promise<unknown>}){
  const [query,setQuery]=useState(''),[allDates,setAllDates]=useState(false),[flow,setFlow]=useState(''),[page,setPage]=useState(0),[selected,setSelected]=useState(new Set<string>()),[action,setAction]=useState('category'),[value,setValue]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[progress,setProgress]=useState('');

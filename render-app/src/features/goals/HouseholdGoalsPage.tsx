@@ -1,3 +1,4 @@
+import {appCurrency} from '../../lib/currency';
 import {displayText} from '../../lib/text';
 import {monthlyContribution} from './goal-plan';
 import {localToday} from '../../lib/dates';
@@ -11,7 +12,7 @@ import {supabase} from '../../lib/client';
 
 type Goal=Pick<Tables<'household_savings_goals'>,'id'|'title'|'target_cents'|'target_date'|'created_at'>;
 type Movement=Pick<Tables<'savings_movements'>,'id'|'goal_id'|'movement_type'|'amount_cents'|'movement_date'>;
-const fmt=(cents:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR'}).format(cents/100);
+const fmt=(cents:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:appCurrency()}).format(cents/100);
 
 export default function HouseholdGoalsPage({householdId,refreshVersion}:{householdId:string;refreshVersion:number}){
  const [goals,setGoals]=useState<Goal[]>([]),[movements,setMovements]=useState<Movement[]>([]),[loading,setLoading]=useState(true),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');

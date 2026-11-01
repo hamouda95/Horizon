@@ -1,3 +1,4 @@
+import {appCurrency} from '../../lib/currency';
 import {useMemo,useState} from 'react';
 import {supabase} from '../../lib/client';
 import {appLocale} from '../../lib/locale';
@@ -8,7 +9,7 @@ import {nextMonth,suggestCategoryBudgets} from './budget-suggestions';
 
 type Category={id:string;name:string;kind:string;active:boolean};
 type Budget={category_id:string;month:string;amount_cents:number};
-const money=(cents:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR'}).format(cents/100);
+const money=(cents:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:appCurrency()}).format(cents/100);
 const monthLabel=(month:string)=>new Date(month+'-15T12:00:00').toLocaleDateString(appLocale(),{month:'long',year:'numeric'});
 
 /** Suggested envelope per category for next month, from the last three months; the user picks which to apply. */

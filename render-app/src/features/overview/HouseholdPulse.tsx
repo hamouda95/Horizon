@@ -1,3 +1,4 @@
+import {appCurrency} from '../../lib/currency';
 import {plural} from '../../lib/text';
 import {collectPages} from '../../lib/pagination';
 import {obligationsForMonth,type Settlement} from '../obligations/obligations';
@@ -8,7 +9,7 @@ import type {Tables} from '../../lib/database.types';
 import {supabase} from '../../lib/client';
 
 type Obligation=Pick<Tables<'household_obligations'>,'id'|'title'|'amount_cents'|'frequency'|'due_day'|'due_month'>;
-const fmt=(cents:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR'}).format(cents/100);
+const fmt=(cents:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:appCurrency()}).format(cents/100);
 const monthName=(month:string)=>new Date(month+'-01T12:00:00').toLocaleDateString(appLocale(),{month:'long',year:'numeric'});
 
 export default function HouseholdPulse({householdId,month,refreshVersion,onOpenBills}:{householdId:string;month:string;refreshVersion:number;onOpenBills:()=>void}){

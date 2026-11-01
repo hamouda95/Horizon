@@ -1,3 +1,4 @@
+import {appCurrency} from '../../lib/currency';
 import type {AssetValuation} from './asset-valuation';
 import type {FlowType} from '../../lib/flow';
 import {strFromU8,unzipSync} from 'fflate';
@@ -86,7 +87,7 @@ function parseMoney(value:string):number|null{
 export function transactionFingerprint(date:string,amountCents:number,currency:string,label:string,reference?:string|null):string{
  return `row:${date}|${amountCents}|${currency.toUpperCase().slice(0,3)}|${normalize(label).slice(0,400)}`;
 }
-export function parseTabularTransactions(records:string[][],mapping:CsvMapping,defaultCurrency='EUR',firstRowNumber=2):StatementTransaction[]{
+export function parseTabularTransactions(records:string[][],mapping:CsvMapping,defaultCurrency=appCurrency(),firstRowNumber=2):StatementTransaction[]{
  const col=(row:string[],key:string)=>key===''?'':row[Number(key)]||'';const seen=new Map<string,number>();
  return records.map((row,index)=>{
   const date=parseDate(col(row,mapping.date)),valueDate=parseDate(col(row,mapping.valueDate));const label=col(row,mapping.label).trim();const suggestedLabel=col(row,mapping.suggestedLabel).trim();const categoryHint=col(row,mapping.category).trim();const parentCategoryHint=col(row,mapping.parentCategory).trim();let amount:number|null=null;
@@ -136,7 +137,7 @@ function resolveDuplicateBalanceMapping(records:string[][],headers:string[],mapp
  const scores=candidates.map(candidate=>{const checks=reconcileStatementBalances(parseTabularTransactions(records,candidate));if(!checks||checks.checkedIntervals<2)return {score:-1,checks};return {score:checks.matchedIntervals/checks.checkedIntervals,checks}});
  return scores[0].score>=0.8&&scores[0].score>scores[1].score?candidates[0]:scores[1].score>=0.8&&scores[1].score>scores[0].score?candidates[1]:mapping;
 }
-export function parseCsvTransactions(text:string,mapping:CsvMapping,defaultCurrency='EUR'):StatementTransaction[]{const parsed=parseCsv(text);return parseTabularTransactions(parsed.hasHeaders?parsed.records:parsed.records.slice(1),mapping,defaultCurrency,2)}
+export function parseCsvTransactions(text:string,mapping:CsvMapping,defaultCurrency=appCurrency()):StatementTransaction[]{const parsed=parseCsv(text);return parseTabularTransactions(parsed.hasHeaders?parsed.records:parsed.records.slice(1),mapping,defaultCurrency,2)}
 function csvRows(text:string){const parsed=parseCsv(text);const headerMapping=mapHeaders(parsed.headers,parsed.records);const hasHeaders=Boolean(parsed.headerRow<15&&headerScore(parsed.headers)>=2);const profiled=excelMapping(parsed.records);const inferred=Object.fromEntries((Object.keys(emptyMapping) as (keyof CsvMapping)[]).map(key=>[key,headerMapping[key]||(key==='balance'&&hasHeaders?'':key==='amount'&&(headerMapping.debit||headerMapping.credit)?'':profiled[key])])) as CsvMapping;const headers=hasHeaders?parsed.headers:syntheticHeaders(Math.max(...parsed.records.slice(0,20).map(row=>row.length),0),inferred);const resolved=detectRunningBalance(parsed.records,hasHeaders?resolveDuplicateBalanceMapping(parsed.records,headers,inferred):inferred);return {...parsed,headers,mapping:resolved,hasHeaders}}
 function columnName(index:number){let n=index+1,name='';while(n){const rem=(n-1)%26;name=String.fromCharCode(65+rem)+name;n=Math.floor((n-1)/26)}return name}
 function excelMapping(records:string[][]):CsvMapping{
@@ -158,7 +159,7 @@ function xlsxRecords(bytes:Uint8Array){
  for(const row of rows){const cells=[...row.getElementsByTagNameNS('*','c')];const values:string[]=[];for(const cell of cells){const ref=cell.getAttribute('r')||'';const letters=ref.match(/^[A-Z]+/i)?.[0]||'';let column=0;for(const char of letters.toUpperCase())column=column*26+char.charCodeAt(0)-64;column=Math.max(0,column-1);const type=cell.getAttribute('t');const value=cell.getElementsByTagNameNS('*','v')[0]?.textContent||'';let decoded=value;if(type==='s')decoded=sharedStrings[Number(value)]||'';else if(type==='inlineStr')decoded=[...cell.getElementsByTagNameNS('*','t')].map(text=>text.textContent||'').join('');values[column]=decoded}if(values.some(value=>value?.trim()))matrix.push(values.map(value=>value||''))}
  return matrix;
 }
-export function parseXlsxStatement(buffer:ArrayBuffer|Uint8Array,defaultCurrency='EUR'):StatementPreview{
+export function parseXlsxStatement(buffer:ArrayBuffer|Uint8Array,defaultCurrency=appCurrency()):StatementPreview{
  const bytes=buffer instanceof Uint8Array?buffer:new Uint8Array(buffer);const matrix=xlsxRecords(bytes);if(!matrix.length)throw Error('Aucune opération trouvée dans ce classeur Excel.');let headerIndex=0,score=0;for(let index=0;index<Math.min(matrix.length,15);index++){const current=headerScore(matrix[index]);if(current>score){score=current;headerIndex=index}}const hasHeaders=score>=2;const headerMapping=hasHeaders?mapHeaders(matrix[headerIndex],matrix.slice(headerIndex+1)):emptyMapping;const records=hasHeaders?matrix.slice(headerIndex+1):matrix;const inferred=excelMapping(records);const initialMapping=Object.fromEntries((Object.keys(emptyMapping) as (keyof CsvMapping)[]).map(key=>[key,headerMapping[key]||(key==='balance'&&hasHeaders?'':key==='amount'&&(headerMapping.debit||headerMapping.credit)?'':inferred[key])])) as CsvMapping;const mapping=detectRunningBalance(records,hasHeaders?resolveDuplicateBalanceMapping(records,matrix[headerIndex],initialMapping):initialMapping);const width=Math.max(...matrix.map(row=>row.length),0);const headers=hasHeaders?matrix[headerIndex]:syntheticHeaders(width,mapping);return {format:'xlsx',headers,records,mapping,transactions:parseTabularTransactions(records,mapping,defaultCurrency,hasHeaders?headerIndex+2:1),hasHeaders};
 }
 function parseDateOfx(value:string):string|null{const raw=value.slice(0,8);return raw.length===8?parseDate(`${raw.slice(0,4)}-${raw.slice(4,6)}-${raw.slice(6,8)}`):null}
@@ -174,7 +175,7 @@ function xmlText(source:string,tag:string):string{
  const value=xmlBlock(source,tag).replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replace(/&#x([\da-f]+);/gi,(_,n)=>String.fromCodePoint(parseInt(n,16))).replace(/\s+/g,' ').trim();
  return value;
 }
-function parseCamtStatement(text:string,defaultCurrency='EUR'):StatementPreview{
+function parseCamtStatement(text:string,defaultCurrency=appCurrency()):StatementPreview{
  if(!/<(?:[\w.-]+:)?(?:BkToCstmrStmt|Stmt)\b/i.test(text)||!/<(?:[\w.-]+:)?Ntry\b/i.test(text))throw Error('XML bancaire non reconnu. Choisissez un export CSV, OFX ou CAMT.053.');
  const entries=xmlBlocks(text,'Ntry'),seen=new Map<string,number>();
  const transactions:StatementTransaction[]=entries.map((entry,index)=>{
@@ -206,7 +207,7 @@ function parseCamtStatement(text:string,defaultCurrency='EUR'):StatementPreview{
  if(closing&&transactions.length){let index=transactions.length-1;for(let i=0;i<transactions.length;i++)if(transactions[i].transactionDate&&transactions[i].transactionDate<=closing.date)index=i;transactions[index]={...transactions[index],balanceCents:Math.abs(closing.amount)*(closing.direction==='DBIT'?-1:1),balanceDate:closing.date}}
  return {format:'camt',headers:[],records:[],mapping:emptyMapping,transactions};
 }
-export function parseDelimitedStatement(text:string,filename:string,defaultCurrency='EUR'):StatementPreview{
+export function parseDelimitedStatement(text:string,filename:string,defaultCurrency=appCurrency()):StatementPreview{
  const extension=filename.toLowerCase().split('.').pop();if(extension==='xml'||/<(?:[\w.-]+:)?Document\b/i.test(text)&&/<(?:[\w.-]+:)?Ntry\b/i.test(text))return parseCamtStatement(text,defaultCurrency);if(extension==='ofx'||extension==='qfx'||/<OFX|<STMTTRN/i.test(text)){
   const rows=[...text.matchAll(/<STMTTRN>([\s\S]*?)(?=<STMTTRN>|<\/BANKTRANLIST|<\/OFX|$)/gi)],seen=new Map<string,number>();const balanceRaw=text.match(/<LEDGERBAL>[\s\S]*?<BALAMT>([^<\r\n]+)/i)?.[1]||'',balance=parseMoney(balanceRaw),balanceDateRaw=text.match(/<LEDGERBAL>[\s\S]*?<DTASOF>(\d{8})/i)?.[1]||'',balanceDate=balanceDateRaw?parseDateOfx(balanceDateRaw)||undefined:undefined;
   const transactions=rows.map((match,index)=>{const body=match[1];const field=(name:string)=>body.match(new RegExp(`<${name}>([^<\\r\\n]+)`,'i'))?.[1].trim()||'';const date=parseDateOfx(field('DTPOSTED'));const label=field('NAME')||field('MEMO');const suggestedLabel=field('MEMO');const amount=parseMoney(field('TRNAMT'));const externalId=field('FITID')||null;const error=!date?'Date illisible':!label?'Libellé manquant':amount===null?'Montant illisible':amount===0?'Montant nul':undefined;const transactionDate=date||'';const base=date&&amount!==null?transactionFingerprint(date,amount,defaultCurrency,label):`invalid:${index}`;const occurrence=(seen.get(base)||0)+1;seen.set(base,occurrence);return {rowNumber:index+1,transactionDate,valueDate:null,label,suggestedLabel,amountCents:amount||0,currency:defaultCurrency.toUpperCase(),externalId,fingerprint:`${base}|occurrence:${occurrence}`,possibleDuplicate:occurrence>1,...(index===rows.length-1&&balance!==null?{balanceCents:balance,balanceDate}:{}),error}});return {format:'ofx',headers:[],records:[],mapping:emptyMapping,transactions};

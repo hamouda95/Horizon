@@ -1,3 +1,4 @@
+import {appCurrency} from '../../lib/currency';
 import {displayText} from '../../lib/text';
 import {appLocale} from '../../lib/locale';
 import {useEffect,useState} from 'react';
@@ -9,7 +10,7 @@ import {supabase} from '../../lib/client';
 
 type Movement=Pick<Tables<'savings_movements'>,'id'|'goal_id'|'movement_type'|'amount_cents'|'movement_date'|'note'>;
 type Goal=Pick<Tables<'household_savings_goals'>,'id'|'title'>;
-const euro=(amount:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(amount/100);
+const euro=(amount:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:appCurrency(),maximumFractionDigits:2}).format(amount/100);
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 
 export default function SavingsMovementTracker({householdId,refreshVersion}:{householdId:string;refreshVersion:number}){
