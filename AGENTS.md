@@ -12,7 +12,7 @@ Application de budget de foyer en français : React 19 + TypeScript + Vite 8 (`r
 - `app/Budget.tsx` : coquille de l'app (navigation, pages, dialogues). Gros fichier : chercher avec `grep -o` plutôt que le lire en entier.
 - `lib/` : `client.ts` (Supabase), `database.types.ts`, `money.ts` (centimes), `dates.ts`, `period.ts`, `flow.ts` (natures d'opération), `finance-engine.ts`.
 - `hooks/useHouseholdData.ts` : chargement et temps réel des données du foyer ; type `Entry` dans `hooks/household-data.ts`.
-- `features/<domaine>/` : une page par dossier avec ses tests — `overview`, `operations` (registre, actions groupées par lots de 500 dans `bulk.ts`), `banking` (import de relevés, comptes), `classification` (règles « libellé contient → catégorie » dans `household_merchant_rules`, `rule-application.ts` ; suggestions par IA dans `AiCategorizationPanel.tsx`, voir `docs/ia-categorisation.md`), `budget`, `categories`, `household`, `obligations`, `goals`, `documents`, `loans`, `reports`.
+- `features/<domaine>/` : une page par dossier avec ses tests — `overview`, `operations` (registre, actions groupées par lots de 500 dans `bulk.ts`), `banking` (import de relevés, comptes), `classification` (règles « libellé contient → catégorie » dans `household_merchant_rules`, `rule-application.ts` ; dictionnaire `reference-data.ts` et suggestions automatiques locales `local-suggestions.ts` / `AiCategorizationPanel.tsx`, voir `docs/ia-categorisation.md`), `budget`, `categories`, `household`, `obligations`, `goals`, `documents`, `loans`, `reports`.
 - `components/` : UI partagée (`ModuleUI.tsx`, `PeriodControl.tsx`, `Charts.tsx`). `styles/` : CSS.
 
 ## Base de données
