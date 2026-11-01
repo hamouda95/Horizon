@@ -46,3 +46,9 @@ body *{text-transform:none!important}
 .taxonomy-duplicates li{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .taxonomy-duplicates h3{display:flex;align-items:center;gap:6px;margin:0}
 .budget-suggestions table td:nth-child(n+3),.budget-suggestions table th:nth-child(n+3){text-align:right}
+.quick-add-fab{position:fixed;right:24px;bottom:24px;width:56px;height:56px;border-radius:50%;border:0;background:var(--accent,#315e4d);color:#fff;font-size:30px;line-height:1;box-shadow:0 6px 18px rgba(0,0,0,.2);cursor:pointer;z-index:40}
+.quick-add-fab:focus-visible{outline:3px solid #9cc5b2;outline-offset:3px}
+@media (max-width:640px){.quick-add-fab{right:16px;bottom:16px}}
+.quick-add-kind{grid-column:1/-1;display:flex;gap:8px}
+.quick-add-kind button{flex:1;padding:8px;border:1px solid var(--line,#dfe6df);border-radius:8px;background:transparent;cursor:pointer}
+.quick-add-kind button.selected{background:var(--accent,#315e4d);color:#fff}
