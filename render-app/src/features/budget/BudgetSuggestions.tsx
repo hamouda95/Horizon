@@ -1,48 +1,52 @@
 import {appCurrency} from '../../lib/currency';
-import {useMemo,useState} from 'react';
+import {useState} from 'react';
+import {Sparkles} from 'lucide-react';
 import {supabase} from '../../lib/client';
 import {appLocale} from '../../lib/locale';
-import {localToday} from '../../lib/dates';
 import {displayText,plural} from '../../lib/text';
-import type {Entry} from '../../hooks/household-data';
-import {nextMonth,suggestCategoryBudgets} from './budget-suggestions';
+import type {CategorySuggestion} from './budget-suggestions';
 
 type Category={id:string;name:string;kind:string;active:boolean};
 type Budget={category_id:string;month:string;amount_cents:number};
 const money=(cents:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:appCurrency()}).format(cents/100);
-const monthLabel=(month:string)=>new Date(month+'-15T12:00:00').toLocaleDateString(appLocale(),{month:'long',year:'numeric'});
+export const monthLabel=(month:string)=>new Date(month+'-15T12:00:00').toLocaleDateString(appLocale(),{month:'long',year:'numeric'});
 
-/** Suggested envelope per category for next month, from the last three months; the user picks which to apply. */
-export default function BudgetSuggestions({householdId,categories,entries,budgets,onChanged}:{householdId:string;categories:Category[];entries:Entry[];budgets:Budget[];onChanged:()=>Promise<unknown>}){
- const current=localToday().slice(0,7),target=nextMonth(current);
- const expense=categories.filter(c=>c.active&&c.kind==='expense');
- const rows=useMemo(()=>suggestCategoryBudgets(entries,expense.map(c=>c.id),current).filter(s=>s.suggestedCents>0),[entries,expense,current]);
- const existing=(id:string)=>budgets.find(b=>b.category_id===id&&b.month.slice(0,7)===target)?.amount_cents??null;
- const [selected,setSelected]=useState<Set<string>|null>(null),[open,setOpen]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
- // Categories without a budget for next month are pre-selected; existing envelopes are only replaced on request.
- const chosen=selected??new Set(rows.filter(r=>existing(r.categoryId)===null).map(r=>r.categoryId));
- const total=rows.filter(r=>chosen.has(r.categoryId)).reduce((n,r)=>n+r.suggestedCents,0);
- async function apply(){
-  const picked=rows.filter(r=>chosen.has(r.categoryId));if(!picked.length)return;
-  setBusy(true);setError('');setNotice('');
-  try{
-   const {error}=await supabase.from('monthly_category_budgets').upsert(picked.map(r=>({household_id:householdId,category_id:r.categoryId,month:target+'-01',amount_cents:r.suggestedCents})),{onConflict:'household_id,category_id,month'});
-   if(error)throw error;
-   setNotice(`${plural(picked.length,'enveloppe enregistrée','enveloppes enregistrées')} pour ${monthLabel(target)}, soit ${money(total)}.`);setSelected(null);await onChanged();
-  }catch(e){setError((e as Error).message||'Enregistrement impossible.')}finally{setBusy(false)}
+/** Saves suggested envelopes for one month, or as monthly budgets from that month on. */
+export async function applySuggestions(householdId:string,month:string,rows:{categoryId:string;suggestedCents:number}[],everyMonth:boolean){
+ if(!rows.length)return;
+ const {error}=everyMonth
+  ?await supabase.rpc('configure_category_budgets',{p_household_id:householdId,p_effective_month:month+'-01',p_rules:rows.map(r=>({category_id:r.categoryId,cadence:'monthly',amount_cents:r.suggestedCents,enabled:true})),p_replace_override:false})
+  :await supabase.from('monthly_category_budgets').upsert(rows.map(r=>({household_id:householdId,category_id:r.categoryId,month:month+'-01',amount_cents:r.suggestedCents})),{onConflict:'household_id,category_id,month'});
+ if(error)throw error;
+}
+
+/** Envelopes suggested from the last three complete months for the month on screen; categories still without a budget come first. */
+export default function BudgetSuggestions({householdId,month,categories,suggestions,budgets,onChanged}:{householdId:string;month:string;categories:Category[];suggestions:CategorySuggestion[];budgets:Budget[];onChanged:()=>Promise<unknown>}){
+ const existing=(id:string)=>budgets.find(b=>b.category_id===id&&b.month.slice(0,7)===month)?.amount_cents??null;
+ const rows=suggestions.filter(s=>s.suggestedCents>0&&categories.some(c=>c.id===s.categoryId)),missing=rows.filter(r=>existing(r.categoryId)===null);
+ const [selected,setSelected]=useState<Set<string>|null>(null),[open,setOpen]=useState(false),[everyMonth,setEveryMonth]=useState(true),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
+ // Categories without a budget are pre-selected; existing envelopes are only replaced on request.
+ const chosen=selected??new Set(missing.map(r=>r.categoryId));
+ const picked=rows.filter(r=>chosen.has(r.categoryId)),total=picked.reduce((n,r)=>n+r.suggestedCents,0);
+ const name=(id:string)=>categories.find(c=>c.id===id)?.name||'';
+ async function apply(list=picked){
+  if(!list.length)return;setBusy(true);setError('');setNotice('');
+  try{await applySuggestions(householdId,month,list,everyMonth);setNotice(`${list.length} ${list.length>1?'enveloppes enregistrées':'enveloppe enregistrée'} ${everyMonth?'à partir de':'pour'} ${monthLabel(month)}, soit ${money(list.reduce((n,r)=>n+r.suggestedCents,0))} par mois.`);setSelected(null);await onChanged()}
+  catch(e){setError((e as Error).message||'Enregistrement impossible.')}finally{setBusy(false)}
  }
  if(!rows.length)return null;
- return <section className="card budget-suggestions">
-  <div className="sectionhead"><h2>Budget suggéré pour {monthLabel(target)}</h2><button className="textbtn" aria-expanded={open} onClick={()=>setOpen(v=>!v)}>{open?'Replier':'Voir les suggestions'}</button></div>
-  <p>Estimé à partir de vos dépenses courantes des trois derniers mois complets, plus un douzième de vos factures annuelles, arrondi aux 5 € supérieurs. {plural(rows.length,'catégorie','catégories')} · {money(rows.reduce((n,r)=>n+r.suggestedCents,0))} au total.</p>
-  {error&&<p className="error" role="alert">{displayText(error)}</p>}{notice&&<p role="status">{displayText(notice)}</p>}
-  {open&&<><table className="module-table"><thead><tr><th scope="col"><span className="sr-only">Appliquer</span></th><th scope="col">Catégorie</th><th scope="col">Moyenne mensuelle</th><th scope="col">Part des factures annuelles</th><th scope="col">Suggestion</th><th scope="col">Budget déjà prévu</th></tr></thead><tbody>
-   {rows.map(r=>{const c=expense.find(x=>x.id===r.categoryId)!,prior=existing(r.categoryId);return <tr key={r.categoryId}>
-    <td><input type="checkbox" aria-label={displayText(`Appliquer la suggestion pour ${c.name}`)} checked={chosen.has(r.categoryId)} disabled={busy} onChange={e=>{const next=new Set(chosen);e.target.checked?next.add(r.categoryId):next.delete(r.categoryId);setSelected(next)}}/></td>
-    <td>{displayText(c.name)}<br/><small>{plural(r.months,'mois observé','mois observés')}</small></td>
-    <td>{money(r.averageCents)}</td><td>{r.annualShareCents?money(r.annualShareCents):'—'}</td><td><b>{money(r.suggestedCents)}</b></td><td>{prior===null?'—':money(prior)}</td>
+ return <section className={'card budget-suggestions'+(missing.length?' has-missing':'')}>
+  <div className="sectionhead"><div><span className="overline"><Sparkles size={12}/> Suggestions</span><h2>{missing.length?`Compléter le budget de ${monthLabel(month)}`:`Budget suggéré pour ${monthLabel(month)}`}</h2></div><button className="textbtn" aria-expanded={open} onClick={()=>setOpen(v=>!v)}>{open?'Replier':'Voir le détail'}</button></div>
+  <p>{missing.length?`${missing.length} ${missing.length>1?'catégories ont':'catégorie a'} des dépenses récentes mais pas encore de budget ce mois-ci.`:'Toutes vos catégories dépensées ont un budget. Comparez-les à vos dépenses récentes.'} Calcul : moyenne des trois derniers mois complets, plus un douzième des factures annuelles, arrondie aux 5 € supérieurs.</p>
+  {missing.length>0&&!open&&<ul className="suggestion-chips">{missing.map(r=><li key={r.categoryId}><span>{displayText(name(r.categoryId))}</span><b>{money(r.suggestedCents)}</b></li>)}</ul>}
+  {error&&<p className="error" role="alert">{displayText(error)}</p>}{notice&&<p className="notice" role="status">{displayText(notice)}</p>}
+  {open&&<div className="module-table-scroll"><table className="module-table"><thead><tr><th scope="col"><span className="sr-only">Appliquer</span></th><th scope="col">Catégorie</th><th scope="col">Moyenne mensuelle</th><th scope="col">Part des factures annuelles</th><th scope="col">Suggestion</th><th scope="col">Budget actuel</th></tr></thead><tbody>
+   {rows.map(r=>{const prior=existing(r.categoryId);return <tr key={r.categoryId}>
+    <td><input type="checkbox" aria-label={displayText(`Appliquer la suggestion pour ${name(r.categoryId)}`)} checked={chosen.has(r.categoryId)} disabled={busy} onChange={e=>{const next=new Set(chosen);if(e.target.checked)next.add(r.categoryId);else next.delete(r.categoryId);setSelected(next)}}/></td>
+    <td>{displayText(name(r.categoryId))}<br/><small>{plural(r.months,'mois observé','mois observés')}</small></td>
+    <td>{money(r.averageCents)}</td><td>{r.annualShareCents?money(r.annualShareCents):'—'}</td><td><b>{money(r.suggestedCents)}</b></td><td>{prior===null?'Non défini':money(prior)}</td>
    </tr>})}
-  </tbody></table>
-  <div className="selection-toolbar"><span>{plural(chosen.size,'catégorie sélectionnée','catégories sélectionnées')} · {money(total)}</span><button className="primary" disabled={busy||!chosen.size} onClick={()=>void apply()}>Appliquer à {monthLabel(target)}</button></div></>}
+  </tbody></table></div>}
+  <div className="selection-toolbar"><label className="checkline"><input type="checkbox" checked={everyMonth} disabled={busy} onChange={e=>setEveryMonth(e.target.checked)}/> Reconduire chaque mois</label><span>{plural(picked.length,'catégorie sélectionnée','catégories sélectionnées')} · {money(total)}</span><button className="primary" disabled={busy||!picked.length} onClick={()=>void apply()}>{busy?'Enregistrement…':`Appliquer à ${monthLabel(month)}`}</button></div>
  </section>;
 }
