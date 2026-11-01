@@ -1,6 +1,7 @@
 import {displayText,plural} from '../../lib/text';
 import {useCallback,useEffect,useMemo,useState} from 'react';
 import {classificationReference,referenceTaxonomy} from './classification-reference';
+import {alignTaxonomy} from '../categories/category-synonyms';
 import {normalizeMerchant,type MerchantKnowledgeRule} from './merchant-knowledge';
 import {changedOperationCount,planRuleApplication,ruleKey,type RuleTarget} from './rule-application';
 import {runInBatches} from '../operations/bulk';
@@ -29,7 +30,7 @@ export default function ClassificationReferenceManager({householdId,userId,categ
  async function run(task:()=>Promise<string>){setBusy(true);setError('');setNotice('');try{setNotice(await task());await refresh()}catch(e){setError((e as Error).message||'Action impossible.')}finally{setBusy(false)}}
  function reset(){setEditing(null);setPhrase('');setCategory('');setSubcategory('');setFlow('standard')}
  function edit(r:MerchantKnowledgeRule){setEditing(ruleKey(r));setPhrase(r.merchant_label);setKind(r.kind);setCategory(r.category_id);setSubcategory(r.subcategory_id||'');setFlow(r.flow_type||'standard')}
- async function install(){await run(async()=>{const {error}=await supabase.rpc('ensure_classification_reference',{p_household_id:householdId,p_definitions:referenceTaxonomy()});if(error)throw error;return 'Catégories et sous-catégories du référentiel disponibles. Les opérations existantes restent à valider.'})}
+ async function install(){await run(async()=>{const {error}=await supabase.rpc('ensure_classification_reference',{p_household_id:householdId,p_definitions:alignTaxonomy(referenceTaxonomy(),categories,subcategories)});if(error)throw error;return 'Catégories et sous-catégories du référentiel disponibles. Les opérations existantes restent à valider.'})}
  async function save(){
   const key=normalizeMerchant(phrase);
   if(key.length<2||key.length>120){setError('Indiquez un nom ou une expression de 2 à 120 caractères (hors mots génériques comme « CB » ou « PRLV »).');return}

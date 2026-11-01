@@ -20,7 +20,7 @@ type MonthlyBudgetRow=Pick<Tables<'monthly_budgets'>,'id'|'month'|'income_cents'
 
 export type HouseholdPerson={id:string;name:string;relationship:'self'|'partner'|'child'|'other';isPrimary:boolean;active:boolean;sortOrder:number};
 export type Entry={id:string;kind:'income'|'expense';label:string;category:string;amount:number;date:string;frequency:'monthly'|'annual';incomeAllocation:'calendar'|'next_month';expenseType:ExpenseType;categoryId:string;subcategoryId:string|null;bankTransactionId:string|null;personId:string|null;flowType:FlowType;subcategory?:string;accountId?:string|null;loanId?:string|null;paymentMethod?:string|null};
-export type Home={id:string;name:string;role:'owner'|'member';savingsRate:number|null;incomeTypes:string;expenseTypes:string;categories:{id:string;name:string;kind:string;active:boolean}[];people:HouseholdPerson[]};
+export type Home={id:string;name:string;role:'owner'|'member';savingsRate:number|null;incomeTypes:string;expenseTypes:string;categories:{id:string;name:string;kind:string;active:boolean;sort_order?:number|null}[];people:HouseholdPerson[]};
 
 function parseEntryRow(row:RawEntryRow):EntryRow{
  if(row.kind!=='income'&&row.kind!=='expense')throw new Error('Type d’opération invalide dans les données du foyer.');
@@ -44,4 +44,10 @@ export async function fetchHouseholdRows(table:HouseholdTable,columns:string,hou
   const rows=(data||[]) as unknown as {id:string}[];
   return table==='entries'?rows.map(row=>parseEntryRow(row as RawEntryRow)) as {id:string}[]:rows;
  });
+}
+
+/** Categories or subcategories with their household order; works before migration 20261101120000 adds sort_order. */
+export async function fetchOrderedRows<T extends {id:string}>(table:'categories'|'subcategories',columns:string,householdId:string):Promise<Array<T&{sort_order?:number|null}>>{
+ const load=(select:string)=>collectPages(async after=>{let query=supabase.from(table).select(select).eq('household_id',householdId).order('id',{ascending:true}).limit(500);if(after)query=query.gt('id',after);const {data,error}=await query;if(error)throw error;return (data||[]) as unknown as Array<T&{sort_order?:number|null}>});
+ try{return await load(columns+',sort_order')}catch(error){if((error as {code?:string})?.code==='42703')return load(columns);throw error}
 }
