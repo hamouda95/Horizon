@@ -1,3 +1,4 @@
+import CategoryPicker from '../../components/CategoryPicker';
 import {appCurrency} from '../../lib/currency';
 import {displayText} from '../../lib/text';
 import type {Dispatch, FormEventHandler, SetStateAction} from 'react';
@@ -11,7 +12,7 @@ type ExpenseType=''|'recurring'|'one_off';
 type Setter<T>=Dispatch<SetStateAction<T>>;
 type Subcategory={id:string;name:string};
 
-export default function EntryDialog({accountId='',setAccountId=()=>{},accounts=[],loanId='',setLoanId=()=>{},loans=[],paymentMethod='',setPaymentMethod=()=>{},imported=false,kind,setKind,label,setLabel,amount,setAmount,date,setDate,category,setCategory,categories,subcategoryId,setSubcategoryId,subcategories,newSubcategory,setNewSubcategory,addSubcategory,frequency,setFrequency,expenseType,setExpenseType,flowType,setFlowType,allocation,setAllocation,personId,setPersonId,people,editingId,saving,onSubmit,onLabelSettled}:{onLabelSettled?:(label:string)=>void;
+export default function EntryDialog({accountId='',setAccountId=()=>{},accounts=[],loanId='',setLoanId=()=>{},loans=[],paymentMethod='',setPaymentMethod=()=>{},imported=false,kind,setKind,label,setLabel,amount,setAmount,date,setDate,category,setCategory,categories,subcategoryId,setSubcategoryId,subcategories,pickerCategories,pickerSubcategories,newSubcategory,setNewSubcategory,addSubcategory,frequency,setFrequency,expenseType,setExpenseType,flowType,setFlowType,allocation,setAllocation,personId,setPersonId,people,editingId,saving,onSubmit,onLabelSettled}:{onLabelSettled?:(label:string)=>void;
  accountId?:string;setAccountId?:Setter<string>;accounts?:{id:string;name:string;account_type:string;currency:string}[];
  loanId?:string;setLoanId?:Setter<string>;loans?:{id:string;borrower:string}[];paymentMethod?:string;setPaymentMethod?:Setter<string>;imported?:boolean;
  kind:EntryKind;setKind:Setter<EntryKind>;
@@ -20,6 +21,7 @@ export default function EntryDialog({accountId='',setAccountId=()=>{},accounts=[
  date:string;setDate:Setter<string>;
  category:string;setCategory:Setter<string>;categories:string[];
  subcategoryId:string;setSubcategoryId:Setter<string>;subcategories:Subcategory[];
+ pickerCategories?:{id:string;name:string;active:boolean}[];pickerSubcategories?:{id:string;name:string;category_id:string;active:boolean}[];
  newSubcategory:string;setNewSubcategory:Setter<string>;addSubcategory:()=>void;
  frequency:Frequency;setFrequency:Setter<Frequency>;
  expenseType:ExpenseType;setExpenseType:Setter<ExpenseType>;
@@ -29,9 +31,7 @@ export default function EntryDialog({accountId='',setAccountId=()=>{},accounts=[
  editingId:string|null;saving:boolean;onSubmit:FormEventHandler<HTMLFormElement>;
 }){
  return <form onSubmit={onSubmit}>
-  <span className="overline">Votre budget</span>
   <h2>{editingId?'Modifier l’opération':'Ajouter une opération'}</h2>
-  <p>Renseignez une entrée ou une sortie pour garder votre budget à jour.</p>
   <div className="switch">
    <button type="button" disabled={!!editingId} className={kind==='expense'?'selected':''} onClick={()=>{setKind('expense');setCategory('');setSubcategoryId('');setAllocation('calendar')}}>Sortie d’argent</button>
    <button type="button" disabled={!!editingId} className={kind==='income'?'selected':''} onClick={()=>{setKind('income');setCategory('');setSubcategoryId('')}}>Entrée d’argent</button>
@@ -45,14 +45,15 @@ export default function EntryDialog({accountId='',setAccountId=()=>{},accounts=[
    <label>Montant (€)<input required type="number" min="0.01" max="1000000000" step="0.01" placeholder="0,00" value={amount} onChange={event=>setAmount(event.target.value)}/></label>
    <label>Date<input required type="date" value={date} onChange={event=>setDate(event.target.value)}/></label>
   </div>
-  <label>Catégorie<select required value={category} onChange={event=>{setCategory(event.target.value);setSubcategoryId('')}}><option value="">Choisir une catégorie</option>{categories.map(value=><option key={value} value={value}>{displayText(value)}</option>)}</select></label>
-  <label>Sous-catégorie <span className="optional">(facultatif)</span><select value={subcategoryId} onChange={event=>setSubcategoryId(event.target.value)}><option value="">Sans sous-catégorie</option>{subcategories.map(item=><option key={item.id} value={item.id}>{displayText(item.name)}</option>)}</select></label>
+  {pickerCategories?<CategoryPicker label="Catégorie" required categories={pickerCategories} subcategories={pickerSubcategories||[]} value={{categoryId:pickerCategories.find(c=>c.name===category)?.id||null,subcategoryId:subcategoryId||null}} onChange={v=>{setCategory(v.category);setSubcategoryId(v.subcategoryId||'')}}/>:<>
+   <label>Catégorie<select required value={category} onChange={event=>{setCategory(event.target.value);setSubcategoryId('')}}><option value="">Choisir une catégorie</option>{categories.map(value=><option key={value} value={value}>{displayText(value)}</option>)}</select></label>
+   <label>Sous-catégorie <span className="optional">(facultatif)</span><select value={subcategoryId} onChange={event=>setSubcategoryId(event.target.value)}><option value="">Sans sous-catégorie</option>{subcategories.map(item=><option key={item.id} value={item.id}>{displayText(item.name)}</option>)}</select></label>
+  </>}
   {people.length>0&&<label>{kind==='expense'?'Pour qui ?':'Qui reçoit cette entrée ?'} <span className="optional">(facultatif)</span><select value={personId} onChange={event=>setPersonId(event.target.value)}><option value="">Opération commune</option>{people.filter(person=>person.active).map(person=><option key={person.id} value={person.id}>{displayText(person.name)}</option>)}</select></label>}
-  <div className="subcategory-add"><input aria-label="Nouvelle sous-catégorie" maxLength={60} placeholder="Nouvelle sous-catégorie" value={newSubcategory} onChange={event=>setNewSubcategory(event.target.value)}/><button type="button" className="secondary" disabled={saving||!newSubcategory.trim()} onClick={addSubcategory}>Ajouter</button></div>
+  {category&&<details className="subcategory-add-toggle"><summary>+ Nouvelle sous-catégorie</summary><div className="subcategory-add"><input aria-label="Nouvelle sous-catégorie" maxLength={60} placeholder="Nom de la sous-catégorie" value={newSubcategory} onChange={event=>setNewSubcategory(event.target.value)}/><button type="button" className="secondary" disabled={saving||!newSubcategory.trim()} onClick={addSubcategory}>Ajouter</button></div></details>}
   {kind==='expense'&&flowType==='standard'&&<label>Type de dépense <span className="optional">(facultatif)</span><select value={expenseType} onChange={event=>setExpenseType(event.target.value as ExpenseType)}><option value="">Non précisé</option><option value="recurring">Récurrente — loyer, abonnement…</option><option value="one_off">Ponctuelle — achat occasionnel…</option></select></label>}
   {flowType==='standard'&&<label>Fréquence<select value={frequency} onChange={event=>setFrequency(event.target.value as Frequency)}><option value="monthly">Mensuelle</option><option value="annual">Annuelle</option></select></label>}
   {kind==='expense'&&flowType==='standard'&&frequency==='annual'&&<p className="field-help">La dépense reste datée du jour saisi. Sa provision est répartie sur les 12 mois de cette année.</p>}
-  {kind==='expense'&&flowType==='standard'&&<p className="field-help">La classification organise vos sorties d’argent ; elle ne crée pas automatiquement de futurs paiements.</p>}
   {kind==='income'&&flowType==='standard'&&<label>Affecter ce revenu au budget<select value={allocation} onChange={event=>setAllocation(event.target.value as Allocation)}><option value="calendar">Mois de la date de versement</option><option value="next_month">Mois suivant le versement</option></select></label>}
   <button className="primary wide" disabled={saving}>{saving?'Enregistrement…':editingId?'Enregistrer les modifications':'Enregistrer l’opération'} <ArrowRight size={17}/></button>
  </form>;

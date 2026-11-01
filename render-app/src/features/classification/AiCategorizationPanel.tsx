@@ -1,3 +1,4 @@
+import InfoTip from '../../components/InfoTip';
 import {appCurrency} from '../../lib/currency';
 import {useMemo,useState} from 'react';
 import {supabase} from '../../lib/client';
@@ -62,7 +63,7 @@ export default function AiCategorizationPanel({householdId,categories,subcategor
  const allSelected=suggestions.length>0&&suggestions.every(s=>selected.has(s.entryId));
  return <section className="card product-panel ai-categorization">
   <div className="sectionhead"><h2>Suggestions automatiques</h2></div>
-  <p>Pour les opérations encore à classer, Horizon combine vos règles, son dictionnaire de commerçants et ce qu’il apprend de vos opérations déjà classées. Tout est calculé sur votre appareil, gratuitement. Vous choisissez ce qui est appliqué.</p>
+  <InfoTip>Pour les opérations encore à classer, Horizon combine vos règles, son dictionnaire de commerçants et ce qu’il apprend de vos opérations déjà classées. Tout est calculé sur votre appareil, gratuitement. Vous choisissez ce qui est appliqué.</InfoTip>
   {error&&<p className="error" role="alert">{displayText(error)}</p>}{notice&&<p role="status">{displayText(notice)}</p>}
   <div className="selection-toolbar"><span>{candidates.length?plural(candidates.length,'opération à classer','opérations à classer'):'Aucune opération à classer.'}</span><button className="secondary" disabled={busy||!candidates.length} onClick={()=>void suggest()}>{busy?'Analyse…':'Proposer des catégories'}</button></div>
   {suggestions.length>0&&<>

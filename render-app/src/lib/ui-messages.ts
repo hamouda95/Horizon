@@ -7903,5 +7903,129 @@ export const uiMessages:Record<string,{en:string;ar:string}>={
  "Retirer le filtre {0}": {
   "en": "Remove filter {0}",
   "ar": "إزالة عامل التصفية {0}"
+ },
+ "Filtres": {
+  "en": "Filters",
+  "ar": "عوامل التصفية"
+ },
+ "Effacer la recherche": {
+  "en": "Clear search",
+  "ar": "مسح البحث"
+ },
+ "Effacer les filtres": {
+  "en": "Clear filters",
+  "ar": "مسح عوامل التصفية"
+ },
+ "Dates choisies": {
+  "en": "Custom dates",
+  "ar": "تواريخ مختارة"
+ },
+ "Du": {
+  "en": "From",
+  "ar": "من"
+ },
+ "Banque ou compte": {
+  "en": "Bank or account",
+  "ar": "البنك أو الحساب"
+ },
+ "Tous les comptes": {
+  "en": "All accounts",
+  "ar": "كل الحسابات"
+ },
+ "Toute la banque": {
+  "en": "Whole bank",
+  "ar": "البنك بأكمله"
+ },
+ "Saisies sans compte": {
+  "en": "Entries without account",
+  "ar": "إدخالات بدون حساب"
+ },
+ "Toutes": {
+  "en": "All",
+  "ar": "الكل"
+ },
+ "Montant min.": {
+  "en": "Min. amount",
+  "ar": "الحد الأدنى للمبلغ"
+ },
+ "Montant max.": {
+  "en": "Max. amount",
+  "ar": "الحد الأقصى للمبلغ"
+ },
+ "Libellé, catégorie, banque, montant…": {
+  "en": "Description, category, bank, amount…",
+  "ar": "الوصف، الفئة، البنك، المبلغ…"
+ },
+ "+ Ajouter": {
+  "en": "+ Add",
+  "ar": "+ إضافة"
+ },
+ "Sélectionnez uniquement des entrées ou des sorties.": {
+  "en": "Select only money in or only money out.",
+  "ar": "اختر المداخيل فقط أو المصاريف فقط."
+ },
+ "Rechercher une catégorie": {
+  "en": "Search a category",
+  "ar": "ابحث عن فئة"
+ },
+ "Aucune catégorie ne correspond.": {
+  "en": "No matching category.",
+  "ar": "لا توجد فئة مطابقة."
+ },
+ "Rechercher une catégorie ou sous-catégorie": {
+  "en": "Search a category or subcategory",
+  "ar": "ابحث عن فئة أو فئة فرعية"
+ },
+ "Rechercher une échéance": {
+  "en": "Search a due payment",
+  "ar": "ابحث عن استحقاق"
+ },
+ "Aucune échéance pour ces filtres.": {
+  "en": "No due payment for these filters.",
+  "ar": "لا توجد استحقاقات لعوامل التصفية هذه."
+ },
+ "Payées": {
+  "en": "Paid",
+  "ar": "مدفوعة"
+ },
+ "+ Nouvelle sous-catégorie": {
+  "en": "+ New subcategory",
+  "ar": "+ فئة فرعية جديدة"
+ },
+ "Détails": {
+  "en": "Details",
+  "ar": "التفاصيل"
+ },
+ "{0} virements internes probables à vérifier": {
+  "en": "{0} likely internal transfers to check",
+  "ar": "{0} تحويلات داخلية محتملة للتحقق منها"
+ },
+ "{0} virement interne probable à vérifier": {
+  "en": "{0} likely internal transfer to check",
+  "ar": "{0} تحويل داخلي محتمل للتحقق منه"
+ },
+ "{0} entre vos comptes ou les membres du foyer.": {
+  "en": "{0} between your accounts or household members.",
+  "ar": "{0} بين حساباتك أو أفراد الأسرة."
+ },
+ "« {0} » existe déjà dans « {1} » ({2}). Utilisez-la, ou fusionnez les deux.": {
+  "en": "“{0}” already exists in “{1}” ({2}). Use it, or merge the two.",
+  "ar": "«{0}» موجودة بالفعل في «{1}» ({2}). استخدمها أو ادمج الاثنتين."
+ },
+ "doublon probable à fusionner": {
+  "en": "likely duplicate to merge",
+  "ar": "تكرار محتمل للدمج"
+ },
+ "doublons probables à fusionner": {
+  "en": "likely duplicates to merge",
+  "ar": "تكرارات محتملة للدمج"
+ },
+ "{0} doublons probables à fusionner": {
+  "en": "{0} likely duplicates to merge",
+  "ar": "{0} تكرارات محتملة للدمج"
+ },
+ "{0} doublon probable à fusionner": {
+  "en": "{0} likely duplicate to merge",
+  "ar": "{0} تكرار محتمل للدمج"
  }
 };

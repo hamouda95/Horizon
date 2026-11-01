@@ -1,11 +1,11 @@
 import {useState} from 'react';
 import {ModuleDrawer} from '../../components/ModuleUI';
-import {displayText} from '../../lib/text';
+import CategoryPicker from '../../components/CategoryPicker';
 import {parseEuroCents} from '../../lib/money';
 import {localToday} from '../../lib/dates';
 
 export type QuickEntry={kind:'income'|'expense';label:string;amountCents:number;date:string;category:string};
-type Props={categories:{name:string;kind:string;active:boolean}[];suggest:(label:string,kind:'income'|'expense')=>string|null;onSave:(entry:QuickEntry)=>Promise<boolean>;onMore:(draft:Partial<QuickEntry>&{amount:string})=>void;onClose:()=>void};
+type Props={categories:{id:string;name:string;kind:string;active:boolean}[];suggest:(label:string,kind:'income'|'expense')=>string|null;onSave:(entry:QuickEntry)=>Promise<boolean>;onMore:(draft:Partial<QuickEntry>&{amount:string})=>void;onClose:()=>void};
 
 /** Four fields to record an operation from anywhere; the full form stays one click away. */
 export default function QuickAdd({categories,suggest,onSave,onMore,onClose}:Props){
@@ -24,7 +24,7 @@ export default function QuickAdd({categories,suggest,onSave,onMore,onClose}:Prop
   <div className="quick-add-kind" role="group" aria-label="Sens de l’opération"><button type="button" className={kind==='expense'?'selected':''} aria-pressed={kind==='expense'} onClick={()=>{setKind('expense');setCategory('')}}>Dépense</button><button type="button" className={kind==='income'?'selected':''} aria-pressed={kind==='income'} onClick={()=>{setKind('income');setCategory('')}}>Entrée</button></div>
   <label>Montant (€)<input autoFocus required inputMode="decimal" placeholder="0,00" value={amount} onChange={e=>setAmount(e.target.value)}/></label>
   <label>Libellé<input required maxLength={100} placeholder={kind==='expense'?'Ex. Boulangerie, Carrefour':'Ex. Salaire, remboursement'} value={label} onChange={e=>setLabel(e.target.value)} onBlur={guess}/></label>
-  <label>Catégorie<select required value={category} onChange={e=>setCategory(e.target.value)}><option value="">Choisir</option>{options.map(c=><option key={c.name} value={c.name}>{displayText(c.name)}</option>)}</select></label>
+  <CategoryPicker label="Catégorie" required categories={options} subcategories={[]} allowSubcategories={false} value={{categoryId:options.find(c=>c.name===category)?.id||null,subcategoryId:null}} onChange={v=>setCategory(v.category)}/>
   <label>Date<input required type="date" value={date} onChange={e=>setDate(e.target.value)}/></label>
   {error&&<p className="error" role="alert">{error}</p>}
   <button className="primary" disabled={busy}>{busy?'Enregistrement…':'Enregistrer'}</button>
