@@ -3,7 +3,9 @@ import type {Loan} from '../lib/finance-engine';
 import {useEffect,useRef,useState} from 'react';
 import type {Dispatch,SetStateAction} from 'react';
 import {supabase} from '../lib/client';
-import {fetchHouseholdRows} from './household-data';
+import {fetchHouseholdRows,fetchOrderedRows} from './household-data';
+import {importanceByCategory,orderByImportance} from '../features/categories/category-order';
+import {localToday} from '../lib/dates';
 import type {Entry,Home} from './household-data';
 
 export type HouseholdChoice={id:string;name:string;role:'owner'|'member';savingsRate:number|null};
@@ -33,10 +35,10 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
    if(selectedId.current!==selected.id){selectedId.current=selected.id;setHome(null);setEntries([]);setLoans([]);setSubcategories([]);setPlans([]);setLoading(true)}
    try{localStorage.setItem(`horizon.household.${userId}`,selected.id)}catch{/* le choix reste valable pour cette session */}
    const [categories,entryRows,budgetRows,subRows,peopleRows,loanRows]=await Promise.all([
-    fetchHouseholdRows('categories','id,name,kind,active',selected.id),
+    fetchOrderedRows<{id:string;name:string;kind:string;active:boolean}>('categories','id,name,kind,active',selected.id),
     fetchHouseholdRows('entries','id,kind,label,amount_cents,entry_date,category_id,frequency,income_allocation,expense_type,subcategory_id,bank_transaction_id,person_id,flow_type,account_id,loan_id,payment_method',selected.id),
     fetchHouseholdRows('monthly_budgets','id,month,income_cents,expense_cents',selected.id),
-    fetchHouseholdRows('subcategories','id,name,category_id,active',selected.id),
+    fetchOrderedRows<{id:string;name:string;category_id:string;active:boolean}>('subcategories','id,name,category_id,active',selected.id),
     supabase.from('household_people').select('id,name,relationship,is_primary,active,sort_order').eq('household_id',selected.id).order('sort_order').order('name'),
     collectPages<Loan>(async after=>{
      // expected_repayment_on comes with migration 20261101090000; until it is applied, load loans without it.
@@ -47,9 +49,12 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
    ]);
    if(peopleRows.error)throw peopleRows.error;
    if(sequence!==loadSequence.current)return true;
-   setLoans(loanRows);setSubcategories(subRows);setPlans(budgetRows);
+   setLoans(loanRows);// Household order first, then the categories that move the most money.
+   const importance=importanceByCategory(entryRows.map(x=>({categoryId:x.category_id,subcategoryId:x.subcategory_id,amount:Number(x.amount_cents),date:x.entry_date})),localToday());
+   const sortedCategories=orderByImportance(categories,importance),sortedSubcategories=orderByImportance(subRows,importance);
+   setSubcategories(sortedSubcategories);setPlans(budgetRows);
    const people=(peopleRows.data||[]).map(x=>({id:x.id,name:x.name,relationship:x.relationship as 'self'|'partner'|'child'|'other',isPrimary:x.is_primary,active:x.active,sortOrder:x.sort_order}));
-   setHome({id:selected.id,name:selected.name,role:selected.role,savingsRate:selected.savingsRate,incomeTypes:JSON.stringify(categories.filter(x=>x.active&&x.kind==='income').map(x=>x.name)),expenseTypes:JSON.stringify(categories.filter(x=>x.active&&x.kind==='expense').map(x=>x.name)),categories,people});
+   setHome({id:selected.id,name:selected.name,role:selected.role,savingsRate:selected.savingsRate,incomeTypes:JSON.stringify(categories.filter(x=>x.active&&x.kind==='income').map(x=>x.name)),expenseTypes:JSON.stringify(categories.filter(x=>x.active&&x.kind==='expense').map(x=>x.name)),categories:sortedCategories,people});
    setEntries(entryRows.map(x=>({id:x.id,kind:x.kind,label:x.label,category:categories.find(c=>c.id===x.category_id)?.name||'Autre',amount:Number(x.amount_cents),date:x.entry_date,frequency:x.frequency,incomeAllocation:x.income_allocation,expenseType:x.expense_type,flowType:x.flow_type,categoryId:x.category_id,subcategoryId:x.subcategory_id,bankTransactionId:x.bank_transaction_id,personId:x.person_id,accountId:x.account_id,loanId:x.loan_id,paymentMethod:x.payment_method,subcategory:subRows.find(y=>y.id===x.subcategory_id)?.name})));
    setRefreshVersion(value=>value+1);
    return true;

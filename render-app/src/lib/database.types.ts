@@ -186,6 +186,7 @@ export type Database = {
       }
       categories: {
         Row: {
+          sort_order: number | null
           active: boolean
           created_at: string
           household_id: string
@@ -194,6 +195,7 @@ export type Database = {
           name: string
         }
         Insert: {
+          sort_order?: number | null
           active?: boolean
           created_at?: string
           household_id: string
@@ -202,6 +204,7 @@ export type Database = {
           name: string
         }
         Update: {
+          sort_order?: number | null
           active?: boolean
           created_at?: string
           household_id?: string
@@ -783,6 +786,7 @@ export type Database = {
       }
       subcategories: {
         Row: {
+          sort_order: number | null
           active: boolean
           category_id: string
           household_id: string
@@ -791,6 +795,7 @@ export type Database = {
           name: string
         }
         Insert: {
+          sort_order?: number | null
           active?: boolean
           category_id: string
           household_id: string
@@ -799,6 +804,7 @@ export type Database = {
           name: string
         }
         Update: {
+          sort_order?: number | null
           active?: boolean
           category_id?: string
           household_id?: string
