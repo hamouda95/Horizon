@@ -13,3 +13,6 @@ supabase/.temp/
 
 # Relevés bancaires réels utilisés pour tester les imports : jamais versionnés
 echantillons/
+
+# Supabase CLI working files
+**/supabase/.temp/
