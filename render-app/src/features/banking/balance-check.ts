@@ -25,3 +25,13 @@ export function checkTypedBalance({typedCents,typedDate,previous,movements,today
  }else if(previous)expectedCents=previous.cents;
  return {expectedCents,gapCents:expectedCents===null?null:typedCents-expectedCents,between,after,currentCents:typedCents+total(after)};
 }
+
+type StoredBalance={balance_cents:number|null;balance_as_of:string|null;effective_balance_cents?:number|null};
+/** The balance every screen shows: the stored reading plus the operations counted after it. A form starts
+ * from it, so saving it unchanged never brings back an outdated reading. When operations were added, it is
+ * dated today; otherwise it keeps the date of the reading. */
+export function currentBalance(account:StoredBalance,today:string):{cents:number;date:string}|null{
+ if(account.balance_cents===null||!account.balance_as_of)return null;
+ const cents=account.effective_balance_cents??account.balance_cents;
+ return {cents,date:cents===account.balance_cents?account.balance_as_of.slice(0,10):today};
+}
