@@ -7,6 +7,8 @@ it('traduit les règles de la base en français',()=>{
  expect(loanErrorMessage({message:'new row violates check constraint "household_loans_expected_after_opening"'})).toMatch(/suivre la date du prêt/);
  expect(loanErrorMessage({message:'Opening receivable history is immutable; correct linked operations instead'})).toMatch(/mise à jour de la base/);
  expect(loanErrorMessage({message:'column household_loans.expected_repayment_on does not exist',code:'42703'})).toMatch(/mise à jour de la base/);
+ expect(loanErrorMessage({message:'Choose a loan from this household dated before the operation'})).toMatch(/antérieure à la date du prêt/);
+ expect(loanErrorMessage({message:'A cash payment requires a cash account'})).toMatch(/compte Espèces/);
  expect(loanErrorMessage(null)).toBe('Modification impossible pour le moment.');
 });
 
