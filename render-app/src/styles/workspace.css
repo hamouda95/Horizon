@@ -64,7 +64,5 @@ body *{text-transform:none!important}
 .loan-tag-out{font-weight:600}
 .loan-tag-in{font-weight:600;color:#2f6b4f}
 
-/* Right-to-left layout for Arabic */
-[dir=rtl] .sidebar{left:auto;right:0;border-right:0;border-left:1px solid var(--line)}[dir=rtl] .module-drawer{inset:0 auto 0 0}[dir=rtl] .sidebar-resize-handle{right:auto;left:-5px}[dir=rtl] .sidebar-resize-handle:after{right:auto;left:4px}[dir=rtl] .module-table{text-align:right}[dir=rtl] .account-destination-grid input,[dir=rtl] .account-destination-grid select{text-align:right}@media(min-width:901px){[dir=rtl] main{margin-left:0;margin-right:var(--sidebar-width,248px)}}
 
 .settings-fieldset label.checkline{display:flex;flex-direction:row;align-items:center;gap:8px;margin:12px 0 4px}.settings-fieldset label.checkline input{width:auto;margin:0}
