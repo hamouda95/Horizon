@@ -38,7 +38,12 @@ export function useHouseholdData(userId:string,modal:string,tab:string,setModal:
     fetchHouseholdRows('monthly_budgets','id,month,income_cents,expense_cents',selected.id),
     fetchHouseholdRows('subcategories','id,name,category_id,active',selected.id),
     supabase.from('household_people').select('id,name,relationship,is_primary,active,sort_order').eq('household_id',selected.id).order('sort_order').order('name'),
-    collectPages<Loan>(async after=>{let q=supabase.from('household_loans').select('id,borrower,opening_principal_cents,opened_on,notes').eq('household_id',selected.id).order('id').limit(500);if(after)q=q.gt('id',after);const {data,error}=await q;if(error)throw error;return data||[]})
+    collectPages<Loan>(async after=>{
+     // expected_repayment_on comes with migration 20261101090000; until it is applied, load loans without it.
+     const page=(columns:string)=>{let q=supabase.from('household_loans').select(columns).eq('household_id',selected.id).order('id').limit(500);if(after)q=q.gt('id',after);return q};
+     let {data,error}=await page('id,borrower,opening_principal_cents,opened_on,notes,expected_repayment_on');
+     if(error?.code==='42703')({data,error}=await page('id,borrower,opening_principal_cents,opened_on,notes'));
+     if(error)throw error;return (data||[]) as unknown as Loan[]})
    ]);
    if(peopleRows.error)throw peopleRows.error;
    if(sequence!==loadSequence.current)return true;
