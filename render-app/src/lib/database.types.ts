@@ -837,6 +837,7 @@ export type Database = {
       bank_duplicate_count: {Args:{p_household_id:string};Returns:number};
       ensure_classification_reference: { Args: { p_household_id: string; p_definitions: Json }; Returns: Json }
       resolve_bank_duplicates: { Args: { p_household_id: string; p_keep_ids: string[] }; Returns: number }
+      resolve_bank_shifted_duplicates: { Args: { p_household_id: string; p_keep_ids: string[]; p_remove_ids: string[] }; Returns: number }
 
       configure_household_with_accounts: { Args: { p_household_id: string | null; p_name: string; p_income_types: Json; p_expense_types: Json; p_people: Json; p_accounts: Json; p_budget: Json }; Returns: string }
       delete_manual_accounts: { Args: { p_household_id: string; p_account_ids: string[] }; Returns: Json }
