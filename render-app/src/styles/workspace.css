@@ -53,3 +53,13 @@ body *{text-transform:none!important}
 .quick-add-kind button{flex:1;padding:8px;border:1px solid var(--line,#dfe6df);border-radius:8px;background:transparent;cursor:pointer}
 .quick-add-kind button.selected{background:var(--accent,#315e4d);color:#fff}
 .goal-plan{display:block;margin-top:4px}
+.loan-bar{display:block;height:6px;border-radius:3px;background:var(--line,#e2e8e2);margin-top:6px;overflow:hidden;max-width:220px}
+.loan-bar i{display:block;height:100%;background:var(--accent,#315e4d)}
+.loan-insights{display:grid;gap:8px;padding:12px;border-radius:10px;background:var(--surface-soft,#f6f8f5);margin:8px 0}
+.loan-insights p{margin:0}
+.loan-insights ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.loan-insights li{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.loan-insight-warning{color:#8a4b12}
+.loan-entry-opening{opacity:.85;font-style:italic}
+.loan-tag-out{font-weight:600}
+.loan-tag-in{font-weight:600;color:#2f6b4f}
