@@ -7731,5 +7731,177 @@ export const uiMessages:Record<string,{en:string;ar:string}>={
  "Votre mot de passe n’est jamais stocké en clair ; la double authentification est disponible.": {
   "en": "Your password is never stored in plain text; two-step verification is available.",
   "ar": "لا تُخزَّن كلمة مرورك أبدا كنص واضح؛ والتحقق بخطوتين متاح."
+ },
+ "au total": {
+  "en": "in total",
+  "ar": "في المجموع"
+ },
+ "Chargement de vos comptes…": {
+  "en": "Loading your accounts…",
+  "ar": "جارٍ تحميل حساباتك…"
+ },
+ "Voir le détail": {
+  "en": "See details",
+  "ar": "عرض التفاصيل"
+ },
+ "Toutes vos catégories dépensées ont un budget. Comparez-les à vos dépenses récentes.": {
+  "en": "Every category you spend in has a budget. Compare them with your recent spending.",
+  "ar": "كل الفئات التي تنفق فيها لها ميزانية. قارنها بمصاريفك الأخيرة."
+ },
+ "Calcul : moyenne des trois derniers mois complets, plus un douzième des factures annuelles, arrondie aux 5 € supérieurs.": {
+  "en": "How it's calculated: average of the last three full months, plus one twelfth of yearly bills, rounded up to the next 5 €.",
+  "ar": "طريقة الحساب: متوسط آخر ثلاثة أشهر كاملة، مع جزء من اثني عشر من الفواتير السنوية، مقرّبا إلى أعلى 5 €."
+ },
+ "Budget actuel": {
+  "en": "Current budget",
+  "ar": "الميزانية الحالية"
+ },
+ "Reconduire chaque mois": {
+  "en": "Repeat every month",
+  "ar": "تكرار كل شهر"
+ },
+ "Moyenne des trois derniers mois, reconduite chaque mois": {
+  "en": "Average of the last three months, repeated every month",
+  "ar": "متوسط آخر ثلاثة أشهر، يتكرر كل شهر"
+ },
+ "Suggestions": {
+  "en": "Suggestions",
+  "ar": "اقتراحات"
+ },
+ "Compléter le budget de {0}": {
+  "en": "Complete the {0} budget",
+  "ar": "إكمال ميزانية {0}"
+ },
+ "Budget suggéré pour {0}": {
+  "en": "Suggested budget for {0}",
+  "ar": "الميزانية المقترحة لـ {0}"
+ },
+ "{0} catégories ont des dépenses récentes mais pas encore de budget ce mois-ci.": {
+  "en": "{0} categories have recent spending but no budget yet this month.",
+  "ar": "{0} فئات لها مصاريف حديثة دون ميزانية هذا الشهر."
+ },
+ "{0} catégorie a des dépenses récentes mais pas encore de budget ce mois-ci.": {
+  "en": "{0} category has recent spending but no budget yet this month.",
+  "ar": "{0} فئة لها مصاريف حديثة دون ميزانية هذا الشهر."
+ },
+ "{0} enveloppes enregistrées à partir de {1}, soit {2} par mois.": {
+  "en": "{0} envelopes saved from {1}, {2} per month.",
+  "ar": "تم حفظ {0} أظرف ابتداء من {1}، أي {2} شهريا."
+ },
+ "{0} enveloppe enregistrée à partir de {1}, soit {2} par mois.": {
+  "en": "{0} envelope saved from {1}, {2} per month.",
+  "ar": "تم حفظ {0} ظرف ابتداء من {1}، أي {2} شهريا."
+ },
+ "{0} enveloppes enregistrées pour {1}, soit {2} par mois.": {
+  "en": "{0} envelopes saved for {1}, {2} per month.",
+  "ar": "تم حفظ {0} أظرف لـ {1}، أي {2} شهريا."
+ },
+ "{0} enveloppe enregistrée pour {1}, soit {2} par mois.": {
+  "en": "{0} envelope saved for {1}, {2} per month.",
+  "ar": "تم حفظ {0} ظرف لـ {1}، أي {2} شهريا."
+ },
+ "Entrées par catégorie": {
+  "en": "Money in by category",
+  "ar": "الأموال الواردة حسب الفئة"
+ },
+ "Sorties par catégorie": {
+  "en": "Money out by category",
+  "ar": "الأموال الصادرة حسب الفئة"
+ },
+ "Aucune entrée d’argent sur cette période.": {
+  "en": "No money in for this period.",
+  "ar": "لا أموال واردة في هذه الفترة."
+ },
+ "Aucune sortie d’argent sur cette période.": {
+  "en": "No money out for this period.",
+  "ar": "لا أموال صادرة في هذه الفترة."
+ },
+ "Aucune entrée d’argent ce mois-ci.": {
+  "en": "No money in this month.",
+  "ar": "لا أموال واردة هذا الشهر."
+ },
+ "Aucune sortie d’argent ce mois-ci.": {
+  "en": "No money out this month.",
+  "ar": "لا أموال صادرة هذا الشهر."
+ },
+ "Aucune entrée d’argent sur ce mois.": {
+  "en": "No money in this month.",
+  "ar": "لا أموال واردة في هذا الشهر."
+ },
+ "Aucune sortie d’argent sur ce mois.": {
+  "en": "No money out this month.",
+  "ar": "لا أموال صادرة في هذا الشهر."
+ },
+ "Autres catégories": {
+  "en": "Other categories",
+  "ar": "فئات أخرى"
+ },
+ "Selon la nature choisie dans les filtres. Cliquez sur une catégorie pour filtrer la liste.": {
+  "en": "Based on the type chosen in the filters. Click a category to filter the list.",
+  "ar": "حسب النوع المختار في عوامل التصفية. انقر على فئة لتصفية القائمة."
+ },
+ "Mouvements courants et à vérifier, hors virements internes, épargne, placements et prêts. Cliquez sur une catégorie pour filtrer la liste.": {
+  "en": "Everyday and to-check movements, excluding internal transfers, savings, investments and loans. Click a category to filter the list.",
+  "ar": "الحركات العادية والتي تحتاج مراجعة، دون التحويلات الداخلية والادخار والاستثمارات والقروض. انقر على فئة لتصفية القائمة."
+ },
+ "Mouvements courants et à vérifier, hors virements internes, épargne, placements et prêts.": {
+  "en": "Everyday and to-check movements, excluding internal transfers, savings, investments and loans.",
+  "ar": "الحركات العادية والتي تحتاج مراجعة، دون التحويلات الداخلية والادخار والاستثمارات والقروض."
+ },
+ "Hors virements internes, épargne, placements et prêts.": {
+  "en": "Excluding internal transfers, savings, investments and loans.",
+  "ar": "دون التحويلات الداخلية والادخار والاستثمارات والقروض."
+ },
+ "{0} opérations à vérifier ressemblent à des virements au sein du foyer": {
+  "en": "{0} transactions to check look like transfers within the household",
+  "ar": "{0} عمليات للمراجعة تشبه تحويلات داخل الأسرة"
+ },
+ "{0} opération à vérifier ressemble à des virements au sein du foyer": {
+  "en": "{0} transaction to check looks like a transfer within the household",
+  "ar": "{0} عملية للمراجعة تشبه تحويلا داخل الأسرة"
+ },
+ "{0} sur tout l’historique : virements de compte à compte ou au nom de {1}. Tant qu’ils restent « à vérifier », ils faussent vos entrées.": {
+  "en": "{0} over the whole history: account-to-account transfers or in the name of {1}. While they stay “to check”, they distort your money in.",
+  "ar": "{0} على كامل السجل: تحويلات بين الحسابات أو باسم {1}. ما دامت «للمراجعة» فهي تشوّه أموالك الواردة."
+ },
+ "{0} sur tout l’historique : virements de compte à compte ou au nom de {1}. Tant qu’ils restent « à vérifier », ils faussent vos sorties.": {
+  "en": "{0} over the whole history: account-to-account transfers or in the name of {1}. While they stay “to check”, they distort your money out.",
+  "ar": "{0} على كامل السجل: تحويلات بين الحسابات أو باسم {1}. ما دامت «للمراجعة» فهي تشوّه أموالك الصادرة."
+ },
+ "Classer {0} opérations comme virements internes ? Elles ne compteront plus comme revenus. Vous pourrez modifier chacune ensuite.": {
+  "en": "Mark {0} transactions as internal transfers? They will no longer count as income. You can still edit each one afterwards.",
+  "ar": "تصنيف {0} عمليات كتحويلات داخلية؟ لن تُحتسب كمداخيل بعد الآن. يمكنك تعديل كل واحدة لاحقا."
+ },
+ "Classer {0} opérations comme virements internes ? Elles ne compteront plus comme dépenses. Vous pourrez modifier chacune ensuite.": {
+  "en": "Mark {0} transactions as internal transfers? They will no longer count as spending. You can still edit each one afterwards.",
+  "ar": "تصنيف {0} عمليات كتحويلات داخلية؟ لن تُحتسب كمصاريف بعد الآن. يمكنك تعديل كل واحدة لاحقا."
+ },
+ "Revenir à la liste": {
+  "en": "Back to the list",
+  "ar": "العودة إلى القائمة"
+ },
+ "Les afficher": {
+  "en": "Show them",
+  "ar": "عرضها"
+ },
+ "Classer en virements internes": {
+  "en": "Mark as internal transfers",
+  "ar": "تصنيفها كتحويلات داخلية"
+ },
+ "Sans plafond ni dépense ce mois-ci :": {
+  "en": "No limit and no spending this month:",
+  "ar": "بلا سقف ولا مصاريف هذا الشهر:"
+ },
+ "Détail des entrées →": {
+  "en": "Money in details →",
+  "ar": "تفاصيل الأموال الواردة ←"
+ },
+ "Détail des sorties →": {
+  "en": "Money out details →",
+  "ar": "تفاصيل الأموال الصادرة ←"
+ },
+ "Retirer le filtre {0}": {
+  "en": "Remove filter {0}",
+  "ar": "إزالة عامل التصفية {0}"
  }
 };
