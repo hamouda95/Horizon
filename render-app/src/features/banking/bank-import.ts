@@ -22,8 +22,11 @@ export function inferStatementFlowType(row:StatementTransaction,accountType?:str
  if(/virements? emis de comptes a comptes|virements? recus de comptes a comptes|transfert interne|mouvements internes/.test(text))return 'transfer';
  if(/\b(?:virement|vir|transfert)\b.*\b(?:depuis|vers)\b.*\b(?:bourso(?:bank)?|boursorama|livret|epargne|compte courant|compte epargne)\b/.test(text))return 'transfer';
  if(/\b(?:depuis|vers)\b.*\b(?:bourso|boursorama|livret|epargne|compte courant|compte epargne)\b/.test(text))return 'transfer';
- if(/livret|epargne|compte epargne/.test(text))return 'savings';
- if(/remboursement|rembourse|refund|\bavoir\b|cpam|securite sociale|complementaire sante/.test(text))return 'refund';
+ // A bank named "Caisse d'Épargne" is not a savings movement: its name is removed before looking for savings words.
+ const withoutBankNames=text.replace(/\bcaisses? d ?epargne\b|\bcaisse epargne\b/g,' ');
+ if(/livret|epargne|compte epargne/.test(withoutBankNames))return 'savings';
+ // A refund is money coming back: a debited "remboursement prêt" is a loan instalment, not a refund.
+ if(row.amountCents>0&&/remboursement|rembourse|refund|\bavoir\b|cpam|securite sociale|complementaire sante/.test(text))return 'refund';
  if(/salaire|payroll|paie|virement employeur|remuneration|loyer|revenu locatif|rent/.test(text))return 'standard';
  // Unrecognized savings-account movements need review rather than being counted as income.
  if(accountType==='savings'||accountType==='investment'||accountType==='crypto'||accountType==='credit')return 'review';
