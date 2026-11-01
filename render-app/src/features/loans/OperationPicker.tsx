@@ -1,10 +1,11 @@
+import {appCurrency} from '../../lib/currency';
 import {useMemo,useState} from 'react';
 import type {Entry} from '../../hooks/household-data';
 import {displayText} from '../../lib/text';
 import {appLocale} from '../../lib/locale';
 import {rankLinkCandidates} from './link-candidates';
 
-const money=(n:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR'}).format(n/100);
+const money=(n:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:appCurrency()}).format(n/100);
 
 /** Picks an existing operation to attach to a loan: searchable, with the person's operations and similar amounts first. */
 export default function OperationPicker({entries,kind,borrower,targetCents,value,onChange,label}:{entries:Entry[];kind:'income'|'expense';borrower:string;targetCents:number;value:string;onChange:(id:string)=>void;label:string}){

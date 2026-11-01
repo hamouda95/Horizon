@@ -1,3 +1,4 @@
+import {appCurrency} from '../../lib/currency';
 import {useMemo,useState} from 'react';
 import {supabase} from '../../lib/client';
 import {appLocale} from '../../lib/locale';
@@ -20,7 +21,7 @@ export default function AiCategorizationPanel({householdId,categories,subcategor
  const [suggestions,setSuggestions]=useState<LocalSuggestion[]>([]),[selected,setSelected]=useState(new Set<string>()),[learn,setLearn]=useState(true),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  const byId=useMemo(()=>new Map(entries.map(e=>[e.id,e])),[entries]);
  const name=(id:string|null|undefined)=>categories.find(c=>c.id===id)?.name||subcategories.find(s=>s.id===id)?.name||'';
- const money=(cents:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR'}).format(cents/100);
+ const money=(cents:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:appCurrency()}).format(cents/100);
 
  async function suggest(){
   if(busy||!candidates.length)return;

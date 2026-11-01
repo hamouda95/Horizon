@@ -1,3 +1,4 @@
+import {appCurrency} from '../../lib/currency';
 import {Pencil} from 'lucide-react';
 import CategoryBudgetEditor from '../budget/CategoryBudgetEditor';
 import {displayText} from '../../lib/text';
@@ -10,7 +11,7 @@ import {budgetMonth} from '../../lib/period';
 import {appLocale} from '../../lib/locale';
 export type BudgetCategory={id:string;name:string;kind:string;active:boolean};
 export function categorySpending(entries:Entry[],categoryId:string,month:string,today:string){return financialPeriod(entries,month,today).byCategory.get(categoryId)||0}
-const money=(n:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR'}).format(n/100);
+const money=(n:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:appCurrency()}).format(n/100);
 export default function CategoryBudgetSummary({householdId,onChanged,categories,entries,budgets,month,today,error,loading,onBudget}:{householdId?:string;onChanged?:()=>Promise<unknown>;categories:BudgetCategory[];entries:Entry[];budgets:CategoryBudget[];month:string;today:string;error:string;loading:boolean;onBudget:()=>void}){
  const [editing,setEditing]=useState<{id:string;name:string;limit:number|null}|null>(null);
  const rows=categories.filter(c=>c.kind==='expense').map(c=>{const spent=categorySpending(entries,c.id,month,today),limit=budgets.find(b=>b.category_id===c.id&&b.month===month+'-01')?.amount_cents??null;return {...c,spent,limit,...categoryBudgetProgress(spent,limit)}}).filter(c=>c.active||c.spent>0||c.limit!==null).sort((a,b)=>(b.percent??-1)-(a.percent??-1)||b.spent-a.spent);

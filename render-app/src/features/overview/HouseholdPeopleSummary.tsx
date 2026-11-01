@@ -1,8 +1,9 @@
+import {appCurrency} from '../../lib/currency';
 import {displayText} from '../../lib/text';
 import {appLocale} from '../../lib/locale';
 import type {Entry,HouseholdPerson} from '../../hooks/household-data';
 
-const currency=(cents:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(cents/100);
+const currency=(cents:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:appCurrency(),maximumFractionDigits:0}).format(cents/100);
 export default function HouseholdPeopleSummary({people,entries}:{people:HouseholdPerson[];entries:Entry[]}){
  const visible=people.filter(person=>person.active||entries.some(entry=>entry.personId===person.id));if(visible.length<2)return null;
  const totals=visible.map(person=>{const rows=entries.filter(entry=>entry.personId===person.id);return {person,income:rows.filter(entry=>entry.kind==='income'&&(entry.flowType||'standard')==='standard').reduce((sum,entry)=>sum+entry.amount,0),expense:rows.filter(entry=>entry.kind==='expense'&&(entry.flowType||'standard')==='standard').reduce((sum,entry)=>sum+entry.amount,0)}});

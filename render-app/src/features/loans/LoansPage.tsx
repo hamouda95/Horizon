@@ -1,3 +1,4 @@
+import {appCurrency} from '../../lib/currency';
 import {displayText,plural} from '../../lib/text';
 import {ModuleHeader,MetricStrip,ModuleTabs,ModuleDrawer} from '../../components/ModuleUI';
 import {useState} from 'react';import type {Entry} from '../../hooks/household-data';import {loanPosition,type Loan} from '../../lib/finance-engine';import {supabase} from '../../lib/client';import {parseEuroCents} from '../../lib/money';import {appLocale} from '../../lib/locale';
@@ -5,7 +6,7 @@ import {localToday} from '../../lib/dates';
 import {loanErrorMessage,repaymentStatus} from './loan-corrections';
 import OperationPicker from './OperationPicker';
 import {likelyDuplicates,openingLooksDuplicated,unattachedForBorrower} from './loan-insights';
-const money=(n:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:'EUR'}).format(n/100);
+const money=(n:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:appCurrency()}).format(n/100);
 export default function LoansPage({householdId,loans,entries,accounts,onChanged,onAdd,onEdit}:{householdId:string;loans:Loan[];entries:Entry[];accounts:{id:string;name:string;account_type:string}[];onChanged:()=>Promise<unknown>;onAdd:(kind:'income'|'expense',loan:Loan)=>void;onEdit:(entry:Entry)=>void}){
  const [createOpen,setCreateOpen]=useState(false),[scope,setScope]=useState<'all'|'open'|'settled'>('all');
  const [linking,setLinking]=useState(''),[linkKind,setLinkKind]=useState<'income'|'expense'>('expense'),[linkId,setLinkId]=useState(''),[linkMethod,setLinkMethod]=useState('transfer');

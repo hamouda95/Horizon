@@ -1,3 +1,4 @@
+import {appCurrency} from '../../lib/currency';
 import {displayText} from '../../lib/text';
 import type {Dispatch, FormEventHandler, SetStateAction} from 'react';
 import {ArrowRight} from 'lucide-react';
@@ -37,7 +38,7 @@ export default function EntryDialog({accountId='',setAccountId=()=>{},accounts=[
   </div>
   <label>Nature du mouvement<select value={flowType} onChange={event=>{const next=event.target.value as FlowType;setFlowType(next);if(next!=='standard')setExpenseType('')}}><option value="standard">{kind==='income'?'Entrée courante':'Sortie de consommation'} comptabilisée au budget</option><option value="transfer">Transfert entre comptes</option><option value="refund">Remboursement</option><option value="savings">Mouvement d’épargne</option><option value="investment">Versement / retrait de placement</option><option value="loan">Prêt ou remboursement de créance</option><option value="review">À vérifier</option></select></label>
   {flowType==='loan'&&<label>Prêt concerné<select required value={loanId} onChange={e=>setLoanId(e.target.value)}><option value="">Choisir un prêt</option>{loans.map(l=><option key={l.id} value={l.id}>{displayText(l.borrower)}</option>)}</select></label>}
-  {!imported&&<label>{kind==='income'?'Compte de réception':'Compte débité'}<select value={accountId} onChange={e=>setAccountId(e.target.value)}><option value="">À préciser (solde non actualisé)</option>{accounts.filter(a=>a.currency==='EUR'&&(paymentMethod!=='cash'||a.account_type==='cash')).map(a=><option key={a.id} value={a.id}>{displayText(a.name)}</option>)}</select></label>}
+  {!imported&&<label>{kind==='income'?'Compte de réception':'Compte débité'}<select value={accountId} onChange={e=>setAccountId(e.target.value)}><option value="">À préciser (solde non actualisé)</option>{accounts.filter(a=>a.currency===appCurrency()&&(paymentMethod!=='cash'||a.account_type==='cash')).map(a=><option key={a.id} value={a.id}>{displayText(a.name)}</option>)}</select></label>}
   <label>Moyen de paiement<select required={flowType==='loan'} value={paymentMethod} onChange={e=>{setPaymentMethod(e.target.value);if(e.target.value==='cash'&&!imported)setAccountId('')}}><option value="">À préciser</option><option value="cash">Espèces</option><option value="transfer">Virement</option><option value="card">Carte</option><option value="cheque">Chèque</option><option value="other">Autre</option></select></label>
   <label>Libellé<input required maxLength={100} placeholder="Ex. Courses de la semaine" value={label} onChange={event=>setLabel(event.target.value)} onBlur={()=>{if(!category&&label.trim())onLabelSettled?.(label)}}/></label>
   <div className="formgrid">

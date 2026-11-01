@@ -20,7 +20,7 @@ type MonthlyBudgetRow=Pick<Tables<'monthly_budgets'>,'id'|'month'|'income_cents'
 
 export type HouseholdPerson={id:string;name:string;relationship:'self'|'partner'|'child'|'other';isPrimary:boolean;active:boolean;sortOrder:number};
 export type Entry={id:string;kind:'income'|'expense';label:string;category:string;amount:number;date:string;frequency:'monthly'|'annual';incomeAllocation:'calendar'|'next_month';expenseType:ExpenseType;categoryId:string;subcategoryId:string|null;bankTransactionId:string|null;personId:string|null;flowType:FlowType;subcategory?:string;accountId?:string|null;loanId?:string|null;paymentMethod?:string|null};
-export type Home={id:string;name:string;role:'owner'|'member';savingsRate:number|null;incomeTypes:string;expenseTypes:string;categories:{id:string;name:string;kind:string;active:boolean;sort_order?:number|null}[];people:HouseholdPerson[]};
+export type Home={id:string;name:string;role:'owner'|'member';savingsRate:number|null;currency:string;incomeTypes:string;expenseTypes:string;categories:{id:string;name:string;kind:string;active:boolean;sort_order?:number|null}[];people:HouseholdPerson[]};
 
 function parseEntryRow(row:RawEntryRow):EntryRow{
  if(row.kind!=='income'&&row.kind!=='expense')throw new Error('Type d’opération invalide dans les données du foyer.');

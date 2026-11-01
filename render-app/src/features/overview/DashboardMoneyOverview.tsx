@@ -1,3 +1,4 @@
+import {appCurrency} from '../../lib/currency';
 import {displayText,plural} from '../../lib/text';
 import type {Entry} from '../../hooks/household-data';
 import type {Tables} from '../../lib/database.types';
@@ -8,8 +9,8 @@ import {budgetMonth} from '../../lib/period';
 
 type Account=Pick<Tables<'bank_accounts'>,'id'|'name'|'account_type'|'currency'|'balance_cents'|'balance_as_of'>;
 type Props={accounts:Account[];accountError:string;entries:Entry[];month:string;spentCents:number;budgetCents:number|null;today:string;onOpenBank:()=>void;onOpenBudget:()=>void};
-const currencyCode=(value:string)=>/^[A-Z]{3}$/.test(value)?value:'EUR';
-const money=(cents:number,currency='EUR')=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:currencyCode(currency),maximumFractionDigits:2}).format(cents/100);
+const currencyCode=(value:string)=>/^[A-Z]{3}$/.test(value)?value:appCurrency();
+const money=(cents:number,currency=appCurrency())=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:currencyCode(currency),maximumFractionDigits:2}).format(cents/100);
 const dateLabel=(value:string)=>new Date(value+'T12:00:00').toLocaleDateString(appLocale(),{day:'numeric',month:'short',year:'numeric'});
 const monthLabel=(value:string)=>new Date(value+'-01T12:00:00').toLocaleDateString(appLocale(),{month:'long',year:'numeric'});
 function totalsByCurrency(accounts:Account[],accountType?:string){

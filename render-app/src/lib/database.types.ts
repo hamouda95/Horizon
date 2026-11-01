@@ -831,6 +831,7 @@ export type Database = {
 
       create_household_loan:{Args:{p_household_id:string;p_borrower:string;p_opening_cents:number;p_opened_on:string|null;p_notes:string;p_existing_entry_id?:string|null;p_account_id?:string|null;p_payment_method?:string|null};Returns:string}
       delete_household_loan:{Args:{p_household_id:string;p_loan_id:string;p_with_operations?:boolean};Returns:number}
+      set_household_currency:{Args:{p_household_id:string;p_currency:string;p_relabel?:boolean};Returns:string}
       configure_category_budgets:{Args:{p_household_id:string;p_effective_month:string;p_rules:Json;p_replace_override?:boolean};Returns:number}
 
       bank_duplicate_count: {Args:{p_household_id:string};Returns:number};
