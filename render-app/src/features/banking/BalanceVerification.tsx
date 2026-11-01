@@ -55,7 +55,7 @@ export default function BalanceVerification({householdId,accountId,currency,prev
   {!empty&&(!previous||previous.date===typedDate)&&(()=>{
    // Nothing to compare with: still show what the account contains up to that date.
    const history=movements!.filter(row=>row.date<=typedDate).sort((a,b)=>b.date.localeCompare(a.date));
-   return <details open={history.length<=20}><summary>{plural(history.length,'opération','opérations')} du compte jusqu’au {day(typedDate)} · total {money(history.reduce((sum,row)=>sum+row.signedCents,0),currency)}</summary><Movements rows={history} currency={currency}/></details>;
+   return <details open={history.length<=20}><summary>{plural(history.length,'opération','opérations')} du compte jusqu’au {day(typedDate)}</summary><Movements rows={history} currency={currency}/></details>;
   })()}
   {(()=>{
    // When the typed date precedes the known balance, the operations added are mostly those already listed.

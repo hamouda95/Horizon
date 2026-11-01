@@ -1,5 +1,5 @@
 import {expect,it} from 'vitest';
-import {checkTypedBalance,type AccountMovement} from './balance-check';
+import {checkTypedBalance,currentBalance,type AccountMovement} from './balance-check';
 
 const m=(id:string,date:string,signedCents:number):AccountMovement=>({id,date,label:id,signedCents});
 const movements=[m('loyer','2026-10-05',-80000),m('salaire','2026-10-10',200000),m('courses','2026-10-20',-5000),m('cafe','2026-10-28',-300)];
@@ -30,4 +30,10 @@ it('sans solde connu, montre les opérations ajoutées et le solde actuel obtenu
 it('ignore les opérations futures',()=>{
  const check=checkTypedBalance({typedCents:0,typedDate:'2026-10-25',previous:null,movements:[...movements,m('futur','2026-11-05',-1000)],today:'2026-10-31'});
  expect(check.after.map(r=>r.id)).toEqual(['cafe']);
+});
+
+it('part du solde affiché : le relevé plus les opérations arrivées depuis, daté du jour',()=>{
+ expect(currentBalance({balance_cents:30172,balance_as_of:'2026-10-31T12:00:00Z',effective_balance_cents:21522},'2026-11-01')).toEqual({cents:21522,date:'2026-11-01'});
+ expect(currentBalance({balance_cents:99200,balance_as_of:'2026-10-30T00:00:00Z',effective_balance_cents:99200},'2026-11-01')).toEqual({cents:99200,date:'2026-10-30'});
+ expect(currentBalance({balance_cents:null,balance_as_of:null},'2026-11-01')).toBeNull();
 });

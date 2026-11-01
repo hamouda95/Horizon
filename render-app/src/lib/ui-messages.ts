@@ -8027,5 +8027,13 @@ export const uiMessages:Record<string,{en:string;ar:string}>={
  "{0} doublon probable à fusionner": {
   "en": "{0} likely duplicate to merge",
   "ar": "{0} تكرار محتمل للدمج"
+ },
+ "Relevé du {0} + opérations suivantes": {
+  "en": "Statement of {0} + later operations",
+  "ar": "كشف {0} + العمليات اللاحقة"
+ },
+ "Ce solde est déjà celui du compte.": {
+  "en": "This is already the account balance.",
+  "ar": "هذا هو رصيد الحساب بالفعل."
  }
 };
