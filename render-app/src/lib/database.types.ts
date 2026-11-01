@@ -14,7 +14,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      household_loans:{Row:{id:string;household_id:string;borrower:string;opening_principal_cents:number;opened_on:string|null;notes:string;created_at:string};Insert:{id?:string;household_id:string;borrower:string;opening_principal_cents?:number;opened_on?:string|null;notes?:string};Update:{borrower?:string;notes?:string};Relationships:[]}
+      household_loans:{Row:{id:string;household_id:string;borrower:string;opening_principal_cents:number;opened_on:string|null;notes:string;created_at:string;expected_repayment_on:string|null};Insert:{id?:string;household_id:string;borrower:string;opening_principal_cents?:number;opened_on?:string|null;notes?:string;expected_repayment_on?:string|null};Update:{borrower?:string;notes?:string;opening_principal_cents?:number;opened_on?:string|null;expected_repayment_on?:string|null};Relationships:[]}
       category_budget_rules:{Row:{id:string;revision:number;household_id:string;category_id:string;kind:string;effective_month:string;cadence:string;amount_cents:number;enabled:boolean;created_at:string};Insert:{household_id:string;category_id:string;effective_month:string;cadence:string;amount_cents:number;enabled?:boolean};Update:never;Relationships:[]}
       financial_entry_history:{Row:{id:string;household_id:string;entry_id:string;operation:string;changed_at:string;actor_id:string|null;old_data:Json|null;new_data:Json|null};Insert:never;Update:never;Relationships:[]}
 
