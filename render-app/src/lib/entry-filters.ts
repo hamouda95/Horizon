@@ -5,7 +5,7 @@ import {budgetMonth} from './period';
 
 export type EntryFilterValues={period:string;from:string;to:string;person:string;account:string;flow:string;category:string;min:string;max:string};
 export const emptyEntryFilters:EntryFilterValues={period:'month',from:'',to:'',person:'',account:'',flow:'',category:'',min:'',max:''};
-export type FilterAccount={id:string;name:string;source_name:string|null;owner_person_id:string|null};
+export type FilterAccount={id:string;name:string;source_name:string|null;owner_person_id:string|null;account_type?:string;balance_cents?:number|null;effective_balance_cents?:number|null};
 export type EntryContext={account:(entry:Entry)=>FilterAccount|undefined;personName:(id:string|null)=>string};
 
 export const fold=(text:string)=>text.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();

@@ -8035,5 +8035,17 @@ export const uiMessages:Record<string,{en:string;ar:string}>={
  "Ce solde est déjà celui du compte.": {
   "en": "This is already the account balance.",
   "ar": "هذا هو رصيد الحساب بالفعل."
+ },
+ "Ce que vous possédiez au {0}": {
+  "en": "What you owned on {0}",
+  "ar": "ما كنتم تملكونه في {0}"
+ },
+ "Total par compte au {0}": {
+  "en": "Total by account on {0}",
+  "ar": "المجموع حسب الحساب في {0}"
+ },
+ "Solde au {0}": {
+  "en": "Balance on {0}",
+  "ar": "الرصيد في {0}"
  }
 };
