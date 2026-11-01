@@ -1,4 +1,4 @@
-// Interface texts, keyed by the French source text. Only marked interface text is translated, never bank data.
+// Interface texts, keyed by the French source text. Keys with {0}, {1}… are message templates for composed texts.
 export const uiMessages:Record<string,{en:string;ar:string}>={
  "Vue d’ensemble": {
   "en": "Overview",
@@ -4579,5 +4579,2921 @@ export const uiMessages:Record<string,{en:string;ar:string}>={
  "Horizon évolue pour faciliter la gestion du budget de votre foyer.": {
   "en": "Horizon is evolving to make managing your household budget easier.",
   "ar": "يتطور Horizon لتسهيل إدارة ميزانية أسرتك."
+ },
+ "Salaire": {
+  "en": "Salary",
+  "ar": "الراتب"
+ },
+ "Prime": {
+  "en": "Bonus",
+  "ar": "علاوة"
+ },
+ "Aides": {
+  "en": "Benefits",
+  "ar": "مساعدات"
+ },
+ "Autres revenus": {
+  "en": "Other income",
+  "ar": "إيرادات أخرى"
+ },
+ "Logement": {
+  "en": "Housing",
+  "ar": "السكن"
+ },
+ "Courses": {
+  "en": "Groceries",
+  "ar": "المشتريات الغذائية"
+ },
+ "Transport": {
+  "en": "Transport",
+  "ar": "النقل"
+ },
+ "Factures": {
+  "en": "Bills",
+  "ar": "الفواتير"
+ },
+ "Loisirs": {
+  "en": "Leisure",
+  "ar": "الترفيه"
+ },
+ "Santé": {
+  "en": "Health",
+  "ar": "الصحة"
+ },
+ "Autres dépenses": {
+  "en": "Other expenses",
+  "ar": "مصاريف أخرى"
+ },
+ "L’ordre du menu a changé ici, mais n’a pas pu être enregistré sur votre compte.": {
+  "en": "The menu order was changed here but could not be saved to your account.",
+  "ar": "تم تغيير ترتيب القائمة هنا لكن تعذر حفظه في حسابك."
+ },
+ "La vérification des doublons est indisponible.": {
+  "en": "Duplicate checking is unavailable.",
+  "ar": "التحقق من التكرارات غير متاح."
+ },
+ "Mon foyer": {
+  "en": "My household",
+  "ar": "أسرتي"
+ },
+ "Les soldes des comptes sont indisponibles pour le moment.": {
+  "en": "Account balances are unavailable for now.",
+  "ar": "أرصدة الحسابات غير متاحة حاليا."
+ },
+ "L’invitation n’a pas pu être acceptée.": {
+  "en": "The invitation could not be accepted.",
+  "ar": "تعذر قبول الدعوة."
+ },
+ "Vous avez rejoint « {0} ».": {
+  "en": "You have joined “{0}”.",
+  "ar": "لقد انضممت إلى «{0}»."
+ },
+ "Invitation impossible à accepter.": {
+  "en": "Unable to accept the invitation.",
+  "ar": "يتعذر قبول الدعوة."
+ },
+ "Foyer introuvable.": {
+  "en": "Household not found.",
+  "ar": "لم يتم العثور على الأسرة."
+ },
+ "Créez d’abord votre foyer.": {
+  "en": "Create your household first.",
+  "ar": "أنشئ أسرتك أولا."
+ },
+ "Choisissez une catégorie valide.": {
+  "en": "Choose a valid category.",
+  "ar": "اختر فئة صالحة."
+ },
+ "Modification impossible : opération introuvable ou droits insuffisants.": {
+  "en": "Unable to edit: transaction not found or insufficient permissions.",
+  "ar": "يتعذر التعديل: المعاملة غير موجودة أو الصلاحيات غير كافية."
+ },
+ "Impossible de modifier cette dépense.": {
+  "en": "Unable to edit this expense.",
+  "ar": "يتعذر تعديل هذا المصروف."
+ },
+ "Suppression impossible : opération introuvable.": {
+  "en": "Unable to delete: transaction not found.",
+  "ar": "يتعذر الحذف: المعاملة غير موجودة."
+ },
+ "Suppression impossible : opération introuvable ou droits insuffisants.": {
+  "en": "Unable to delete: transaction not found or insufficient permissions.",
+  "ar": "يتعذر الحذف: المعاملة غير موجودة أو الصلاحيات غير كافية."
+ },
+ "Opération enregistrée. La règle de catégorisation n’a pas pu être mémorisée.": {
+  "en": "Transaction saved. The categorisation rule could not be remembered.",
+  "ar": "تم حفظ المعاملة. تعذر تذكر قاعدة التصنيف."
+ },
+ "La modification est enregistrée, mais l’actualisation a échoué. Actualisez les données avant de continuer.": {
+  "en": "The change was saved, but the refresh failed. Refresh the data before continuing.",
+  "ar": "تم حفظ التعديل لكن فشل التحديث. حدّث البيانات قبل المتابعة."
+ },
+ "Une erreur est survenue": {
+  "en": "An error occurred",
+  "ar": "حدث خطأ"
+ },
+ "Choisissez un taux compris entre 0 et 100 %.": {
+  "en": "Choose a rate between 0 and 100%.",
+  "ar": "اختر نسبة بين 0 و100 %."
+ },
+ "Impossible de modifier ce foyer.": {
+  "en": "Unable to edit this household.",
+  "ar": "يتعذر تعديل هذه الأسرة."
+ },
+ "Objectif enregistré, mais actualisation impossible. Rechargez les données.": {
+  "en": "Goal saved, but refresh failed. Reload the data.",
+  "ar": "تم حفظ الهدف لكن تعذر التحديث. أعد تحميل البيانات."
+ },
+ "Objectif d’épargne enregistré.": {
+  "en": "Savings goal saved.",
+  "ar": "تم حفظ هدف الادخار."
+ },
+ "Impossible d’enregistrer cet objectif.": {
+  "en": "Unable to save this goal.",
+  "ar": "يتعذر حفظ هذا الهدف."
+ },
+ "Choisissez une catégorie et saisissez une sous-catégorie.": {
+  "en": "Choose a category and enter a subcategory.",
+  "ar": "اختر فئة وأدخل فئة فرعية."
+ },
+ "Impossible d’ajouter cette sous-catégorie.": {
+  "en": "Unable to add this subcategory.",
+  "ar": "يتعذر إضافة هذه الفئة الفرعية."
+ },
+ "Renseignez un prénom valide.": {
+  "en": "Enter a valid first name.",
+  "ar": "أدخل اسما أول صالحا."
+ },
+ "La date de naissance ne peut pas être dans le futur.": {
+  "en": "The date of birth cannot be in the future.",
+  "ar": "لا يمكن أن يكون تاريخ الميلاد في المستقبل."
+ },
+ "Profil mis à jour.": {
+  "en": "Profile updated.",
+  "ar": "تم تحديث الملف الشخصي."
+ },
+ "Impossible de modifier le profil.": {
+  "en": "Unable to edit the profile.",
+  "ar": "يتعذر تعديل الملف الشخصي."
+ },
+ "Notre nouveau foyer": {
+  "en": "Our new household",
+  "ar": "أسرتنا الجديدة"
+ },
+ "Choisissez une catégorie.": {
+  "en": "Choose a category.",
+  "ar": "اختر فئة."
+ },
+ "Saisissez un montant valide supérieur à zéro.": {
+  "en": "Enter a valid amount greater than zero.",
+  "ar": "أدخل مبلغا صالحا أكبر من الصفر."
+ },
+ "Opération modifiée et affectée à la période sélectionnée.": {
+  "en": "Transaction edited and assigned to the selected period.",
+  "ar": "تم تعديل المعاملة وإسنادها إلى الفترة المحددة."
+ },
+ "Opération enregistrée et affectée à la période sélectionnée.": {
+  "en": "Transaction saved and assigned to the selected period.",
+  "ar": "تم حفظ المعاملة وإسنادها إلى الفترة المحددة."
+ },
+ "Opération ajoutée : {0}.": {
+  "en": "Transaction added: {0}.",
+  "ar": "تمت إضافة المعاملة: {0}."
+ },
+ "Prêt à un ami": {
+  "en": "Loan to a friend",
+  "ar": "قرض لصديق"
+ },
+ "Remboursement ·": {
+  "en": "Repayment ·",
+  "ar": "سداد ·"
+ },
+ "Prêt ·": {
+  "en": "Loan ·",
+  "ar": "قرض ·"
+ },
+ "Saisissez des montants prévisionnels valides.": {
+  "en": "Enter valid forecast amounts.",
+  "ar": "أدخل مبالغ تقديرية صالحة."
+ },
+ "Budget enregistré, mais actualisation impossible. Rechargez les données.": {
+  "en": "Budget saved, but refresh failed. Reload the data.",
+  "ar": "تم حفظ الميزانية لكن تعذر التحديث. أعد تحميل البيانات."
+ },
+ "Budget prévisionnel enregistré pour la période sélectionnée.": {
+  "en": "Forecast budget saved for the selected period.",
+  "ar": "تم حفظ الميزانية التقديرية للفترة المحددة."
+ },
+ "Proposition issue du budget précédent, ou des opérations du mois précédent et des provisions de la période choisie. Vérifiez-la avant de l’enregistrer.": {
+  "en": "Suggestion based on the previous budget, or on last month’s transactions and the selected period’s provisions. Review it before saving.",
+  "ar": "اقتراح مبني على الميزانية السابقة، أو على معاملات الشهر الماضي ومخصصات الفترة المختارة. راجعه قبل الحفظ."
+ },
+ "Déplacer {0} ; utilisez les flèches pour réorganiser": {
+  "en": "Move {0}; use the arrow keys to reorder",
+  "ar": "نقل {0}؛ استخدم الأسهم لإعادة الترتيب"
+ },
+ "Déplacer": {
+  "en": "Move",
+  "ar": "نقل"
+ },
+ "; utilisez les flèches pour réorganiser": {
+  "en": "; use the arrow keys to reorder",
+  "ar": "؛ استخدم الأسهم لإعادة الترتيب"
+ },
+ "Monter {0}": {
+  "en": "Move {0} up",
+  "ar": "رفع {0}"
+ },
+ "Descendre {0}": {
+  "en": "Move {0} down",
+  "ar": "خفض {0}"
+ },
+ "Suivez votre foyer en un coup d’œil.": {
+  "en": "Keep track of your household at a glance.",
+  "ar": "تابع أسرتك بنظرة واحدة."
+ },
+ "La règle n’a pas pu être annulée.": {
+  "en": "The rule could not be undone.",
+  "ar": "تعذر التراجع عن القاعدة."
+ },
+ "Règle annulée.": {
+  "en": "Rule undone.",
+  "ar": "تم التراجع عن القاعدة."
+ },
+ "Modification enregistrée, mais actualisation impossible. Réessayez de charger les données.": {
+  "en": "Change saved, but refresh failed. Try reloading the data.",
+  "ar": "تم حفظ التعديل لكن تعذر التحديث. حاول إعادة تحميل البيانات."
+ },
+ "Activité · {0}": {
+  "en": "Activity · {0}",
+  "ar": "النشاط · {0}"
+ },
+ "Modifier {0}": {
+  "en": "Edit {0}",
+  "ar": "تعديل {0}"
+ },
+ "Supprimer {0}": {
+  "en": "Delete {0}",
+  "ar": "حذف {0}"
+ },
+ "Supprimer cette opération ?": {
+  "en": "Delete this transaction?",
+  "ar": "حذف هذه المعاملة؟"
+ },
+ "notification non lue": {
+  "en": "unread notification",
+  "ar": "إشعار غير مقروء"
+ },
+ "notifications non lues": {
+  "en": "unread notifications",
+  "ar": "إشعارات غير مقروءة"
+ },
+ "English": {
+  "en": "English",
+  "ar": "الإنجليزية"
+ },
+ "Arabe (Tunisie)": {
+  "en": "Arabic (Tunisia)",
+  "ar": "العربية (تونس)"
+ },
+ "Le changement de devise sera disponible après la prochaine mise à jour du serveur.": {
+  "en": "Currency change will be available after the next server update.",
+  "ar": "سيتوفر تغيير العملة بعد التحديث القادم للخادم."
+ },
+ "OPÉRATIONS": {
+  "en": "TRANSACTIONS",
+  "ar": "المعاملات"
+ },
+ "Planifiez vos dépenses et votre épargne.": {
+  "en": "Plan your spending and savings.",
+  "ar": "خطط لمصاريفك وادخارك."
+ },
+ "Suivez les revenus du foyer.": {
+  "en": "Track the household’s income.",
+  "ar": "تابع إيرادات الأسرة."
+ },
+ "Suivez et classez les dépenses du foyer.": {
+  "en": "Track and categorise the household’s expenses.",
+  "ar": "تابع مصاريف الأسرة وصنّفها."
+ },
+ "Organisez les catégories du foyer.": {
+  "en": "Organise the household’s categories.",
+  "ar": "نظّم فئات الأسرة."
+ },
+ "Des conseils fondés sur vos opérations.": {
+  "en": "Advice based on your transactions.",
+  "ar": "نصائح مبنية على معاملاتك."
+ },
+ "revenus {0}, dépenses {1}": {
+  "en": "income {0}, expenses {1}",
+  "ar": "الإيرادات {0}، المصاريف {1}"
+ },
+ "aucune opération": {
+  "en": "no transactions",
+  "ar": "لا توجد معاملات"
+ },
+ "budget prévu : revenus {0}, dépenses {1}": {
+  "en": "planned budget: income {0}, expenses {1}",
+  "ar": "الميزانية المخططة: الإيرادات {0}، المصاريف {1}"
+ },
+ "aucun budget prévu": {
+  "en": "no planned budget",
+  "ar": "لا توجد ميزانية مخططة"
+ },
+ "Répartition de {0} de dépenses par catégorie": {
+  "en": "Breakdown of {0} of expenses by category",
+  "ar": "توزيع {0} من المصاريف حسب الفئة"
+ },
+ "Opérations du compte indisponibles.": {
+  "en": "Account transactions unavailable.",
+  "ar": "معاملات الحساب غير متاحة."
+ },
+ "opérations": {
+  "en": "transactions",
+  "ar": "معاملات"
+ },
+ "entre ce solde et le": {
+  "en": "between this balance and the",
+  "ar": "بين هذا الرصيد و"
+ },
+ "Ces {0} opérations seront ajoutées": {
+  "en": "These {0} transactions will be added",
+  "ar": "ستتم إضافة هذه المعاملات البالغ عددها {0}"
+ },
+ "opération postérieure sera ajoutée": {
+  "en": "later transaction will be added",
+  "ar": "ستتم إضافة معاملة لاحقة"
+ },
+ "opérations postérieures seront ajoutées": {
+  "en": "later transactions will be added",
+  "ar": "ستتم إضافة معاملات لاحقة"
+ },
+ "Vérifiez le solde saisi avec les opérations du compte avant d’enregistrer.": {
+  "en": "Check the entered balance against the account’s transactions before saving.",
+  "ar": "تحقق من الرصيد المدخل مقارنة بمعاملات الحساب قبل الحفظ."
+ },
+ "Saisissez un solde valide.": {
+  "en": "Enter a valid balance.",
+  "ar": "أدخل رصيدا صالحا."
+ },
+ "Choisissez une date de relevé passée ou actuelle.": {
+  "en": "Choose a past or current statement date.",
+  "ar": "اختر تاريخ كشف حساب سابقا أو حاليا."
+ },
+ "Saisissez ce montant sans signe négatif.": {
+  "en": "Enter this amount without a negative sign.",
+  "ar": "أدخل هذا المبلغ دون علامة سالبة."
+ },
+ "Vérifiez le net estimé et la part bloquée : celle-ci ne peut pas dépasser la valeur totale.": {
+  "en": "Check the estimated net and the locked portion: the latter cannot exceed the total value.",
+  "ar": "تحقق من الصافي المقدر والجزء المحجوز: لا يمكن أن يتجاوز الجزء المحجوز القيمة الإجمالية."
+ },
+ "Placement": {
+  "en": "Investment",
+  "ar": "استثمار"
+ },
+ "Compte introuvable ou droits insuffisants.": {
+  "en": "Account not found or insufficient permissions.",
+  "ar": "الحساب غير موجود أو الصلاحيات غير كافية."
+ },
+ "Modification impossible.": {
+  "en": "Unable to edit.",
+  "ar": "يتعذر التعديل."
+ },
+ "Supprimer {0} et leurs opérations importées ? Cette action supprime aussi les lignes liées dans le budget et leurs rapprochements. Les autres comptes restent conservés.": {
+  "en": "Delete {0} and their imported transactions? This also deletes the linked budget lines and their reconciliations. Other accounts are kept.",
+  "ar": "حذف {0} ومعاملاتهما المستوردة؟ سيؤدي ذلك أيضا إلى حذف الأسطر المرتبطة في الميزانية وعمليات المطابقة الخاصة بها. تبقى الحسابات الأخرى."
+ },
+ "compte supprimé": {
+  "en": "account deleted",
+  "ar": "تم حذف الحساب"
+ },
+ "comptes supprimés": {
+  "en": "accounts deleted",
+  "ar": "تم حذف الحسابات"
+ },
+ "Suppression impossible.": {
+  "en": "Unable to delete.",
+  "ar": "يتعذر الحذف."
+ },
+ "Fusionner « {0} » dans « {1} » ? Les opérations uniques seront conservées, les doublons stricts retirés, les corrections du compte destination conservées et le solde le plus récent retenu. La fiche source sera supprimée.": {
+  "en": "Merge “{0}” into “{1}”? Unique transactions will be kept, exact duplicates removed, the destination account’s corrections kept, and the most recent balance retained. The source record will be deleted.",
+  "ar": "دمج «{0}» في «{1}»؟ ستُحفظ المعاملات الفريدة، وتُزال التكرارات المطابقة تماما، وتُحفظ تصحيحات الحساب الوجهة، ويُعتمد أحدث رصيد. سيتم حذف سجل المصدر."
+ },
+ "Comptes fusionnés. Les opérations uniques et le solde le plus récent sont conservés.": {
+  "en": "Accounts merged. Unique transactions and the most recent balance are kept.",
+  "ar": "تم دمج الحسابات. تم الاحتفاظ بالمعاملات الفريدة وأحدث رصيد."
+ },
+ "Fusion impossible.": {
+  "en": "Unable to merge.",
+  "ar": "يتعذر الدمج."
+ },
+ "{0} · total partiel": {
+  "en": "{0} · partial total",
+  "ar": "{0} · مجموع جزئي"
+ },
+ "solde à compléter": {
+  "en": "balance to complete",
+  "ar": "رصيد يجب إكماله"
+ },
+ "soldes à compléter": {
+  "en": "balances to complete",
+  "ar": "أرصدة يجب إكمالها"
+ },
+ "Sélectionner {0}": {
+  "en": "Select {0}",
+  "ar": "تحديد {0}"
+ },
+ "Source non renseignée": {
+  "en": "Source not specified",
+  "ar": "المصدر غير محدد"
+ },
+ "Part bloquée au relevé : {0}": {
+  "en": "Locked portion at statement: {0}",
+  "ar": "الجزء المحجوز في كشف الحساب: {0}"
+ },
+ "· Net estimé : {0}": {
+  "en": "· Estimated net: {0}",
+  "ar": "· الصافي المقدر: {0}"
+ },
+ "· Net estimé :": {
+  "en": "· Estimated net:",
+  "ar": "· الصافي المقدر:"
+ },
+ "Base au {0}": {
+  "en": "Base as of {0}",
+  "ar": "الأساس بتاريخ {0}"
+ },
+ "Valorisation ·": {
+  "en": "Valuation ·",
+  "ar": "التقييم ·"
+ },
+ "Solde ·": {
+  "en": "Balance ·",
+  "ar": "الرصيد ·"
+ },
+ "Supprimer les copies de {0} ? La ligne choisie et sa catégorisation seront conservées. Les soldes de comptes ne changent pas.": {
+  "en": "Delete the copies of {0}? The chosen line and its categorisation will be kept. Account balances do not change.",
+  "ar": "حذف نسخ {0}؟ سيتم الاحتفاظ بالسطر المختار وتصنيفه. لا تتغير أرصدة الحسابات."
+ },
+ "copie supprimée": {
+  "en": "copy deleted",
+  "ar": "تم حذف النسخة"
+ },
+ "copies supprimées": {
+  "en": "copies deleted",
+  "ar": "تم حذف النسخ"
+ },
+ "à vérifier": {
+  "en": "to review",
+  "ar": "للمراجعة"
+ },
+ "confirmée": {
+  "en": "confirmed",
+  "ar": "مؤكدة"
+ },
+ "Supprimer les copies de {0}": {
+  "en": "Delete the copies of {0}",
+  "ar": "حذف نسخ {0}"
+ },
+ "Relevé importé": {
+  "en": "Imported statement",
+  "ar": "كشف حساب مستورد"
+ },
+ "Solde courant": {
+  "en": "Current balance",
+  "ar": "الرصيد الجاري"
+ },
+ "Dettes (montants dus négatifs)": {
+  "en": "Debts (amounts owed as negatives)",
+  "ar": "الديون (المبالغ المستحقة بالسالب)"
+ },
+ "Autres comptes": {
+  "en": "Other accounts",
+  "ar": "حسابات أخرى"
+ },
+ "Avoirs nets déclarés": {
+  "en": "Declared net assets",
+  "ar": "صافي الأصول المصرح بها"
+ },
+ "Titulaire du foyer": {
+  "en": "Household owner",
+  "ar": "صاحب الأسرة"
+ },
+ "Impossible de charger les comptes bancaires.": {
+  "en": "Unable to load bank accounts.",
+  "ar": "يتعذر تحميل الحسابات البنكية."
+ },
+ "Fichier limité à 10 Mo.": {
+  "en": "File limited to 10 MB.",
+  "ar": "الملف محدد بـ 10 ميغابايت."
+ },
+ "Format non pris en charge. Choisissez une archive ZIP ou un relevé CSV, Excel, CAMT, OFX, QIF ou PDF.": {
+  "en": "Unsupported format. Choose a ZIP archive or a CSV, Excel, CAMT, OFX, QIF or PDF statement.",
+  "ar": "صيغة غير مدعومة. اختر أرشيف ZIP أو كشف حساب بصيغة CSV أو Excel أو CAMT أو OFX أو QIF أو PDF."
+ },
+ "{0} fichier{1} dans l’archive. Choisissez le relevé à analyser.": {
+  "en": "{0} file{1} in the archive. Choose the statement to analyse.",
+  "ar": "{0} ملف{1} في الأرشيف. اختر كشف الحساب المراد تحليله."
+ },
+ "Fichier limité à 10 000 opérations. Importez-le en plusieurs périodes.": {
+  "en": "File limited to 10,000 transactions. Import it in several periods.",
+  "ar": "الملف محدد بـ 10 000 معاملة. استورده على عدة فترات."
+ },
+ "Plan d’épargne entreprise": {
+  "en": "Employee savings plan",
+  "ar": "خطة ادخار الموظفين"
+ },
+ "État de placement détecté. Choisissez le compte concerné ou créez un compte de placement, puis confirmez la valorisation.": {
+  "en": "Investment statement detected. Choose the relevant account or create an investment account, then confirm the valuation.",
+  "ar": "تم اكتشاف كشف استثمار. اختر الحساب المعني أو أنشئ حساب استثمار، ثم أكّد التقييم."
+ },
+ "{0} opération{1} détectée{2}. Vérifiez-les avant l’import.": {
+  "en": "{0} transaction{1} detected{2}. Review them before importing.",
+  "ar": "تم اكتشاف {0} معاملة{1}{2}. راجعها قبل الاستيراد."
+ },
+ "Aucune opération détectée dans ce fichier.": {
+  "en": "No transactions detected in this file.",
+  "ar": "لم يتم اكتشاف أي معاملة في هذا الملف."
+ },
+ "Le relevé n’a pas pu être lu.": {
+  "en": "The statement could not be read.",
+  "ar": "تعذرت قراءة كشف الحساب."
+ },
+ "La base ne peut pas dépasser 10 Mo.": {
+  "en": "The database cannot exceed 10 MB.",
+  "ar": "لا يمكن أن تتجاوز قاعدة البيانات 10 ميغابايت."
+ },
+ "Choisissez un fichier CSV avec les colonnes Marque, Catégorie et Sous-catégorie.": {
+  "en": "Choose a CSV file with the columns Brand, Category and Subcategory.",
+  "ar": "اختر ملف CSV يحتوي على الأعمدة: العلامة والفئة والفئة الفرعية."
+ },
+ "Colonnes Marque et Catégorie introuvables.": {
+  "en": "Brand and Category columns not found.",
+  "ar": "لم يتم العثور على عمودي العلامة والفئة."
+ },
+ "Aucune association marque/catégorie trouvée.": {
+  "en": "No brand/category association found.",
+  "ar": "لم يتم العثور على أي ارتباط بين علامة وفئة."
+ },
+ "Ce fichier de connaissance n’a pas pu être lu.": {
+  "en": "This knowledge file could not be read.",
+  "ar": "تعذرت قراءة ملف المعرفة هذا."
+ },
+ "Aucune règle ajoutée. {0}, {1} à associer, {2}.": {
+  "en": "No rules added. {0}, {1} to match, {2}.",
+  "ar": "لم تتم إضافة أي قاعدة. {0}، {1} للربط، {2}."
+ },
+ "marque ambiguë": {
+  "en": "ambiguous brand",
+  "ar": "علامة ملتبسة"
+ },
+ "marques ambiguës": {
+  "en": "ambiguous brands",
+  "ar": "علامات ملتبسة"
+ },
+ "catégorie": {
+  "en": "category",
+  "ar": "فئة"
+ },
+ "conflit avec la mémoire actuelle": {
+  "en": "conflict with current memory",
+  "ar": "تعارض مع الذاكرة الحالية"
+ },
+ "conflits avec la mémoire actuelle": {
+  "en": "conflicts with current memory",
+  "ar": "تعارضات مع الذاكرة الحالية"
+ },
+ "{0} à la mémoire; {1}. {2}, {3}, {4}.": {
+  "en": "{0} to memory; {1}. {2}, {3}, {4}.",
+  "ar": "{0} إلى الذاكرة؛ {1}. {2}، {3}، {4}."
+ },
+ "marque ajoutée": {
+  "en": "brand added",
+  "ar": "تمت إضافة علامة"
+ },
+ "marques ajoutées": {
+  "en": "brands added",
+  "ar": "تمت إضافة علامات"
+ },
+ "règle ambiguë retirée": {
+  "en": "ambiguous rule removed",
+  "ar": "تمت إزالة قاعدة ملتبسة"
+ },
+ "règles ambiguës retirées": {
+  "en": "ambiguous rules removed",
+  "ar": "تمت إزالة قواعد ملتبسة"
+ },
+ "ambiguïté": {
+  "en": "ambiguity",
+  "ar": "التباس"
+ },
+ "ambiguïtés": {
+  "en": "ambiguities",
+  "ar": "التباسات"
+ },
+ "catégorie non associée": {
+  "en": "unmatched category",
+  "ar": "فئة غير مرتبطة"
+ },
+ "catégories non associées": {
+  "en": "unmatched categories",
+  "ar": "فئات غير مرتبطة"
+ },
+ "conflit détecté": {
+  "en": "conflict detected",
+  "ar": "تم اكتشاف تعارض"
+ },
+ "conflits détectés": {
+  "en": "conflicts detected",
+  "ar": "تعارضات مكتشفة"
+ },
+ "Les règles de classement n’ont pas pu être enregistrées.": {
+  "en": "The classification rules could not be saved.",
+  "ar": "تعذر حفظ قواعد التصنيف."
+ },
+ "Règle retirée de la mémoire du foyer.": {
+  "en": "Rule removed from the household memory.",
+  "ar": "تم حذف القاعدة من ذاكرة الأسرة."
+ },
+ "Impossible de retirer cette règle.": {
+  "en": "Unable to remove this rule.",
+  "ar": "تعذر حذف هذه القاعدة."
+ },
+ "Saisissez un nom de compte valide.": {
+  "en": "Enter a valid account name.",
+  "ar": "أدخل اسم حساب صالحا."
+ },
+ "Le nom de la source ne peut pas dépasser 100 caractères.": {
+  "en": "The source name cannot exceed 100 characters.",
+  "ar": "لا يمكن أن يتجاوز اسم المصدر 100 حرف."
+ },
+ "Sélectionnez la personne titulaire du compte.": {
+  "en": "Select the account holder.",
+  "ar": "اختر صاحب الحساب."
+ },
+ "Compte ajouté. Renseignez son solde dans « Mes comptes » ou importez un relevé contenant un solde.": {
+  "en": "Account added. Enter its balance in “My accounts” or import a statement that contains a balance.",
+  "ar": "تمت إضافة الحساب. أدخل رصيده في «حساباتي» أو استورد كشف حساب يتضمن رصيدا."
+ },
+ "Compte ajouté avec son solde. Vos avoirs ont été actualisés.": {
+  "en": "Account added with its balance. Your assets have been updated.",
+  "ar": "تمت إضافة الحساب مع رصيده. تم تحديث أصولك."
+ },
+ "Choisissez un compte manuel que vous gérez.": {
+  "en": "Choose a manual account that you manage.",
+  "ar": "اختر حسابا يدويا تديره."
+ },
+ "Indiquez la date à laquelle le solde a été relevé.": {
+  "en": "Enter the date on which the balance was recorded.",
+  "ar": "أدخل تاريخ تسجيل الرصيد."
+ },
+ "Le solde n’a pas pu être enregistré. Vérifiez que vous êtes bien titulaire de ce compte.": {
+  "en": "The balance could not be saved. Check that you are the holder of this account.",
+  "ar": "تعذر حفظ الرصيد. تأكد من أنك صاحب هذا الحساب."
+ },
+ "Solde du compte enregistré. Il est inclus dans la consolidation du foyer.": {
+  "en": "Account balance saved. It is included in the household consolidation.",
+  "ar": "تم حفظ رصيد الحساب. وهو مدرج في تجميع حسابات الأسرة."
+ },
+ "{0} et {1} du bilan supprimées pour {2}.": {
+  "en": "{0} and {1} removed from the summary for {2}.",
+  "ar": "تم حذف {0} و{1} من الحصيلة لـ {2}."
+ },
+ "Données bancaires réinitialisées : {0}, {1} et {2} du bilan supprimés.": {
+  "en": "Banking data reset: {0}, {1} and {2} removed from the summary.",
+  "ar": "تمت إعادة تعيين البيانات البنكية: تم حذف {0} و{1} و{2} من الحصيلة."
+ },
+ "La suppression n’a pas abouti.": {
+  "en": "The deletion did not succeed.",
+  "ar": "لم تنجح عملية الحذف."
+ },
+ "Ajoutez d’abord une catégorie de {0} pour « {1} ».": {
+  "en": "First add a {0} category for “{1}”.",
+  "ar": "أضف أولا فئة {0} لـ «{1}»."
+ },
+ "{0} au bilan{1}. Catégories estimées automatiquement, à vérifier dans le bilan.{2}": {
+  "en": "{0} in the summary{1}. Categories estimated automatically, to be checked in the summary.{2}",
+  "ar": "{0} في الحصيلة{1}. الفئات مقدرة تلقائيا، يرجى التحقق منها في الحصيلة.{2}"
+ },
+ "opération ajoutée": {
+  "en": "transaction added",
+  "ar": "معاملة مضافة"
+ },
+ "opérations ajoutées": {
+  "en": "transactions added",
+  "ar": "معاملات مضافة"
+ },
+ "opération déjà synchronisée": {
+  "en": "transaction already synced",
+  "ar": "معاملة متزامنة مسبقا"
+ },
+ "opérations déjà synchronisées": {
+  "en": "transactions already synced",
+  "ar": "معاملات متزامنة مسبقا"
+ },
+ "Actualisez le bilan si les chiffres ne se mettent pas à jour.": {
+  "en": "Refresh the summary if the figures do not update.",
+  "ar": "حدّث الحصيلة إذا لم تتحدث الأرقام."
+ },
+ "Les opérations n’ont pas pu être ajoutées au bilan.": {
+  "en": "The transactions could not be added to the summary.",
+  "ar": "تعذرت إضافة المعاملات إلى الحصيلة."
+ },
+ "Aucune opération ni aucun solde à mettre à jour.": {
+  "en": "No transactions or balances to update.",
+  "ar": "لا توجد معاملات أو أرصدة لتحديثها."
+ },
+ "Choisissez un compte existant ou demandez explicitement la création d’un compte.": {
+  "en": "Choose an existing account or explicitly request the creation of an account.",
+  "ar": "اختر حسابا موجودا أو اطلب صراحة إنشاء حساب."
+ },
+ "Le budget du foyer est en {0}. Ce relevé contient des opérations dans une autre devise : convertissez-les avant import, ou changez la devise principale dans les préférences.": {
+  "en": "The household budget is in {0}. This statement contains transactions in another currency: convert them before importing, or change the main currency in the preferences.",
+  "ar": "ميزانية الأسرة بعملة {0}. يحتوي كشف الحساب هذا على معاملات بعملة أخرى: حوّلها قبل الاستيراد، أو غيّر العملة الرئيسية في التفضيلات."
+ },
+ "Choisissez le titulaire du compte avant de valider.": {
+  "en": "Choose the account holder before confirming.",
+  "ar": "اختر صاحب الحساب قبل التأكيد."
+ },
+ "Choisissez une catégorie pour chaque opération sélectionnée.": {
+  "en": "Choose a category for each selected transaction.",
+  "ar": "اختر فئة لكل معاملة محددة."
+ },
+ "Choisissez un compte de placement pour enregistrer cette valorisation.": {
+  "en": "Choose an investment account to record this valuation.",
+  "ar": "اختر حساب استثمار لتسجيل هذا التقييم."
+ },
+ "La date de valorisation est dans le futur. Vérifiez le document.": {
+  "en": "The valuation date is in the future. Check the document.",
+  "ar": "تاريخ التقييم في المستقبل. تحقق من المستند."
+ },
+ "Ce relevé est antérieur à la dernière valorisation du compte. Conservez la valeur la plus récente.": {
+  "en": "This statement predates the account’s latest valuation. Keep the most recent value.",
+  "ar": "كشف الحساب هذا أقدم من آخر تقييم للحساب. احتفظ بالقيمة الأحدث."
+ },
+ "Ce relevé semble provenir d’un compte {0}, mais le compte choisi est un {1}. Sélectionnez un compte du bon type.": {
+  "en": "This statement appears to come from a {0} account, but the chosen account is a {1}. Select an account of the right type.",
+  "ar": "يبدو أن كشف الحساب هذا يخص حسابا من نوع {0}، لكن الحساب المختار من نوع {1}. اختر حسابا من النوع الصحيح."
+ },
+ "Vous ne pouvez pas modifier le titulaire de ce compte. Choisissez un autre compte ou demandez au titulaire de le corriger.": {
+  "en": "You cannot change the holder of this account. Choose another account or ask the holder to correct it.",
+  "ar": "لا يمكنك تغيير صاحب هذا الحساب. اختر حسابا آخر أو اطلب من صاحبه تصحيحه."
+ },
+ "Choisissez le compte de destination.": {
+  "en": "Choose the destination account.",
+  "ar": "اختر حساب الوجهة."
+ },
+ "Une catégorie sélectionnée n’est plus disponible. Actualisez la page puis réessayez.": {
+  "en": "A selected category is no longer available. Refresh the page and try again.",
+  "ar": "فئة محددة لم تعد متاحة. حدّث الصفحة ثم أعد المحاولة."
+ },
+ "Une sous-catégorie doit contenir entre 1 et 60 caractères.": {
+  "en": "A subcategory must contain between 1 and 60 characters.",
+  "ar": "يجب أن تتكون الفئة الفرعية من 1 إلى 60 حرفا."
+ },
+ "Une sous-catégorie ne correspond pas à la catégorie choisie.": {
+  "en": "A subcategory does not match the chosen category.",
+  "ar": "فئة فرعية لا تتوافق مع الفئة المختارة."
+ },
+ "La sous-catégorie « {0} » n’a pas pu être créée.": {
+  "en": "The subcategory “{0}” could not be created.",
+  "ar": "تعذر إنشاء الفئة الفرعية «{0}»."
+ },
+ "Valorisation enregistrée dans les avoirs, sans création de revenu ni de dépense.": {
+  "en": "Valuation recorded in assets, without creating any income or expense.",
+  "ar": "تم تسجيل التقييم في الأصول دون إنشاء أي دخل أو مصروف."
+ },
+ "Solde du relevé traité.": {
+  "en": "Statement balance processed.",
+  "ar": "تمت معالجة رصيد كشف الحساب."
+ },
+ "{0} : informations manquantes complétées, corrections conservées.": {
+  "en": "{0}: missing information completed, corrections kept.",
+  "ar": "{0}: تم استكمال المعلومات الناقصة مع الاحتفاظ بالتصحيحات."
+ },
+ "opération existante examinée": {
+  "en": "existing transaction reviewed",
+  "ar": "معاملة موجودة تمت مراجعتها"
+ },
+ "opérations existantes examinées": {
+  "en": "existing transactions reviewed",
+  "ar": "معاملات موجودة تمت مراجعتها"
+ },
+ "{0} au bilan; {1}.": {
+  "en": "{0} in the summary; {1}.",
+  "ar": "{0} في الحصيلة؛ {1}."
+ },
+ "doublon ignoré": {
+  "en": "duplicate ignored",
+  "ar": "تكرار تم تجاهله"
+ },
+ "doublons ignorés": {
+  "en": "duplicates ignored",
+  "ar": "تكرارات تم تجاهلها"
+ },
+ "Import validé : {0}. Actualisez le bilan si les chiffres ne se mettent pas à jour.": {
+  "en": "Import confirmed: {0}. Refresh the summary if the figures do not update.",
+  "ar": "تم تأكيد الاستيراد: {0}. حدّث الحصيلة إذا لم تتحدث الأرقام."
+ },
+ "règle mémorisée": {
+  "en": "rule saved",
+  "ar": "قاعدة محفوظة"
+ },
+ "règles mémorisées": {
+  "en": "rules saved",
+  "ar": "قواعد محفوظة"
+ },
+ "règle contradictoire non remplacée": {
+  "en": "conflicting rule not replaced",
+  "ar": "قاعدة متعارضة لم يتم استبدالها"
+ },
+ "règles contradictoires non remplacées": {
+  "en": "conflicting rules not replaced",
+  "ar": "قواعد متعارضة لم يتم استبدالها"
+ },
+ "La mémoire n’a pas pu être mise à jour.": {
+  "en": "The memory could not be updated.",
+  "ar": "تعذر تحديث الذاكرة."
+ },
+ "Aucun solde détecté : ouvrez « Mes comptes », puis « Renseigner le solde » pour compléter vos avoirs.": {
+  "en": "No balance detected: open “My accounts”, then “Enter balance” to complete your assets.",
+  "ar": "لم يتم اكتشاف أي رصيد: افتح «حساباتي» ثم «إدخال الرصيد» لاستكمال أصولك."
+ },
+ "L’import a échoué. Vérifiez l’historique avant de relancer.": {
+  "en": "The import failed. Check the history before trying again.",
+  "ar": "فشل الاستيراد. تحقق من السجل قبل إعادة المحاولة."
+ },
+ "Date valeur": {
+  "en": "Value date",
+  "ar": "تاريخ القيمة"
+ },
+ "Libellé suggéré": {
+  "en": "Suggested label",
+  "ar": "الوصف المقترح"
+ },
+ "Montant signé": {
+  "en": "Signed amount",
+  "ar": "المبلغ بالإشارة"
+ },
+ "Débit": {
+  "en": "Debit",
+  "ar": "مدين"
+ },
+ "Crédit": {
+  "en": "Credit",
+  "ar": "دائن"
+ },
+ "Catégorie parente": {
+  "en": "Parent category",
+  "ar": "الفئة الأصلية"
+ },
+ "Référence": {
+  "en": "Reference",
+  "ar": "المرجع"
+ },
+ "Autres devises dans la liste": {
+  "en": "Other currencies in the list",
+  "ar": "عملات أخرى في القائمة"
+ },
+ "opération répétée": {
+  "en": "repeated transaction",
+  "ar": "معاملة متكررة"
+ },
+ "opérations répétées": {
+  "en": "repeated transactions",
+  "ar": "معاملات متكررة"
+ },
+ "Choisir une base CSV": {
+  "en": "Choose a CSV base",
+  "ar": "اختر قاعدة CSV"
+ },
+ "Oublier {0}": {
+  "en": "Forget {0}",
+  "ar": "نسيان {0}"
+ },
+ "{0} nouvelle{1} opération{2}": {
+  "en": "{0} new transaction{1}{2}",
+  "ar": "{0} معاملة جديدة{1}{2}"
+ },
+ "opération existante à vérifier pour complément": {
+  "en": "existing transaction to check for completion",
+  "ar": "معاملة موجودة للتحقق منها قصد الاستكمال"
+ },
+ "opérations existantes à vérifier pour complément": {
+  "en": "existing transactions to check for completion",
+  "ar": "معاملات موجودة للتحقق منها قصد الاستكمال"
+ },
+ "· {0} doublon{1} ignoré{2}": {
+  "en": "· {0} duplicate{1} ignored{2}",
+  "ar": "· {0} تكرار{1} تم تجاهله{2}"
+ },
+ "· {0} ligne{1} à vérifier": {
+  "en": "· {0} line{1} to check",
+  "ar": "· {0} سطر{1} للتحقق"
+ },
+ "Solde : {0}/{1} intervalles réconciliés.": {
+  "en": "Balance: {0}/{1} intervals reconciled.",
+  "ar": "الرصيد: تمت تسوية {0}/{1} فترات."
+ },
+ "écart à vérifier": {
+  "en": "discrepancy to check",
+  "ar": "فارق للتحقق"
+ },
+ "écarts à vérifier": {
+  "en": "discrepancies to check",
+  "ar": "فوارق للتحقق"
+ },
+ "Dates de solde à vérifier : {0}.": {
+  "en": "Balance dates to check: {0}.",
+  "ar": "تواريخ الرصيد للتحقق: {0}."
+ },
+ "Valeurs divergentes le {0}: {1}{2}.": {
+  "en": "Differing values on {0}: {1}{2}.",
+  "ar": "قيم متباينة بتاريخ {0}: {1}{2}."
+ },
+ "({0} retenu par réconciliation)": {
+  "en": "({0} retained by reconciliation)",
+  "ar": "({0} معتمد بالتسوية)"
+ },
+ "Importer {0}": {
+  "en": "Import {0}",
+  "ar": "استيراد {0}"
+ },
+ "Catégorie pour {0}": {
+  "en": "Category for {0}",
+  "ar": "فئة {0}"
+ },
+ "Sous-catégorie pour {0}": {
+  "en": "Subcategory for {0}",
+  "ar": "الفئة الفرعية لـ {0}"
+ },
+ "Personne concernée pour {0}": {
+  "en": "Person concerned for {0}",
+  "ar": "الشخص المعني بـ {0}"
+ },
+ "pour ce compte": {
+  "en": "for this account",
+  "ar": "لهذا الحساب"
+ },
+ "pour tous ces comptes": {
+  "en": "for all these accounts",
+  "ar": "لكل هذه الحسابات"
+ },
+ "Vérifiez le nom et le montant de chaque compte de départ.": {
+  "en": "Check the name and amount of each starting account.",
+  "ar": "تحقق من اسم ومبلغ كل حساب ابتدائي."
+ },
+ "Indiquez une date de relevé passée ou actuelle.": {
+  "en": "Enter a past or current statement date.",
+  "ar": "أدخل تاريخ كشف حساب سابقا أو حاليا."
+ },
+ "Pour une dette, saisissez le montant restant à rembourser sans signe.": {
+  "en": "For a debt, enter the remaining amount to repay without a sign.",
+  "ar": "بالنسبة إلى الدين، أدخل المبلغ المتبقي للسداد دون إشارة."
+ },
+ "Les espèces et la valeur des placements ne peuvent pas être négatives.": {
+  "en": "Cash and investment value cannot be negative.",
+  "ar": "لا يمكن أن تكون قيمة النقد والاستثمارات سالبة."
+ },
+ "Renseignez les deux montants du budget, ou laissez les deux champs vides.": {
+  "en": "Enter both budget amounts, or leave both fields empty.",
+  "ar": "أدخل مبلغي الميزانية معا، أو اترك الحقلين فارغين."
+ },
+ "Commun ou non attribué": {
+  "en": "Shared or unassigned",
+  "ar": "مشترك أو غير مخصص"
+ },
+ "Organisme à préciser": {
+  "en": "Institution to specify",
+  "ar": "الجهة المراد تحديدها"
+ },
+ "Colonne {0}": {
+  "en": "Column {0}",
+  "ar": "العمود {0}"
+ },
+ "La base doit contenir une ligne de titre avec ses colonnes.": {
+  "en": "The file must contain a header row with its columns.",
+  "ar": "يجب أن يحتوي الملف على سطر عناوين يتضمن أعمدته."
+ },
+ "Date illisible": {
+  "en": "Unreadable date",
+  "ar": "تاريخ غير مقروء"
+ },
+ "Libellé manquant": {
+  "en": "Missing label",
+  "ar": "وصف مفقود"
+ },
+ "Montant illisible": {
+  "en": "Unreadable amount",
+  "ar": "مبلغ غير مقروء"
+ },
+ "Montant nul": {
+  "en": "Zero amount",
+  "ar": "مبلغ معدوم"
+ },
+ "Devise illisible": {
+  "en": "Unreadable currency",
+  "ar": "عملة غير مقروءة"
+ },
+ "Catégorie exportée": {
+  "en": "Exported category",
+  "ar": "الفئة المصدّرة"
+ },
+ "Le fichier Excel contient une feuille illisible.": {
+  "en": "The Excel file contains an unreadable sheet.",
+  "ar": "يحتوي ملف Excel على ورقة غير مقروءة."
+ },
+ "Aucune feuille trouvée dans le fichier Excel.": {
+  "en": "No sheet found in the Excel file.",
+  "ar": "لم يتم العثور على أي ورقة في ملف Excel."
+ },
+ "La première feuille du fichier Excel est introuvable.": {
+  "en": "The first sheet of the Excel file cannot be found.",
+  "ar": "تعذر العثور على الورقة الأولى من ملف Excel."
+ },
+ "Le fichier ne peut pas dépasser 10 Mo.": {
+  "en": "The file cannot exceed 10 MB.",
+  "ar": "لا يمكن أن يتجاوز الملف 10 م.ب."
+ },
+ "Le fichier Excel est trop volumineux après décompression.": {
+  "en": "The Excel file is too large once decompressed.",
+  "ar": "ملف Excel كبير جدا بعد فك الضغط."
+ },
+ "Ce fichier n’est pas un classeur Excel pris en charge.": {
+  "en": "This file is not a supported Excel workbook.",
+  "ar": "هذا الملف ليس مصنف Excel مدعوما."
+ },
+ "La première feuille Excel ne peut pas être lue.": {
+  "en": "The first Excel sheet cannot be read.",
+  "ar": "تعذرت قراءة ورقة Excel الأولى."
+ },
+ "Aucune opération trouvée dans ce classeur Excel.": {
+  "en": "No transactions found in this Excel workbook.",
+  "ar": "لم يتم العثور على أي معاملات في مصنف Excel هذا."
+ },
+ "XML bancaire non reconnu. Choisissez un export CSV, OFX ou CAMT.053.": {
+  "en": "Unrecognised bank XML. Choose a CSV, OFX or CAMT.053 export.",
+  "ar": "ملف XML بنكي غير معروف. اختر تصدير CSV أو OFX أو CAMT.053."
+ },
+ "Opération bancaire": {
+  "en": "Bank transaction",
+  "ar": "معاملة بنكية"
+ },
+ "Archive limitée à 10 Mo.": {
+  "en": "Archive limited to 10 MB.",
+  "ar": "الأرشيف محدود بـ 10 م.ب."
+ },
+ "Archive limitée à 100 fichiers.": {
+  "en": "Archive limited to 100 files.",
+  "ar": "الأرشيف محدود بـ 100 ملف."
+ },
+ "Archive trop volumineuse après décompression.": {
+  "en": "Archive too large once decompressed.",
+  "ar": "الأرشيف كبير جدا بعد فك الضغط."
+ },
+ "Aucun relevé pris en charge dans cette archive. Les archives imbriquées et chiffrées ne sont pas prises en charge.": {
+  "en": "No supported statement in this archive. Nested and encrypted archives are not supported.",
+  "ar": "لا يوجد أي كشف حساب مدعوم في هذا الأرشيف. الأرشيفات المتداخلة والمشفرة غير مدعومة."
+ },
+ "Choisissez un relevé CSV, Excel, OFX, QIF, CAMT ou PDF.": {
+  "en": "Choose a CSV, Excel, OFX, QIF, CAMT or PDF statement.",
+  "ar": "اختر كشف حساب بصيغة CSV أو Excel أو OFX أو QIF أو CAMT أو PDF."
+ },
+ "Date;Libellé;Montant": {
+  "en": "Date;Label;Amount",
+  "ar": "Date;Label;Amount"
+ },
+ "Ce relevé PDF semble être dans une autre devise. Importez un export bancaire indiquant la devise.": {
+  "en": "This PDF statement seems to be in another currency. Import a bank export that states the currency.",
+  "ar": "يبدو أن كشف الحساب PDF هذا بعملة أخرى. استورد تصديرا بنكيا يحدد العملة."
+ },
+ "Sens débit/crédit à vérifier": {
+  "en": "Debit/credit direction to check",
+  "ar": "اتجاه المدين/الدائن للتحقق"
+ },
+ "Aucune transaction lisible avec date complète et montant. Ce PDF peut être scanné ou avoir une présentation non reconnue. Utilisez un export CSV, OFX ou QIF.": {
+  "en": "No readable transaction with a full date and amount. This PDF may be scanned or have an unrecognised layout. Use a CSV, OFX or QIF export.",
+  "ar": "لا توجد معاملة مقروءة بتاريخ كامل ومبلغ. قد يكون ملف PDF ممسوحا ضوئيا أو بتنسيق غير معروف. استخدم تصدير CSV أو OFX أو QIF."
+ },
+ "Date;Date valeur;Libellé;Montant {0}": {
+  "en": "Date;Value date;Label;Amount {0}",
+  "ar": "Date;Value date;Label;Amount {0}"
+ },
+ "Date;Date valeur;Libellé;Montant": {
+  "en": "Date;Value date;Label;Amount",
+  "ar": "Date;Value date;Label;Amount"
+ },
+ "Plusieurs montants sur la même ligne : vérifiez le relevé": {
+  "en": "Several amounts on the same line: check the statement",
+  "ar": "عدة مبالغ في السطر نفسه: تحقق من كشف الحساب"
+ },
+ "PDF limité à 100 pages.": {
+  "en": "PDF limited to 100 pages.",
+  "ar": "ملف PDF محدود بـ 100 صفحة."
+ },
+ "{0} pour {1}, soit {2}.": {
+  "en": "{0} for {1}, i.e. {2}.",
+  "ar": "{0} لـ {1}، أي {2}."
+ },
+ "enveloppe enregistrée": {
+  "en": "envelope saved",
+  "ar": "ظرف محفوظ"
+ },
+ "enveloppes enregistrées": {
+  "en": "envelopes saved",
+  "ar": "ظروف محفوظة"
+ },
+ "Enregistrement impossible.": {
+  "en": "Unable to save.",
+  "ar": "تعذر الحفظ."
+ },
+ "Appliquer la suggestion pour {0}": {
+  "en": "Apply the suggestion for {0}",
+  "ar": "تطبيق الاقتراح لـ {0}"
+ },
+ "mois observé": {
+  "en": "month observed",
+  "ar": "شهر ملاحظ"
+ },
+ "mois observés": {
+  "en": "months observed",
+  "ar": "أشهر ملاحظة"
+ },
+ "catégorie sélectionnée": {
+  "en": "category selected",
+  "ar": "فئة محددة"
+ },
+ "catégories sélectionnées": {
+  "en": "categories selected",
+  "ar": "فئات محددة"
+ },
+ "Catégories configurées sur douze mois": {
+  "en": "Categories configured over twelve months",
+  "ar": "الفئات المهيأة على مدى اثني عشر شهرا"
+ },
+ "Enveloppes − toutes les sorties, dont {0} hors enveloppe": {
+  "en": "Envelopes − all outflows, including {0} outside envelopes",
+  "ar": "الظروف − كل المصروفات، منها {0} خارج الظروف"
+ },
+ "Enveloppes − toutes les sorties, dont": {
+  "en": "Envelopes − all outflows, including",
+  "ar": "الظروف − كل المصروفات، منها"
+ },
+ "hors enveloppe": {
+  "en": "outside envelopes",
+  "ar": "خارج الظروف"
+ },
+ "Enveloppes − sorties de consommation": {
+  "en": "Envelopes − spending outflows",
+  "ar": "الظروف − مصروفات الاستهلاك"
+ },
+ "Année {0}": {
+  "en": "Year {0}",
+  "ar": "سنة {0}"
+ },
+ "catégorie sans plafond complet": {
+  "en": "category without a full limit",
+  "ar": "فئة دون سقف كامل"
+ },
+ "catégories sans plafond complet": {
+  "en": "categories without a full limit",
+  "ar": "فئات دون سقف كامل"
+ },
+ "Modifier le plafond : {0}": {
+  "en": "Edit the limit: {0}",
+  "ar": "تعديل السقف: {0}"
+ },
+ "Saisissez un plafond valide, supérieur ou égal à zéro.": {
+  "en": "Enter a valid limit, greater than or equal to zero.",
+  "ar": "أدخل سقفا صالحا أكبر من أو يساوي صفرا."
+ },
+ "La reconduction doit commencer ce mois-ci ou plus tard.": {
+  "en": "The renewal must start this month or later.",
+  "ar": "يجب أن يبدأ التجديد هذا الشهر أو بعده."
+ },
+ "Plafond · {0}": {
+  "en": "Limit · {0}",
+  "ar": "السقف · {0}"
+ },
+ "Plafond ·": {
+  "en": "Limit ·",
+  "ar": "السقف ·"
+ },
+ "Saisissez un montant de budget valide.": {
+  "en": "Enter a valid budget amount.",
+  "ar": "أدخل مبلغ ميزانية صالحا."
+ },
+ "Enveloppe « {0} » enregistrée.": {
+  "en": "Envelope “{0}” saved.",
+  "ar": "تم حفظ الظرف «{0}»."
+ },
+ "Enveloppe « {0} » supprimée.": {
+  "en": "Envelope “{0}” deleted.",
+  "ar": "تم حذف الظرف «{0}»."
+ },
+ "{0} dépensés sur {1}": {
+  "en": "{0} spent of {1}",
+  "ar": "{0} منفق من {1}"
+ },
+ "Dépenses : {0}": {
+  "en": "Spending: {0}",
+  "ar": "المصروفات: {0}"
+ },
+ "Supprimer l’enveloppe {0}": {
+  "en": "Delete envelope {0}",
+  "ar": "حذف الظرف {0}"
+ },
+ "Dépenses de {0}": {
+  "en": "Spending on {0}",
+  "ar": "مصروفات {0}"
+ },
+ "Indiquez des plafonds valides.": {
+  "en": "Enter valid limits.",
+  "ar": "أدخل سقوفا صالحة."
+ },
+ "Renseignez au moins un plafond.": {
+  "en": "Enter at least one limit.",
+  "ar": "أدخل سقفا واحدا على الأقل."
+ },
+ "Configuration enregistrée pour tous les mois à venir. Les périodes antérieures sont conservées.": {
+  "en": "Configuration saved for all upcoming months. Earlier periods are kept.",
+  "ar": "تم حفظ التهيئة لكل الأشهر القادمة. الفترات السابقة محفوظة."
+ },
+ "· Reste : {0}": {
+  "en": "· Remaining: {0}",
+  "ar": "· المتبقي: {0}"
+ },
+ "· Reste :": {
+  "en": "· Remaining:",
+  "ar": "· المتبقي:"
+ },
+ "Périodicité pour {0}": {
+  "en": "Frequency for {0}",
+  "ar": "الدورية لـ {0}"
+ },
+ "Périodicité pour": {
+  "en": "Frequency for",
+  "ar": "الدورية لـ"
+ },
+ "Impossible de charger les mouvements d’épargne.": {
+  "en": "Unable to load savings movements.",
+  "ar": "تعذر تحميل حركات الادخار."
+ },
+ "Choisissez une date.": {
+  "en": "Choose a date.",
+  "ar": "اختر تاريخا."
+ },
+ "Mouvement ajouté au suivi.": {
+  "en": "Movement added to tracking.",
+  "ar": "تمت إضافة الحركة إلى المتابعة."
+ },
+ "Supprimer ce mouvement du suivi ?": {
+  "en": "Remove this movement from tracking?",
+  "ar": "هل تريد حذف هذه الحركة من المتابعة؟"
+ },
+ "Mouvement supprimé.": {
+  "en": "Movement removed.",
+  "ar": "تم حذف الحركة."
+ },
+ "Ce nom existe déjà dans cette catégorie.": {
+  "en": "This name already exists in this category.",
+  "ar": "هذا الاسم موجود بالفعل في هذه الفئة."
+ },
+ "Impossible de terminer cette action.": {
+  "en": "Unable to complete this action.",
+  "ar": "تعذر إتمام هذا الإجراء."
+ },
+ "« {0} » existe déjà sous le nom « {1} ». Utilisez-le, ou renommez-le.": {
+  "en": "“{0}” already exists as “{1}”. Use it, or rename it.",
+  "ar": "«{0}» موجود بالفعل باسم «{1}». استخدمه أو أعد تسميته."
+ },
+ "Catégorie ajoutée.": {
+  "en": "Category added.",
+  "ar": "تمت إضافة الفئة."
+ },
+ "Sous-catégorie ajoutée.": {
+  "en": "Subcategory added.",
+  "ar": "تمت إضافة الفئة الفرعية."
+ },
+ "Modification impossible : élément introuvable ou droits insuffisants.": {
+  "en": "Unable to edit: item not found or insufficient permissions.",
+  "ar": "تعذر التعديل: العنصر غير موجود أو الصلاحيات غير كافية."
+ },
+ "Nom modifié.": {
+  "en": "Name updated.",
+  "ar": "تم تعديل الاسم."
+ },
+ "Élément réactivé.": {
+  "en": "Item reactivated.",
+  "ar": "تمت إعادة تفعيل العنصر."
+ },
+ "Élément archivé.": {
+  "en": "Item archived.",
+  "ar": "تمت أرشفة العنصر."
+ },
+ "Le classement personnalisé demande une mise à jour de la base de données qui n’est pas encore installée.": {
+  "en": "Custom ordering requires a database update that is not yet installed.",
+  "ar": "يتطلب الترتيب المخصص تحديثا لقاعدة البيانات لم يتم تثبيته بعد."
+ },
+ "Fusionner « {0} » dans « {1} » ? {2}, puis « {3} » sera archivée.": {
+  "en": "Merge “{0}” into “{1}”? {2}, then “{3}” will be archived.",
+  "ar": "هل تريد دمج «{0}» في «{1}»؟ {2}، ثم ستتم أرشفة «{3}»."
+ },
+ "opération sera déplacée": {
+  "en": "transaction will be moved",
+  "ar": "معاملة ستنقل"
+ },
+ "opérations seront déplacées": {
+  "en": "transactions will be moved",
+  "ar": "معاملات ستنقل"
+ },
+ "« {0} » fusionnée dans « {1} ».": {
+  "en": "“{0}” merged into “{1}”.",
+  "ar": "تم دمج «{0}» في «{1}»."
+ },
+ "Fusionner la catégorie « {0} » dans « {1} » ? {2} (avec leur sous-catégorie quand elle existe aussi dans « {3} »), puis « {4} » sera archivée.": {
+  "en": "Merge category “{0}” into “{1}”? {2} (with their subcategory when it also exists in “{3}”), then “{4}” will be archived.",
+  "ar": "هل تريد دمج الفئة «{0}» في «{1}»؟ {2} (مع فئتها الفرعية إذا كانت موجودة أيضا في «{3}»)، ثم ستتم أرشفة «{4}»."
+ },
+ "Catégorie « {0} » fusionnée dans « {1} ».": {
+  "en": "Category “{0}” merged into “{1}”.",
+  "ar": "تم دمج الفئة «{0}» في «{1}»."
+ },
+ "Renommer {0}": {
+  "en": "Rename {0}",
+  "ar": "إعادة تسمية {0}"
+ },
+ "Ordre enregistré.": {
+  "en": "Order saved.",
+  "ar": "تم حفظ الترتيب."
+ },
+ "Ordre par importance rétabli.": {
+  "en": "Order by importance restored.",
+  "ar": "تمت استعادة الترتيب حسب الأهمية."
+ },
+ "Déplier": {
+  "en": "Expand",
+  "ar": "توسيع"
+ },
+ "sous-catégorie": {
+  "en": "subcategory",
+  "ar": "فئة فرعية"
+ },
+ "sous-catégories": {
+  "en": "subcategories",
+  "ar": "فئات فرعية"
+ },
+ "Nouvelle sous-catégorie de {0}": {
+  "en": "New subcategory of {0}",
+  "ar": "فئة فرعية جديدة ضمن {0}"
+ },
+ "Nouvelle sous-catégorie de": {
+  "en": "New subcategory of",
+  "ar": "فئة فرعية جديدة ضمن"
+ },
+ "Sûre": {
+  "en": "Certain",
+  "ar": "مؤكدة"
+ },
+ "Probable": {
+  "en": "Likely",
+  "ar": "محتملة"
+ },
+ "Incertaine": {
+  "en": "Uncertain",
+  "ar": "غير مؤكدة"
+ },
+ "Vos règles": {
+  "en": "Your rules",
+  "ar": "قواعدك"
+ },
+ "Dictionnaire": {
+  "en": "Dictionary",
+  "ar": "القاموس"
+ },
+ "Apprentissage": {
+  "en": "Learning",
+  "ar": "التعلم"
+ },
+ "· {0} à classer à la main": {
+  "en": "· {0} to classify manually",
+  "ar": "· {0} للتصنيف يدويا"
+ },
+ "opération reste": {
+  "en": "transaction remains",
+  "ar": "معاملة متبقية"
+ },
+ "opérations restent": {
+  "en": "transactions remain",
+  "ar": "معاملات متبقية"
+ },
+ "Aucune nouvelle catégorie à proposer : classez ces opérations à la main, Horizon apprendra de vos choix.": {
+  "en": "No new category to suggest: classify these transactions manually, Horizon will learn from your choices.",
+  "ar": "لا توجد فئة جديدة للاقتراح: صنّف هذه المعاملات يدويا وسيتعلم Horizon من اختياراتك."
+ },
+ "Suggestions impossibles pour le moment.": {
+  "en": "Suggestions unavailable for now.",
+  "ar": "الاقتراحات غير متاحة حاليا."
+ },
+ "Catégories appliquées, mais les règles n’ont pas pu être mémorisées.": {
+  "en": "Categories applied, but the rules could not be saved.",
+  "ar": "تم تطبيق الفئات، لكن تعذر حفظ القواعد."
+ },
+ "opération reclassée": {
+  "en": "transaction reclassified",
+  "ar": "معاملة أعيد تصنيفها"
+ },
+ "opérations reclassées": {
+  "en": "transactions reclassified",
+  "ar": "معاملات أعيد تصنيفها"
+ },
+ "{0} pour les prochains imports.": {
+  "en": "{0} for future imports.",
+  "ar": "{0} للاستيرادات القادمة."
+ },
+ "Application impossible.": {
+  "en": "Unable to apply.",
+  "ar": "تعذر التطبيق."
+ },
+ "opération à classer": {
+  "en": "transaction to classify",
+  "ar": "معاملة للتصنيف"
+ },
+ "opérations à classer": {
+  "en": "transactions to classify",
+  "ar": "معاملات للتصنيف"
+ },
+ "Appliquer la proposition pour {0}": {
+  "en": "Apply the suggestion for {0}",
+  "ar": "تطبيق الاقتراح الخاص بـ {0}"
+ },
+ "Revenu / dépense": {
+  "en": "Income / expense",
+  "ar": "دخل / مصروف"
+ },
+ "Catégorie indisponible": {
+  "en": "Category unavailable",
+  "ar": "الفئة غير متاحة"
+ },
+ "Action impossible.": {
+  "en": "Action not possible.",
+  "ar": "الإجراء غير ممكن."
+ },
+ "Catégories et sous-catégories du référentiel disponibles. Les opérations existantes restent à valider.": {
+  "en": "Categories and subcategories from the reference list are available. Existing transactions still need to be validated.",
+  "ar": "الفئات والفئات الفرعية من القائمة المرجعية متاحة. لا تزال المعاملات الحالية بحاجة إلى التحقق."
+ },
+ "Indiquez un nom ou une expression de 2 à 120 caractères (hors mots génériques comme « CB » ou « PRLV »).": {
+  "en": "Enter a name or phrase of 2 to 120 characters (excluding generic words such as “CB” or “PRLV”).",
+  "ar": "أدخل اسما أو عبارة من 2 إلى 120 حرفا (باستثناء الكلمات العامة مثل «CB» أو «PRLV»)."
+ },
+ "Règle modifiée.": {
+  "en": "Rule updated.",
+  "ar": "تم تعديل القاعدة."
+ },
+ "Règle enregistrée pour le foyer. Elle est prioritaire sur le dictionnaire général.": {
+  "en": "Rule saved for the household. It takes priority over the general dictionary.",
+  "ar": "تم حفظ القاعدة للأسرة. لها الأولوية على القاموس العام."
+ },
+ "Supprimer {0} ? Les opérations déjà classées ne changent pas.": {
+  "en": "Delete {0}? Transactions already classified will not change.",
+  "ar": "هل تريد حذف {0}؟ لن تتغير المعاملات المصنفة بالفعل."
+ },
+ "règle": {
+  "en": "rule",
+  "ar": "قاعدة"
+ },
+ "règles": {
+  "en": "rules",
+  "ar": "قواعد"
+ },
+ "règle supprimée": {
+  "en": "rule deleted",
+  "ar": "قاعدة محذوفة"
+ },
+ "règles supprimées": {
+  "en": "rules deleted",
+  "ar": "قواعد محذوفة"
+ },
+ "Supprimer les {0} règles du foyer ? Les opérations déjà classées ne changent pas.": {
+  "en": "Delete the {0} household rules? Transactions already classified will not change.",
+  "ar": "هل تريد حذف قواعد الأسرة الـ{0}؟ لن تتغير المعاملات المصنفة بالفعل."
+ },
+ "Toutes les règles du foyer ont été supprimées.": {
+  "en": "All household rules have been deleted.",
+  "ar": "تم حذف جميع قواعد الأسرة."
+ },
+ "Appliquer les règles à {0} ? Leur catégorie et leur nature seront remplacées par celles des règles ; la sous-catégorie est retirée lors d’un changement de catégorie.": {
+  "en": "Apply the rules to {0}? Their category and type will be replaced by those of the rules; the subcategory is removed when the category changes.",
+  "ar": "هل تريد تطبيق القواعد على {0}؟ سيتم استبدال فئتها ونوعها بما تحدده القواعد، وتتم إزالة الفئة الفرعية عند تغيير الفئة."
+ },
+ "opération existante": {
+  "en": "existing transaction",
+  "ar": "معاملة حالية"
+ },
+ "opérations existantes": {
+  "en": "existing transactions",
+  "ar": "معاملات حالية"
+ },
+ "{0} selon les règles.": {
+  "en": "{0} according to the rules.",
+  "ar": "{0} وفق القواعد."
+ },
+ "opération mise à jour": {
+  "en": "transaction updated",
+  "ar": "معاملة محدثة"
+ },
+ "opérations mises à jour": {
+  "en": "transactions updated",
+  "ar": "معاملات محدثة"
+ },
+ "{0} pas les règles.": {
+  "en": "{0} the rules.",
+  "ar": "{0} القواعد."
+ },
+ "opération existante ne suit": {
+  "en": "existing transaction does not follow",
+  "ar": "معاملة حالية لا تتبع"
+ },
+ "opérations existantes ne suivent": {
+  "en": "existing transactions do not follow",
+  "ar": "معاملات حالية لا تتبع"
+ },
+ "Une opération a changé. Actualisez les suggestions avant de continuer.": {
+  "en": "A transaction has changed. Refresh the suggestions before continuing.",
+  "ar": "تغيرت إحدى المعاملات. حدّث الاقتراحات قبل المتابعة."
+ },
+ "opération corrigée": {
+  "en": "transaction corrected",
+  "ar": "معاملة مصححة"
+ },
+ "opérations corrigées": {
+  "en": "transactions corrected",
+  "ar": "معاملات مصححة"
+ },
+ "correction enregistrée": {
+  "en": "correction saved",
+  "ar": "تصحيح محفوظ"
+ },
+ "corrections enregistrées": {
+  "en": "corrections saved",
+  "ar": "تصحيحات محفوظة"
+ },
+ "Appliquer {0}": {
+  "en": "Apply {0}",
+  "ar": "تطبيق {0}"
+ },
+ "Règle du foyer « {0} »": {
+  "en": "Household rule “{0}”",
+  "ar": "قاعدة الأسرة «{0}»"
+ },
+ "Dictionnaire : {0}": {
+  "en": "Dictionary: {0}",
+  "ar": "القاموس: {0}"
+ },
+ "Ressemble à vos opérations déjà classées": {
+  "en": "Similar to your already classified transactions",
+  "ar": "مشابهة لمعاملاتك المصنفة بالفعل"
+ },
+ "Impossible de charger les documents.": {
+  "en": "Unable to load documents.",
+  "ar": "تعذر تحميل المستندات."
+ },
+ "Le fichier doit peser moins de 10 Mo.": {
+  "en": "The file must be smaller than 10 MB.",
+  "ar": "يجب أن يقل حجم الملف عن 10 ميغابايت."
+ },
+ "Formats acceptés : PDF, JPEG, PNG et WEBP.": {
+  "en": "Accepted formats: PDF, JPEG, PNG and WEBP.",
+  "ar": "الصيغ المقبولة: PDF وJPEG وPNG وWEBP."
+ },
+ "Document ajouté au coffre du foyer.": {
+  "en": "Document added to the household vault.",
+  "ar": "تمت إضافة المستند إلى خزنة الأسرة."
+ },
+ "Impossible d’ajouter le document.": {
+  "en": "Unable to add the document.",
+  "ar": "تعذر إضافة المستند."
+ },
+ "Impossible de télécharger ce document.": {
+  "en": "Unable to download this document.",
+  "ar": "تعذر تنزيل هذا المستند."
+ },
+ "Supprimer « {0} » du coffre du foyer ?": {
+  "en": "Remove “{0}” from the household vault?",
+  "ar": "هل تريد حذف «{0}» من خزنة الأسرة؟"
+ },
+ "Document supprimé.": {
+  "en": "Document deleted.",
+  "ar": "تم حذف المستند."
+ },
+ "Impossible de supprimer ce document.": {
+  "en": "Unable to delete this document.",
+  "ar": "تعذر حذف هذا المستند."
+ },
+ "Impossible de charger les objectifs.": {
+  "en": "Unable to load goals.",
+  "ar": "تعذر تحميل الأهداف."
+ },
+ "Renseignez un nom et un montant cible valides.": {
+  "en": "Enter a valid name and target amount.",
+  "ar": "أدخل اسما ومبلغا مستهدفا صالحين."
+ },
+ "Objectif mis à jour.": {
+  "en": "Goal updated.",
+  "ar": "تم تعديل الهدف."
+ },
+ "Objectif créé.": {
+  "en": "Goal created.",
+  "ar": "تم إنشاء الهدف."
+ },
+ "Supprimer l’objectif « {0} » ? Les mouvements restent dans le suivi général.": {
+  "en": "Delete the goal “{0}”? Movements stay in the general tracking.",
+  "ar": "هل تريد حذف الهدف «{0}»؟ تبقى الحركات في المتابعة العامة."
+ },
+ "Objectif supprimé. Les mouvements associés restent dans le journal.": {
+  "en": "Goal deleted. Associated movements remain in the journal.",
+  "ar": "تم حذف الهدف. تبقى الحركات المرتبطة في السجل."
+ },
+ "Progression de {0}": {
+  "en": "Progress of {0}",
+  "ar": "تقدم {0}"
+ },
+ "Échéance le {0}": {
+  "en": "Due on {0}",
+  "ar": "الاستحقاق في {0}"
+ },
+ "par mois": {
+  "en": "per month",
+  "ar": "في الشهر"
+ },
+ "Collez le lien d’invitation complet ou son code valide.": {
+  "en": "Paste the full invitation link or its valid code.",
+  "ar": "الصق رابط الدعوة كاملا أو رمزها الصالح."
+ },
+ "Cette invitation n’est pas valide ou a expiré. Demandez un nouveau lien au propriétaire du foyer.": {
+  "en": "This invitation is not valid or has expired. Ask the household owner for a new link.",
+  "ar": "هذه الدعوة غير صالحة أو منتهية. اطلب رابطا جديدا من مالك الأسرة."
+ },
+ "Impossible de rejoindre ce foyer. Vérifiez le lien et réessayez.": {
+  "en": "Unable to join this household. Check the link and try again.",
+  "ar": "تعذر الانضمام إلى هذه الأسرة. تحقق من الرابط وأعد المحاولة."
+ },
+ "Impossible de charger les invitations.": {
+  "en": "Unable to load invitations.",
+  "ar": "تعذر تحميل الدعوات."
+ },
+ "Le lien d’invitation n’a pas été créé.": {
+  "en": "The invitation link was not created.",
+  "ar": "لم يتم إنشاء رابط الدعوة."
+ },
+ "Lien créé. Il expire dans 7 jours.": {
+  "en": "Link created. It expires in 7 days.",
+  "ar": "تم إنشاء الرابط. تنتهي صلاحيته خلال 7 أيام."
+ },
+ "Impossible de créer cette invitation.": {
+  "en": "Unable to create this invitation.",
+  "ar": "تعذر إنشاء هذه الدعوة."
+ },
+ "Lien copié.": {
+  "en": "Link copied.",
+  "ar": "تم نسخ الرابط."
+ },
+ "La copie automatique est indisponible. Sélectionnez le lien pour le copier.": {
+  "en": "Automatic copying is unavailable. Select the link to copy it.",
+  "ar": "النسخ التلقائي غير متاح. حدد الرابط لنسخه."
+ },
+ "Révoquer cette invitation ?": {
+  "en": "Revoke this invitation?",
+  "ar": "هل تريد إلغاء هذه الدعوة؟"
+ },
+ "Impossible de révoquer cette invitation.": {
+  "en": "Unable to revoke this invitation.",
+  "ar": "تعذر إلغاء هذه الدعوة."
+ },
+ "Retirer {0} du foyer ?": {
+  "en": "Remove {0} from the household?",
+  "ar": "هل تريد إزالة {0} من الأسرة؟"
+ },
+ "Accès retiré.": {
+  "en": "Access removed.",
+  "ar": "تمت إزالة الوصول."
+ },
+ "Impossible de retirer ce membre.": {
+  "en": "Unable to remove this member.",
+  "ar": "تعذر إزالة هذا العضو."
+ },
+ "Personne@exemple.fr": {
+  "en": "Person@example.com",
+  "ar": "person@example.com"
+ },
+ "QR code du lien d’invitation": {
+  "en": "Invitation link QR code",
+  "ar": "رمز QR لرابط الدعوة"
+ },
+ "Compte Horizon": {
+  "en": "Horizon account",
+  "ar": "حساب Horizon"
+ },
+ "Retirer {0}": {
+  "en": "Remove {0}",
+  "ar": "إزالة {0}"
+ },
+ "Lien partageable": {
+  "en": "Shareable link",
+  "ar": "رابط قابل للمشاركة"
+ },
+ "Acceptée le {0}": {
+  "en": "Accepted on {0}",
+  "ar": "تم القبول في {0}"
+ },
+ "Expire le {0}": {
+  "en": "Expires on {0}",
+  "ar": "تنتهي في {0}"
+ },
+ "Choisissez une opération.": {
+  "en": "Choose a transaction.",
+  "ar": "اختر معاملة."
+ },
+ "Opération introuvable ou accès refusé.": {
+  "en": "Transaction not found or access denied.",
+  "ar": "المعاملة غير موجودة أو الوصول مرفوض."
+ },
+ "Remplacer la saisie « {0} » du {1} par le vrai virement « {2} » du {3} ? La saisie manuelle sera supprimée et le virement rattaché au prêt : les {4} ne compteront plus deux fois.": {
+  "en": "Replace the entry “{0}” of {1} with the actual transfer “{2}” of {3}? The manual entry will be deleted and the transfer linked to the loan: the {4} will no longer be counted twice.",
+  "ar": "هل تريد استبدال الإدخال «{0}» بتاريخ {1} بالتحويل الفعلي «{2}» بتاريخ {3}؟ سيتم حذف الإدخال اليدوي وربط التحويل بالقرض: لن يتم احتساب {4} مرتين."
+ },
+ "Prêt introuvable.": {
+  "en": "Loan not found.",
+  "ar": "القرض غير موجود."
+ },
+ "Créance antérieure invalide.": {
+  "en": "Invalid prior receivable.",
+  "ar": "الدين السابق غير صالح."
+ },
+ "Prêt introuvable ou accès refusé.": {
+  "en": "Loan not found or access denied.",
+  "ar": "القرض غير موجود أو الوصول مرفوض."
+ },
+ "Ses {0} seront {1}.": {
+  "en": "Its {0} will be {1}.",
+  "ar": "سيتم {1} {0} الخاصة به."
+ },
+ "opération liée": {
+  "en": "linked transaction",
+  "ar": "معاملة مرتبطة"
+ },
+ "opérations liées": {
+  "en": "linked transactions",
+  "ar": "معاملات مرتبطة"
+ },
+ "supprimées, sauf {0} d’un relevé, qui {1} « à vérifier »": {
+  "en": "deleted, except {0} from a statement, which {1} “to review”",
+  "ar": "حذفها، باستثناء {0} من كشف حساب، التي {1} «للمراجعة»"
+ },
+ "opération importée": {
+  "en": "imported transaction",
+  "ar": "معاملة مستوردة"
+ },
+ "opérations importées": {
+  "en": "imported transactions",
+  "ar": "معاملات مستوردة"
+ },
+ "supprimées": {
+  "en": "deleted",
+  "ar": "حذفها"
+ },
+ "Supprimer le prêt « {0} » ?{1} Cette action est définitive.": {
+  "en": "Delete the loan “{0}”?{1} This action is permanent.",
+  "ar": "هل تريد حذف القرض «{0}»؟{1} هذا الإجراء نهائي."
+ },
+ "Créance initiale invalide.": {
+  "en": "Invalid initial receivable.",
+  "ar": "الدين الأولي غير صالح."
+ },
+ "À récupérer": {
+  "en": "To collect",
+  "ar": "للتحصيل"
+ },
+ "prêt en cours": {
+  "en": "active loan",
+  "ar": "قرض جارٍ"
+ },
+ "prêts en cours": {
+  "en": "active loans",
+  "ar": "قروض جارية"
+ },
+ "Total prêté": {
+  "en": "Total lent",
+  "ar": "إجمالي المُقرَض"
+ },
+ "Avances et créances initiales": {
+  "en": "Advances and initial receivables",
+  "ar": "السلف والديون الأولية"
+ },
+ "Tous ({0})": {
+  "en": "All ({0})",
+  "ar": "الكل ({0})"
+ },
+ "Tous (": {
+  "en": "All (",
+  "ar": "الكل ("
+ },
+ "À récupérer ({0})": {
+  "en": "To collect ({0})",
+  "ar": "للتحصيل ({0})"
+ },
+ "À récupérer (": {
+  "en": "To collect (",
+  "ar": "للتحصيل ("
+ },
+ "Remboursés ({0})": {
+  "en": "Repaid ({0})",
+  "ar": "مسددة ({0})"
+ },
+ "Remboursés (": {
+  "en": "Repaid (",
+  "ar": "مسددة ("
+ },
+ "Date initiale inconnue": {
+  "en": "Initial date unknown",
+  "ar": "التاريخ الأولي غير معروف"
+ },
+ "· Créance antérieure {0}": {
+  "en": "· Prior receivable {0}",
+  "ar": "· دين سابق {0}"
+ },
+ "· Créance antérieure": {
+  "en": "· Prior receivable",
+  "ar": "· دين سابق"
+ },
+ "Mettre la créance antérieure à 0 ? Le prêt ne comptera plus que les opérations rattachées.": {
+  "en": "Set the prior receivable to 0? The loan will then count only the linked transactions.",
+  "ar": "هل تريد جعل الدين السابق 0؟ لن يحتسب القرض بعد ذلك إلا المعاملات المرتبطة."
+ },
+ "Date inconnue": {
+  "en": "Date unknown",
+  "ar": "التاريخ غير معروف"
+ },
+ "Moyen à préciser": {
+  "en": "Payment method to specify",
+  "ar": "وسيلة الدفع غير محددة"
+ },
+ "Autres opérations, plus récentes d’abord{0}": {
+  "en": "Other transactions, most recent first{0}",
+  "ar": "معاملات أخرى، الأحدث أولا{0}"
+ },
+ "(300 premières, affinez la recherche)": {
+  "en": "(first 300, refine your search)",
+  "ar": "(أول 300، دقّق البحث)"
+ },
+ "Impossible : les remboursements déjà enregistrés dépasseraient le montant prêté.": {
+  "en": "Not possible: the repayments already recorded would exceed the amount lent.",
+  "ar": "غير ممكن: ستتجاوز المبالغ المسددة المسجلة بالفعل المبلغ المُقرَض."
+ },
+ "La date du prêt doit précéder sa première opération.": {
+  "en": "The loan date must precede its first transaction.",
+  "ar": "يجب أن يسبق تاريخ القرض أول معاملة فيه."
+ },
+ "La date de remboursement prévue doit suivre la date du prêt.": {
+  "en": "The planned repayment date must be after the loan date.",
+  "ar": "يجب أن يكون تاريخ السداد المخطط بعد تاريخ القرض."
+ },
+ "Cette opération est antérieure à la date du prêt : avancez d’abord la date du prêt dans « Modifier ».": {
+  "en": "This transaction predates the loan date: first move the loan date earlier in “Edit”.",
+  "ar": "هذه المعاملة سابقة لتاريخ القرض: قدّم تاريخ القرض أولا في «تعديل»."
+ },
+ "Choisissez le moyen de paiement de cette opération.": {
+  "en": "Choose the payment method for this transaction.",
+  "ar": "اختر وسيلة الدفع لهذه المعاملة."
+ },
+ "Un paiement en espèces doit être rattaché à un compte Espèces : choisissez un autre moyen de paiement.": {
+  "en": "A cash payment must be linked to a Cash account: choose another payment method.",
+  "ar": "يجب ربط الدفع نقدا بحساب نقدي: اختر وسيلة دفع أخرى."
+ },
+ "Ce prêt a des opérations liées : confirmez leur suppression avec le prêt.": {
+  "en": "This loan has linked transactions: confirm their deletion along with the loan.",
+  "ar": "لهذا القرض معاملات مرتبطة: أكد حذفها مع القرض."
+ },
+ "Cette correction demande une mise à jour de la base de données qui n’est pas encore installée.": {
+  "en": "This correction requires a database update that is not yet installed.",
+  "ar": "يتطلب هذا التصحيح تحديثا لقاعدة البيانات لم يتم تثبيته بعد."
+ },
+ "Modification impossible pour le moment.": {
+  "en": "Unable to edit for now.",
+  "ar": "تعذر التعديل حاليا."
+ },
+ "Remboursement prévu le {0} · en retard": {
+  "en": "Repayment due on {0} · overdue",
+  "ar": "السداد المتوقع في {0} · متأخر"
+ },
+ "Remboursement prévu le {0}": {
+  "en": "Repayment due on {0}",
+  "ar": "السداد المتوقع في {0}"
+ },
+ "Impossible de charger les échéances.": {
+  "en": "Unable to load due payments.",
+  "ar": "تعذر تحميل الاستحقاقات."
+ },
+ "Échéance rapprochée de la dépense existante. Aucun montant ajouté au budget.": {
+  "en": "Due payment matched with the existing expense. No amount added to the budget.",
+  "ar": "تمت مطابقة الاستحقاق مع المصروف الحالي. لم تتم إضافة أي مبلغ إلى الميزانية."
+ },
+ "Rapprochement impossible.": {
+  "en": "Unable to match.",
+  "ar": "تعذرت المطابقة."
+ },
+ "Rapprochement introuvable. Actualisez les données.": {
+  "en": "Match not found. Refresh the data.",
+  "ar": "المطابقة غير موجودة. حدّث البيانات."
+ },
+ "Rapprochement annulé. La dépense reste dans le budget.": {
+  "en": "Match cancelled. The expense stays in the budget.",
+  "ar": "تم إلغاء المطابقة. يبقى المصروف في الميزانية."
+ },
+ "Impossible d’annuler ce rapprochement.": {
+  "en": "Unable to cancel this match.",
+  "ar": "تعذر إلغاء هذه المطابقة."
+ },
+ "Renseignez un intitulé et un montant valides.": {
+  "en": "Enter a valid title and amount.",
+  "ar": "أدخل عنوانا ومبلغا صالحين."
+ },
+ "Choisissez une date d’échéance valide.": {
+  "en": "Choose a valid due date.",
+  "ar": "اختر تاريخ استحقاق صالحا."
+ },
+ "Échéance mise à jour.": {
+  "en": "Due payment updated.",
+  "ar": "تم تعديل الاستحقاق."
+ },
+ "Échéance ajoutée.": {
+  "en": "Due payment added.",
+  "ar": "تمت إضافة الاستحقاق."
+ },
+ "Supprimer l’échéance « {0} » ?": {
+  "en": "Delete the due payment “{0}”?",
+  "ar": "هل تريد حذف الاستحقاق «{0}»؟"
+ },
+ "Échéance supprimée.": {
+  "en": "Due payment deleted.",
+  "ar": "تم حذف الاستحقاق."
+ },
+ "Annuelle · provision {0}/mois": {
+  "en": "Annual · provision {0}/month",
+  "ar": "سنوي · مخصص {0}/شهر"
+ },
+ "· dépense rapprochée : {0}": {
+  "en": "· matched expense: {0}",
+  "ar": "· المصروف المطابق: {0}"
+ },
+ "Dépense réglant {0}": {
+  "en": "Expense settling {0}",
+  "ar": "مصروف يسدد {0}"
+ },
+ "Autres dépenses à moins de 2 mois{0}": {
+  "en": "Other expenses due within 2 months{0}",
+  "ar": "مصاريف أخرى خلال أقل من شهرين{0}"
+ },
+ "· {0} plus éloignées masquées": {
+  "en": "· {0} further ones hidden",
+  "ar": "· {0} أبعد مخفية"
+ },
+ "Prêt": {
+  "en": "Loan",
+  "ar": "قرض"
+ },
+ "{0} Les soldes relevés sont conservés ; les soldes calculés seront actualisés.": {
+  "en": "{0} Statement balances are kept; calculated balances will be refreshed.",
+  "ar": "{0} يتم الاحتفاظ بأرصدة كشف الحساب، وسيتم تحديث الأرصدة المحسوبة."
+ },
+ "Supprimer cette opération ? Sa transaction bancaire liée et son rapprochement éventuel seront aussi supprimés.": {
+  "en": "Delete this transaction? Its linked bank transaction and any reconciliation will also be deleted.",
+  "ar": "حذف هذه المعاملة؟ سيتم أيضا حذف معاملتها البنكية المرتبطة وأي مطابقة محتملة."
+ },
+ "Supprimer {0} ? Leurs transactions bancaires liées et leurs rapprochements seront aussi supprimés.": {
+  "en": "Delete {0}? Their linked bank transactions and reconciliations will also be deleted.",
+  "ar": "حذف {0}؟ سيتم أيضا حذف معاملاتها البنكية المرتبطة ومطابقاتها."
+ },
+ "opération sélectionnée": {
+  "en": "transaction selected",
+  "ar": "معاملة محددة"
+ },
+ "opérations sélectionnées": {
+  "en": "transactions selected",
+  "ar": "معاملات محددة"
+ },
+ "Les soldes relevés sont conservés ; les soldes calculés seront actualisés.": {
+  "en": "Statement balances are kept; calculated balances will be refreshed.",
+  "ar": "يتم الاحتفاظ بأرصدة كشف الحساب، وسيتم تحديث الأرصدة المحسوبة."
+ },
+ "opération supprimée": {
+  "en": "transaction deleted",
+  "ar": "تم حذف المعاملة"
+ },
+ "opération modifiée": {
+  "en": "transaction updated",
+  "ar": "تم تعديل المعاملة"
+ },
+ "opérations supprimées": {
+  "en": "transactions deleted",
+  "ar": "تم حذف المعاملات"
+ },
+ "opérations modifiées": {
+  "en": "transactions updated",
+  "ar": "تم تعديل المعاملات"
+ },
+ "{0} avant l’interruption.": {
+  "en": "{0} before the interruption.",
+  "ar": "{0} قبل التوقف."
+ },
+ "avant l’interruption.": {
+  "en": "before the interruption.",
+  "ar": "قبل التوقف."
+ },
+ "Action groupée impossible.": {
+  "en": "Bulk action not possible.",
+  "ar": "تعذر تنفيذ الإجراء الجماعي."
+ },
+ "résultat": {
+  "en": "result",
+  "ar": "نتيجة"
+ },
+ "résultats": {
+  "en": "results",
+  "ar": "نتائج"
+ },
+ "Appliquer à {0}": {
+  "en": "Apply to {0}",
+  "ar": "تطبيق على {0}"
+ },
+ "Saisissez un montant supérieur à zéro.": {
+  "en": "Enter an amount greater than zero.",
+  "ar": "أدخل مبلغا أكبر من الصفر."
+ },
+ "Dépassement {0}": {
+  "en": "Overspent by {0}",
+  "ar": "تجاوز بمقدار {0}"
+ },
+ "Reste {0}": {
+  "en": "{0} left",
+  "ar": "المتبقي {0}"
+ },
+ "copie potentielle": {
+  "en": "potential duplicate",
+  "ar": "نسخة محتملة"
+ },
+ "copies potentielles": {
+  "en": "potential duplicates",
+  "ar": "نسخ محتملة"
+ },
+ "entrée à vérifier": {
+  "en": "entry to check",
+  "ar": "إدخال للمراجعة"
+ },
+ "entrées à vérifier": {
+  "en": "entries to check",
+  "ar": "إدخالات للمراجعة"
+ },
+ "{0} % consommé": {
+  "en": "{0}% used",
+  "ar": "تم استهلاك {0} %"
+ },
+ "Prêt à {0} : {1} toujours dû après la date de remboursement prévue.": {
+  "en": "Loan at {0}: {1} still owed after the planned repayment date.",
+  "ar": "قرض لدى {0}: لا يزال {1} مستحقا بعد تاريخ السداد المقرر."
+ },
+ "{0} prêts dépassent leur date de remboursement prévue ({1} encore dus).": {
+  "en": "{0} loans are past their planned repayment date ({1} still owed).",
+  "ar": "{0} قروض تجاوزت تاريخ السداد المقرر (لا يزال {1} مستحقا)."
+ },
+ "entrée": {
+  "en": "entry",
+  "ar": "إدخال"
+ },
+ "entrées": {
+  "en": "entries",
+  "ar": "إدخالات"
+ },
+ "solde à renseigner": {
+  "en": "balance to enter",
+  "ar": "رصيد يجب إدخاله"
+ },
+ "soldes à renseigner": {
+  "en": "balances to enter",
+  "ar": "أرصدة يجب إدخالها"
+ },
+ "Autre compte": {
+  "en": "Other account",
+  "ar": "حساب آخر"
+ },
+ "date de relevé inconnue": {
+  "en": "unknown statement date",
+  "ar": "تاريخ كشف الحساب غير معروف"
+ },
+ "solde inconnu": {
+  "en": "unknown balance",
+  "ar": "رصيد غير معروف"
+ },
+ "soldes inconnus": {
+  "en": "unknown balances",
+  "ar": "أرصدة غير معروفة"
+ },
+ "Dans {0} jours": {
+  "en": "In {0} days",
+  "ar": "بعد {0} أيام"
+ },
+ "Dans": {
+  "en": "In",
+  "ar": "بعد"
+ },
+ "Dépassement de {0}": {
+  "en": "Overspent by {0}",
+  "ar": "تجاوز بمقدار {0}"
+ },
+ "· relevé au {0}": {
+  "en": "· statement of {0}",
+  "ar": "· كشف حساب بتاريخ {0}"
+ },
+ "· relevé au": {
+  "en": "· statement of",
+  "ar": "· كشف حساب بتاريخ"
+ },
+ "solde d’épargne non renseigné": {
+  "en": "savings balance not entered",
+  "ar": "رصيد الادخار غير مدخل"
+ },
+ "soldes d’épargne non renseignés": {
+  "en": "savings balances not entered",
+  "ar": "أرصدة الادخار غير مدخلة"
+ },
+ "échéance à rapprocher": {
+  "en": "due payment to reconcile",
+  "ar": "استحقاق للمطابقة"
+ },
+ "échéances à rapprocher": {
+  "en": "due payments to reconcile",
+  "ar": "استحقاقات للمطابقة"
+ },
+ "Consommation actuelle + dépenses médianes restant après ce jour dans {0} mois précédents. Estimation indicative.": {
+  "en": "Current spending plus median expenses remaining after this day over the previous {0} months. Indicative estimate.",
+  "ar": "الاستهلاك الحالي مضافا إليه وسيط المصاريف المتبقية بعد هذا اليوم خلال الأشهر الـ{0} السابقة. تقدير إرشادي."
+ },
+ "{0} · entrées {1} · consommation {2}": {
+  "en": "{0} · income {1} · spending {2}",
+  "ar": "{0} · المداخيل {1} · الاستهلاك {2}"
+ },
+ "Prévu : {0}": {
+  "en": "Planned: {0}",
+  "ar": "المخطط: {0}"
+ },
+ "Prévu :": {
+  "en": "Planned:",
+  "ar": "المخطط:"
+ },
+ "Confirmées sur la période": {
+  "en": "Confirmed over the period",
+  "ar": "المؤكدة خلال الفترة"
+ },
+ "Plafond : {0}": {
+  "en": "Limit: {0}",
+  "ar": "الحد الأقصى: {0}"
+ },
+ "Plafond :": {
+  "en": "Limit:",
+  "ar": "الحد الأقصى:"
+ },
+ "Aucun plafond global": {
+  "en": "No overall limit",
+  "ar": "لا يوجد حد أقصى إجمالي"
+ },
+ "Reste après mouvements": {
+  "en": "Remaining after movements",
+  "ar": "المتبقي بعد الحركات"
+ },
+ "Après prêts, épargne et placements": {
+  "en": "After loans, savings and investments",
+  "ar": "بعد القروض والادخار والاستثمارات"
+ },
+ "Opérations hors des totaux courants": {
+  "en": "Transactions excluded from current totals",
+  "ar": "معاملات خارج المجاميع الحالية"
+ },
+ "Par catégorie": {
+  "en": "By category",
+  "ar": "حسب الفئة"
+ },
+ "Prévisions et pistes": {
+  "en": "Forecasts and leads",
+  "ar": "التوقعات والمقترحات"
+ },
+ "Mois du budget": {
+  "en": "Budget month",
+  "ar": "شهر الميزانية"
+ },
+ "Montant EUR": {
+  "en": "Amount EUR",
+  "ar": "المبلغ EUR"
+ },
+ "Statut": {
+  "en": "Status",
+  "ar": "الحالة"
+ },
+ "Réalisé": {
+  "en": "Actual",
+  "ar": "الفعلي"
+ },
+ "Type d’opération invalide dans les données du foyer.": {
+  "en": "Invalid transaction type in household data.",
+  "ar": "نوع معاملة غير صالح في بيانات الأسرة."
+ },
+ "Fréquence d’opération invalide dans les données du foyer.": {
+  "en": "Invalid transaction frequency in household data.",
+  "ar": "تكرار معاملة غير صالح في بيانات الأسرة."
+ },
+ "Affectation de revenu invalide dans les données du foyer.": {
+  "en": "Invalid income allocation in household data.",
+  "ar": "تخصيص دخل غير صالح في بيانات الأسرة."
+ },
+ "Nature du mouvement invalide dans les données du foyer.": {
+  "en": "Invalid movement nature in household data.",
+  "ar": "طبيعة حركة غير صالحة في بيانات الأسرة."
+ },
+ "Type de dépense invalide dans les données du foyer.": {
+  "en": "Invalid expense type in household data.",
+  "ar": "نوع مصروف غير صالح في بيانات الأسرة."
+ },
+ "Budgets indisponibles": {
+  "en": "Budgets unavailable",
+  "ar": "الميزانيات غير متاحة"
+ },
+ "Impossible de charger vos données.": {
+  "en": "Unable to load your data.",
+  "ar": "تعذر تحميل بياناتك."
+ },
+ "Euro": {
+  "en": "Euro",
+  "ar": "اليورو"
+ },
+ "Dinar tunisien": {
+  "en": "Tunisian dinar",
+  "ar": "الدينار التونسي"
+ },
+ "Dollar américain": {
+  "en": "US dollar",
+  "ar": "الدولار الأمريكي"
+ },
+ "Livre sterling": {
+  "en": "Pound sterling",
+  "ar": "الجنيه الإسترليني"
+ },
+ "Franc suisse": {
+  "en": "Swiss franc",
+  "ar": "الفرنك السويسري"
+ },
+ "Dollar canadien": {
+  "en": "Canadian dollar",
+  "ar": "الدولار الكندي"
+ },
+ "Dirham marocain": {
+  "en": "Moroccan dirham",
+  "ar": "الدرهم المغربي"
+ },
+ "Dinar algérien": {
+  "en": "Algerian dinar",
+  "ar": "الدينار الجزائري"
+ },
+ "Dinar libyen": {
+  "en": "Libyan dinar",
+  "ar": "الدينار الليبي"
+ },
+ "Livre égyptienne": {
+  "en": "Egyptian pound",
+  "ar": "الجنيه المصري"
+ },
+ "Riyal saoudien": {
+  "en": "Saudi riyal",
+  "ar": "الريال السعودي"
+ },
+ "Dirham des Émirats": {
+  "en": "UAE dirham",
+  "ar": "الدرهم الإماراتي"
+ },
+ "Riyal qatari": {
+  "en": "Qatari riyal",
+  "ar": "الريال القطري"
+ },
+ "Livre turque": {
+  "en": "Turkish lira",
+  "ar": "الليرة التركية"
+ },
+ "Franc CFA (UEMOA)": {
+  "en": "CFA franc (WAEMU)",
+  "ar": "فرنك الاتحاد المالي (UEMOA)"
+ },
+ "Franc CFA (CEMAC)": {
+  "en": "CFA franc (CEMAC)",
+  "ar": "فرنك الاتحاد المالي (CEMAC)"
+ },
+ "Yen": {
+  "en": "Yen",
+  "ar": "الين"
+ },
+ "Yuan": {
+  "en": "Yuan",
+  "ar": "اليوان"
+ },
+ "La pagination des données n’a pas progressé.": {
+  "en": "Data pagination did not advance.",
+  "ar": "لم يتقدم ترقيم صفحات البيانات."
+ },
+ "Si un compte correspond à cette adresse, un lien de réinitialisation va être envoyé.": {
+  "en": "If an account matches this address, a reset link will be sent.",
+  "ar": "إذا كان هناك حساب مطابق لهذا العنوان، فسيتم إرسال رابط إعادة التعيين."
+ },
+ "Choisissez un mot de passe d’au moins 12 caractères.": {
+  "en": "Choose a password of at least 12 characters.",
+  "ar": "اختر كلمة مرور من 12 حرفا على الأقل."
+ },
+ "Les deux mots de passe ne correspondent pas.": {
+  "en": "The two passwords do not match.",
+  "ar": "كلمتا المرور غير متطابقتين."
+ },
+ "Mot de passe modifié. Reconnectez-vous.": {
+  "en": "Password changed. Please sign in again.",
+  "ar": "تم تغيير كلمة المرور. أعد تسجيل الدخول."
+ },
+ "Si votre inscription est acceptée, consultez votre messagerie pour confirmer votre adresse.": {
+  "en": "If your sign-up is accepted, check your inbox to confirm your address.",
+  "ar": "إذا تم قبول تسجيلك، فتحقق من بريدك الإلكتروني لتأكيد عنوانك."
+ },
+ "La demande n’a pas abouti. Réessayez.": {
+  "en": "The request did not go through. Please try again.",
+  "ar": "لم يكتمل الطلب. أعد المحاولة."
+ },
+ "Impossible de vérifier la connexion Google. Réessayez plus tard.": {
+  "en": "Unable to verify the Google sign-in. Please try again later.",
+  "ar": "تعذر التحقق من تسجيل الدخول عبر Google. أعد المحاولة لاحقا."
+ },
+ "La connexion Google est en cours de configuration. Utilisez votre adresse e-mail et votre mot de passe en attendant.": {
+  "en": "Google sign-in is being set up. In the meantime, use your email address and password.",
+  "ar": "تسجيل الدخول عبر Google قيد الإعداد. استخدم بريدك الإلكتروني وكلمة المرور في الوقت الحالي."
+ },
+ "Abonnements": {
+  "en": "Subscriptions",
+  "ar": "الاشتراكات"
+ },
+ "Abonnements & téléphonie - Autres": {
+  "en": "Subscriptions & telecoms - Other",
+  "ar": "الاشتراكات والاتصالات - أخرى"
+ },
+ "Achats": {
+  "en": "Purchases",
+  "ar": "المشتريات"
+ },
+ "Achats en ligne": {
+  "en": "Online shopping",
+  "ar": "التسوق عبر الإنترنت"
+ },
+ "Allocations": {
+  "en": "Allowances",
+  "ar": "المنح"
+ },
+ "Amendes": {
+  "en": "Fines",
+  "ar": "الغرامات"
+ },
+ "Animaux": {
+  "en": "Pets",
+  "ar": "الحيوانات الأليفة"
+ },
+ "Assurances": {
+  "en": "Insurance",
+  "ar": "التأمينات"
+ },
+ "Banque et frais": {
+  "en": "Banking and fees",
+  "ar": "البنك والرسوم"
+ },
+ "Bazar et discount": {
+  "en": "Bargain and discount stores",
+  "ar": "متاجر التخفيضات"
+ },
+ "Boucherie": {
+  "en": "Butcher",
+  "ar": "الجزارة"
+ },
+ "Boulangerie": {
+  "en": "Bakery",
+  "ar": "المخبزة"
+ },
+ "Cadeaux": {
+  "en": "Gifts",
+  "ar": "الهدايا"
+ },
+ "Cafés et bars": {
+  "en": "Cafés and bars",
+  "ar": "المقاهي والحانات"
+ },
+ "Carburant": {
+  "en": "Fuel",
+  "ar": "الوقود"
+ },
+ "Charges": {
+  "en": "Bills and charges",
+  "ar": "الأعباء"
+ },
+ "Divers": {
+  "en": "Miscellaneous",
+  "ar": "متفرقات"
+ },
+ "Dons et cadeaux": {
+  "en": "Donations and gifts",
+  "ar": "التبرعات والهدايا"
+ },
+ "Dons et cagnottes": {
+  "en": "Donations and fundraisers",
+  "ar": "التبرعات وحملات التمويل"
+ },
+ "Eau": {
+  "en": "Water",
+  "ar": "الماء"
+ },
+ "Electronique et informatique": {
+  "en": "Electronics and computing",
+  "ar": "الإلكترونيات والمعلوماتية"
+ },
+ "Enfants": {
+  "en": "Children",
+  "ar": "الأطفال"
+ },
+ "Epargne": {
+  "en": "Savings",
+  "ar": "الادخار"
+ },
+ "Famille": {
+  "en": "Family",
+  "ar": "الأسرة"
+ },
+ "Frais bancaires": {
+  "en": "Bank fees",
+  "ar": "الرسوم البنكية"
+ },
+ "Frais bancaires et de gestion (dont agios)": {
+  "en": "Bank and account fees (incl. overdraft interest)",
+  "ar": "الرسوم البنكية ورسوم إدارة الحساب (بما فيها فوائد السحب على المكشوف)"
+ },
+ "Garde, école et activités": {
+  "en": "Childcare, school and activities",
+  "ar": "الحضانة والمدرسة والأنشطة"
+ },
+ "Hébergement et séjours": {
+  "en": "Accommodation and stays",
+  "ar": "الإقامة والمبيت"
+ },
+ "Impôts": {
+  "en": "Taxes",
+  "ar": "الضرائب"
+ },
+ "Impôts et taxes": {
+  "en": "Taxes and duties",
+  "ar": "الضرائب والرسوم"
+ },
+ "Intérêts et dividendes": {
+  "en": "Interest and dividends",
+  "ar": "الفوائد والأرباح"
+ },
+ "Jeux vidéo": {
+  "en": "Video games",
+  "ar": "ألعاب الفيديو"
+ },
+ "Location de véhicules": {
+  "en": "Vehicle rental",
+  "ar": "كراء السيارات"
+ },
+ "Loyer": {
+  "en": "Rent",
+  "ar": "الإيجار"
+ },
+ "Loyers": {
+  "en": "Rents",
+  "ar": "الإيجارات"
+ },
+ "Marché et primeurs": {
+  "en": "Markets and greengrocers",
+  "ar": "الأسواق وبائعو الخضر والغلال"
+ },
+ "Mobilier, électroménager, décoration…": {
+  "en": "Furniture, appliances, decoration…",
+  "ar": "الأثاث والأجهزة المنزلية والديكور…"
+ },
+ "Mutuelle": {
+  "en": "Health insurance top-up",
+  "ar": "التأمين الصحي التكميلي"
+ },
+ "Optique, audition…": {
+  "en": "Optical, hearing…",
+  "ar": "النظارات وسماعات الأذن…"
+ },
+ "Parking": {
+  "en": "Parking",
+  "ar": "مواقف السيارات"
+ },
+ "Pensions": {
+  "en": "Pensions",
+  "ar": "المعاشات"
+ },
+ "Pensions de retraite": {
+  "en": "Retirement pensions",
+  "ar": "معاشات التقاعد"
+ },
+ "Presse et livres": {
+  "en": "Press and books",
+  "ar": "الصحافة والكتب"
+ },
+ "Prestations et allocations": {
+  "en": "Benefits and allowances",
+  "ar": "المنح والإعانات"
+ },
+ "Péages": {
+  "en": "Tolls",
+  "ar": "معاليم الطرقات"
+ },
+ "Remboursements": {
+  "en": "Refunds",
+  "ar": "المبالغ المستردة"
+ },
+ "Remboursements de crédit": {
+  "en": "Loan repayments",
+  "ar": "سداد القروض"
+ },
+ "Restaurants et livraison": {
+  "en": "Restaurants and delivery",
+  "ar": "المطاعم والتوصيل"
+ },
+ "Retraite": {
+  "en": "Retirement",
+  "ar": "التقاعد"
+ },
+ "Retraits au distributeur": {
+  "en": "ATM withdrawals",
+  "ar": "السحب من الموزع الآلي"
+ },
+ "Retraits de livrets": {
+  "en": "Savings account withdrawals",
+  "ar": "السحب من دفاتر الادخار"
+ },
+ "Retraits d’espèces": {
+  "en": "Cash withdrawals",
+  "ar": "السحب النقدي"
+ },
+ "Revenus de placements": {
+  "en": "Investment income",
+  "ar": "عائدات الاستثمارات"
+ },
+ "Revenus locatifs": {
+  "en": "Rental income",
+  "ar": "المداخيل العقارية"
+ },
+ "Réparation": {
+  "en": "Repairs",
+  "ar": "الإصلاحات"
+ },
+ "Salaire net": {
+  "en": "Net salary",
+  "ar": "الأجر الصافي"
+ },
+ "Salaires": {
+  "en": "Salaries",
+  "ar": "الأجور"
+ },
+ "Shopping": {
+  "en": "Shopping",
+  "ar": "التسوق"
+ },
+ "Soins et nourriture": {
+  "en": "Pet care and food",
+  "ar": "رعاية الحيوانات وغذاؤها"
+ },
+ "Soins et pharmacie": {
+  "en": "Health and pharmacy",
+  "ar": "الصحة والصيدلية"
+ },
+ "Sorties et culture": {
+  "en": "Going out and culture",
+  "ar": "الترفيه والثقافة"
+ },
+ "Sport et fitness": {
+  "en": "Sport and fitness",
+  "ar": "الرياضة واللياقة"
+ },
+ "Supermarchés et alimentation": {
+  "en": "Supermarkets and groceries",
+  "ar": "المساحات التجارية والمواد الغذائية"
+ },
+ "Tabac": {
+  "en": "Tobacco",
+  "ar": "التبغ"
+ },
+ "Taxis": {
+  "en": "Taxis",
+  "ar": "سيارات الأجرة"
+ },
+ "Transports longue distance (avions, trains…)": {
+  "en": "Long-distance travel (planes, trains…)",
+  "ar": "السفر لمسافات طويلة (طائرات، قطارات…)"
+ },
+ "Transports quotidiens (métro, bus…)": {
+  "en": "Daily transport (metro, bus…)",
+  "ar": "النقل اليومي (مترو، حافلة…)"
+ },
+ "Travaux, réparation, entretien, aménagement…": {
+  "en": "Works, repairs, maintenance, fittings…",
+  "ar": "الأشغال والإصلاح والصيانة والتهيئة…"
+ },
+ "Téléphonie et internet": {
+  "en": "Phone and internet",
+  "ar": "الهاتف والإنترنت"
+ },
+ "Vacances": {
+  "en": "Holidays",
+  "ar": "العطل"
+ },
+ "Ventes": {
+  "en": "Sales",
+  "ar": "المبيعات"
+ },
+ "Ventes d’occasion": {
+  "en": "Second-hand sales",
+  "ar": "بيع المستعمل"
+ },
+ "Versements sur livrets": {
+  "en": "Savings account deposits",
+  "ar": "الإيداع في دفاتر الادخار"
+ },
+ "Versements sur placements": {
+  "en": "Investment contributions",
+  "ar": "الإيداع في الاستثمارات"
+ },
+ "Voyage": {
+  "en": "Travel",
+  "ar": "السفر"
+ },
+ "Voyages": {
+  "en": "Trips",
+  "ar": "الرحلات"
+ },
+ "Vêtements et accessoires": {
+  "en": "Clothing and accessories",
+  "ar": "الملابس والإكسسوارات"
+ },
+ "Énergie": {
+  "en": "Energy",
+  "ar": "الطاقة"
+ },
+ "Accessoires": {
+  "en": "Accessories",
+  "ar": "إكسسوارات"
+ },
+ "Activité": {
+  "en": "Activity",
+  "ar": "نشاط"
+ },
+ "Activité (Bowling, Cinéma...)": {
+  "en": "Activity (bowling, cinema...)",
+  "ar": "نشاط (بولينغ، سينما...)"
+ },
+ "Agences de voyages": {
+  "en": "Travel agencies",
+  "ar": "وكالات الأسفار"
+ },
+ "Alimentation": {
+  "en": "Food",
+  "ar": "التغذية"
+ },
+ "Aménagement": {
+  "en": "Home improvement",
+  "ar": "التهيئة"
+ },
+ "Animaux domestiques": {
+  "en": "Pets",
+  "ar": "الحيوانات الأليفة"
+ },
+ "Assurance": {
+  "en": "Insurance",
+  "ar": "التأمين"
+ },
+ "Assurance habitation et RC": {
+  "en": "Home and liability insurance",
+  "ar": "تأمين المسكن والمسؤولية المدنية"
+ },
+ "Bien-être et soins (coiffeur, parfums…)": {
+  "en": "Wellbeing and care (hairdresser, perfume…)",
+  "ar": "الرفاهية والعناية (حلاقة، عطور…)"
+ },
+ "Billets d'avions": {
+  "en": "Plane tickets",
+  "ar": "تذاكر الطيران"
+ },
+ "Bricolage et jardinage": {
+  "en": "DIY and gardening",
+  "ar": "الأشغال اليدوية والبستنة"
+ },
+ "Club / association (sport, hobby, art…)": {
+  "en": "Club / association (sport, hobby, art…)",
+  "ar": "نادٍ / جمعية (رياضة، هواية، فن…)"
+ },
+ "Déplacements": {
+  "en": "Travel",
+  "ar": "التنقلات"
+ },
+ "Divertissement - culture (ciné, théâtre, concerts…)": {
+  "en": "Entertainment - culture (cinema, theatre, concerts…)",
+  "ar": "الترفيه - الثقافة (سينما، مسرح، حفلات…)"
+ },
+ "Electricité": {
+  "en": "Electricity",
+  "ar": "الكهرباء"
+ },
+ "Entretien - Réparation": {
+  "en": "Maintenance - Repair",
+  "ar": "الصيانة - الإصلاح"
+ },
+ "Epicerie": {
+  "en": "Grocery",
+  "ar": "البقالة"
+ },
+ "Equipements sportifs et artistiques": {
+  "en": "Sports and art equipment",
+  "ar": "معدات رياضية وفنية"
+ },
+ "Essence": {
+  "en": "Fuel",
+  "ar": "البنزين"
+ },
+ "Frais de fonctionnement": {
+  "en": "Running costs",
+  "ar": "مصاريف التسيير"
+ },
+ "Hébergement (hôtels, camping…)": {
+  "en": "Accommodation (hotels, camping…)",
+  "ar": "الإقامة (فنادق، تخييم…)"
+ },
+ "Livres, CD/DVD, bijoux, jouets…": {
+  "en": "Books, CDs/DVDs, jewellery, toys…",
+  "ar": "كتب، أقراص، مجوهرات، ألعاب…"
+ },
+ "Loyers, Charges": {
+  "en": "Rent, service charges",
+  "ar": "الإيجار والأعباء"
+ },
+ "Médecins et frais médicaux": {
+  "en": "Doctors and medical costs",
+  "ar": "الأطباء والمصاريف الطبية"
+ },
+ "Mouvements internes créditeurs": {
+  "en": "Internal incoming transfers",
+  "ar": "تحويلات داخلية دائنة"
+ },
+ "Mouvements internes débiteurs": {
+  "en": "Internal outgoing transfers",
+  "ar": "تحويلات داخلية مدينة"
+ },
+ "Multimedia à domicile (TV, internet, téléphonie…)": {
+  "en": "Home multimedia (TV, internet, phone…)",
+  "ar": "الوسائط المتعددة بالمنزل (تلفاز، إنترنت، هاتف…)"
+ },
+ "Non-Remboursable": {
+  "en": "Non-refundable",
+  "ar": "غير قابل للاسترجاع"
+ },
+ "Péage": {
+  "en": "Tolls",
+  "ar": "معاليم الطريق السيارة"
+ },
+ "Pharmacie et laboratoire": {
+  "en": "Pharmacy and laboratory",
+  "ar": "الصيدلية والمخبر"
+ },
+ "Piscine": {
+  "en": "Swimming pool",
+  "ar": "المسبح"
+ },
+ "Remboursable": {
+  "en": "Refundable",
+  "ar": "قابل للاسترجاع"
+ },
+ "Remboursement de frais / offres BoursoBank": {
+  "en": "Fee refunds / BoursoBank offers",
+  "ar": "استرجاع مصاريف / عروض BoursoBank"
+ },
+ "Remboursements - Autres": {
+  "en": "Refunds - Other",
+  "ar": "استرجاعات - أخرى"
+ },
+ "Remboursements frais de santé": {
+  "en": "Health cost refunds",
+  "ar": "استرجاع المصاريف الصحية"
+ },
+ "Remboursements frais de vie quotidienne": {
+  "en": "Everyday cost refunds",
+  "ar": "استرجاع مصاريف الحياة اليومية"
+ },
+ "Restaurant": {
+  "en": "Restaurant",
+  "ar": "مطعم"
+ },
+ "Restaurants, bars, discothèques…": {
+  "en": "Restaurants, bars, nightclubs…",
+  "ar": "مطاعم، حانات، ملاهٍ…"
+ },
+ "Téléphonie (fixe et mobile)": {
+  "en": "Phone (landline and mobile)",
+  "ar": "الهاتف (ثابت وجوال)"
+ },
+ "Vidange": {
+  "en": "Oil change",
+  "ar": "تغيير الزيت"
+ },
+ "Vie Quotidienne - Autres": {
+  "en": "Everyday life - Other",
+  "ar": "الحياة اليومية - أخرى"
+ },
+ "Virements émis": {
+  "en": "Transfers sent",
+  "ar": "التحويلات الصادرة"
+ },
+ "Virements émis de comptes à comptes": {
+  "en": "Transfers sent between accounts",
+  "ar": "التحويلات الصادرة بين الحسابات"
+ },
+ "Virements reçus": {
+  "en": "Transfers received",
+  "ar": "التحويلات الواردة"
+ },
+ "Virements reçus de comptes à comptes": {
+  "en": "Transfers received between accounts",
+  "ar": "التحويلات الواردة بين الحسابات"
+ },
+ "VOYAGE": {
+  "en": "TRAVEL",
+  "ar": "السفر"
+ },
+ "Café Tunisien": {
+  "en": "Tunisian café",
+  "ar": "مقهى تونسي"
+ },
+ "Virement instantané": {
+  "en": "Instant transfer",
+  "ar": "تحويل فوري"
+ },
+ "Virement sepa": {
+  "en": "SEPA transfer",
+  "ar": "تحويل SEPA"
+ },
+ "Prélèvement sepa": {
+  "en": "SEPA direct debit",
+  "ar": "اقتطاع SEPA"
+ },
+ "Prélèvement": {
+  "en": "Direct debit",
+  "ar": "اقتطاع"
+ },
+ "Déplier {0}": {
+  "en": "Expand {0}",
+  "ar": "توسيع {0}"
+ },
+ "Replier {0}": {
+  "en": "Collapse {0}",
+  "ar": "طي {0}"
+ },
+ "Archiver {0}": {
+  "en": "Archive {0}",
+  "ar": "أرشفة {0}"
+ },
+ "Réactiver {0}": {
+  "en": "Reactivate {0}",
+  "ar": "إعادة تفعيل {0}"
+ },
+ "{0}/mois actuellement": {
+  "en": "{0}/month currently",
+  "ar": "{0}/شهر حاليا"
+ },
+ "{0}/mois": {
+  "en": "{0}/month",
+  "ar": "{0}/شهر"
+ },
+ "{0}/an": {
+  "en": "{0}/year",
+  "ar": "{0}/سنة"
+ },
+ "{0} / mois": {
+  "en": "{0} / month",
+  "ar": "{0} / شهر"
+ },
+ "{0} / an": {
+  "en": "{0} / year",
+  "ar": "{0} / سنة"
  }
 };

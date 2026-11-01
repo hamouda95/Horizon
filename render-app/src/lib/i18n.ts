@@ -4,7 +4,7 @@ let language:UiLanguage='fr';
 export function setUiLanguage(value:string){language=value==='en'||value==='ar'?value:'fr'}
 export function uiLanguage(){return language}
 // Form labels are written with « (€) »: the symbol follows the household's main currency.
-const withCurrency=(value:string)=>value.includes('(€)')?value.replace(/\(€\)/g,'('+currencySymbol()+')'):value;
+export const withCurrency=(value:string)=>value.includes('(€)')?value.replace(/\(€\)/g,'('+currencySymbol()+')'):value;
 export function translateUi(value:string|null|undefined):string{return withCurrency(translateText(value))}
 function translateText(value:string|null|undefined):string{
  if(!value)return '';if(language==='fr')return value;
