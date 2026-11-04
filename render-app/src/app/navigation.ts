@@ -27,5 +27,9 @@ export function normalizeNavigation(value:unknown):string[]{const seen=new Set<s
 export function moveNavigation(items:string[],from:string,to:string):string[]{const a=items.indexOf(from),b=items.indexOf(to);if(a<0||b<0||a===b)return items;const next=[...items];next.splice(a,1);next.splice(b,0,from);return next}
 
 export const pageRoutes:Record<string,string>={'Vue d’ensemble':'overview','Budget':'budget','Entrées d’argent':'income','Sorties d’argent':'expenses','Banque':'accounts','Prêts et créances':'loans','Échéances':'bills','Bilan':'reports','Catégories':'categories','Objectifs':'goals','Documents':'documents','Astuces':'insights'};
-export function pageFromHash(hash:string){const route=hash.replace(/^#\/?/,'').split('?')[0];return Object.keys(pageRoutes).find(page=>pageRoutes[page]===route)||'Vue d’ensemble'}
+// The app opens on the expense register: adding a money-out entry is the most frequent task.
+export const landingPage='Sorties d’argent';
+export function pageFromHash(hash:string){const route=hash.replace(/^#\/?/,'').split('?')[0];return Object.keys(pageRoutes).find(page=>pageRoutes[page]===route)||landingPage}
+/** True when the app is opened without a page in the address, i.e. a plain visit that should land on a new expense. */
+export function isLandingVisit(hash:string){return !hash.replace(/^#\/?/,'').split('?')[0]}
 export function hashForPage(page:string){return '#/'+(pageRoutes[page]||'overview')}

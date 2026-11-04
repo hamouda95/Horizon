@@ -31,7 +31,7 @@ import {parseEuroCents} from '../lib/money';
 import PeriodControl from '../components/PeriodControl';
 import type {Entry} from '../hooks/household-data';
 import {useHouseholdData} from '../hooks/useHouseholdData';
-import {pageFromHash,hashForPage,normalizeNavigation,moveNavigation,navigationSections,pageDescriptions,pageRegistry} from './navigation';
+import {pageFromHash,hashForPage,isLandingVisit,normalizeNavigation,moveNavigation,navigationSections,pageDescriptions,pageRegistry} from './navigation';
 import CategoryManager from '../features/categories/CategoryManager';
 import ClassificationReferenceManager from '../features/classification/ClassificationReferenceManager';
 import AiCategorizationPanel from '../features/classification/AiCategorizationPanel';
@@ -57,8 +57,9 @@ const HouseholdDocumentsPage=lazy(()=>import('../features/documents/HouseholdDoc
 const HouseholdGoalsPage=lazy(()=>import('../features/goals/HouseholdGoalsPage'));
 const HouseholdObligationsPage=lazy(()=>import('../features/obligations/HouseholdObligationsPage'));
 const MonthlyReportPage=lazy(()=>import('../features/reports/MonthlyReportPage'));
-const incomeDefaults=['Salaire','Prime','Aides','Autres revenus'];
-const expenseDefaults=['Logement','Courses','Transport','Factures','Loisirs','Santé','Autres dépenses'];
+// Starting categories use the names of the bank dictionary (reference-data.ts), so imported operations land in them.
+const incomeDefaults=['Salaire','Aides','Remboursements','Autres revenus'];
+const expenseDefaults=['Logement','Courses','Transport','Factures','Loisirs','Santé','Shopping','Impôts et taxes','Banque et frais','Autres dépenses'];
 const fmt=(n:number)=>new Intl.NumberFormat(appLocale(),{style:'currency',currency:appCurrency(),maximumFractionDigits:2}).format(n/100);
 const now=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 type DashboardAccount=Pick<Tables<'bank_accounts'>,'id'|'valuation_details'|'name'|'source_name'|'account_type'|'currency'|'balance_cents'|'balance_as_of'>;
@@ -74,7 +75,9 @@ export default function Budget({user,onSignOut}:{user:User;onSignOut:()=>void}){
  const [tab,setTab]=useState(()=>pageFromHash(window.location.hash)),[modal,setModal]=useState(''),[menu,setMenu]=useState(false),[month,setMonth]=useState(now().slice(0,7)),[selectedCategory,setSelectedCategory]=useState<string|null>(null);const [compactOverview,setCompactOverview]=useState(false),[overviewDetailsOpen,setOverviewDetailsOpen]=useState(false),[overviewMonthOpen,setOverviewMonthOpen]=useState(false);
  const {loans,home,households,selectHousehold,entries,loading,error,setError,subcategories,setSubcategories,plans,refreshVersion,load}=useHouseholdData(userId,modal,tab,setModal);
  const accountDirectory=useAccountDirectory(home?.id||'',entries.length+refreshVersion);
- const routeStarted=useRef(false);
+ const routeStarted=useRef(false),landingEntry=useRef(isLandingVisit(window.location.hash));
+ // A plain visit lands on a new expense, once the household is loaded and nothing else (setup, MFA…) is open.
+ useEffect(()=>{if(!landingEntry.current||loading||!home||modal)return;landingEntry.current=false;openNewEntry('expense')},[loading,home,modal]);
  useEffect(()=>{const readRoute=()=>setTab(pageFromHash(window.location.hash));window.addEventListener('popstate',readRoute);window.addEventListener('hashchange',readRoute);return()=>{window.removeEventListener('popstate',readRoute);window.removeEventListener('hashchange',readRoute)}},[]);
  useEffect(()=>{setNotice('');setLearnedRule(null)},[tab]);useEffect(()=>{const hash=hashForPage(tab);if(window.location.hash!==hash){if(routeStarted.current)window.history.pushState(null,'',hash);else window.history.replaceState(null,'',hash)}routeStarted.current=true;window.scrollTo({top:0,behavior:'auto'})},[tab]);
  const categoryBudgets=useCategoryBudgets(home?.id||'',refreshVersion,month);

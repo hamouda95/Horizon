@@ -4,7 +4,7 @@ import {displayText} from '../../lib/text';
 import type {Dispatch, FormEventHandler, SetStateAction} from 'react';
 import {ArrowRight} from 'lucide-react';
 import {useState} from 'react';
-import type {FlowType} from '../../lib/flow';
+import {flowTypeLabel,flowTypeLabels,type FlowType} from '../../lib/flow';
 
 type EntryKind='income'|'expense';
 type Frequency='monthly'|'annual';
@@ -56,7 +56,7 @@ export default function EntryDialog({accountId='',setAccountId=()=>{},accounts=[
   <details className="entry-more" open={more} onToggle={event=>setMore(event.currentTarget.open)}>
    <summary>Plus d’options{extras>0&&<b>{extras}</b>}</summary>
    <div className="formgrid">
-    <label>Nature<select value={flowType} onChange={event=>{const next=event.target.value as FlowType;setFlowType(next);if(next!=='standard')setExpenseType('')}}><option value="standard">{kind==='income'?'Entrée courante':'Dépense courante'}</option><option value="transfer">Transfert entre comptes</option><option value="refund">Remboursement</option><option value="savings">Mouvement d’épargne</option><option value="investment">Versement / retrait de placement</option><option value="loan">Prêt ou remboursement de créance</option><option value="review">À vérifier</option></select></label>
+    <label>Nature<select value={flowType} onChange={event=>{const next=event.target.value as FlowType;setFlowType(next);if(next!=='standard')setExpenseType('')}}>{(Object.keys(flowTypeLabels) as FlowType[]).map(value=><option key={value} value={value}>{flowTypeLabel(value,kind)}</option>)}</select></label>
     <label>Paiement<select required={flowType==='loan'} value={paymentMethod} onChange={e=>{setPaymentMethod(e.target.value);if(e.target.value==='cash'&&!imported)setAccountId('')}}><option value="">À préciser</option><option value="cash">Espèces</option><option value="transfer">Virement</option><option value="card">Carte</option><option value="cheque">Chèque</option><option value="other">Autre</option></select></label>
     {flowType==='loan'&&<label>Prêt concerné<select required value={loanId} onChange={e=>setLoanId(e.target.value)}><option value="">Choisir un prêt</option>{loans.map(l=><option key={l.id} value={l.id}>{displayText(l.borrower)}</option>)}</select></label>}
     {kind==='expense'&&flowType==='standard'&&<label>Type de dépense<select value={expenseType} onChange={event=>setExpenseType(event.target.value as ExpenseType)}><option value="">Non précisé</option><option value="recurring">Récurrente</option><option value="one_off">Ponctuelle</option></select></label>}
