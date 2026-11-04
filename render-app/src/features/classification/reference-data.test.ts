@@ -1,4 +1,5 @@
 import {expect,it} from 'vitest';
+import {movementCategories} from './reference-data';
 import {classificationReference,referenceMatch,resolveReferenceCategory} from './classification-reference';
 
 it('couvre un large éventail de libellés bancaires français',()=>{
@@ -40,3 +41,4 @@ it('retombe sur une catégorie existante du foyer grâce aux alias',()=>{
  expect(resolveReferenceCategory({category:'Voyages',kind:'expense'},categories)?.id).toBe('trip');
  expect(resolveReferenceCategory({category:'Salaire',kind:'income'},categories)).toBeNull();
 });
+it('réserve les catégories de mouvements à l’épargne, aux placements et aux retraits',()=>{expect([...movementCategories].sort()).toEqual(['Placements','Retraits d’espèces','Épargne'])});

@@ -97,3 +97,7 @@ export const referenceData:ReferenceRule[]=[
  {key:'interest',terms:['interets credites','interets livret','interets','dividendes','dividende','coupon','plus value'],kind:'income',category:'Revenus de placements',subcategory:'Intérêts et dividendes',flowType:'standard'},
  {key:'sales',terms:['vinted','leboncoin','ebay vente','backmarket reprise','rakuten vente','vestiaire collective','selency','vente'],kind:'income',category:'Ventes',subcategory:'Ventes d’occasion',flowType:'standard'},
 ];
+
+/** Expense reference categories used only for money movements (savings, investments, cash withdrawals), never for consumption. */
+const expenseRules=referenceData.filter(rule=>rule.kind==='expense');
+export const movementCategories=new Set(expenseRules.map(rule=>rule.category).filter(category=>expenseRules.every(rule=>rule.category!==category||rule.flowType&&rule.flowType!=='standard')));

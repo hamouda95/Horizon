@@ -8079,5 +8079,9 @@ export const uiMessages:Record<string,{en:string;ar:string}>={
  "Entre vos comptes, vers l’épargne, les placements et les prêts : hors budget": {
   "en": "Between your accounts, to savings, investments and loans: outside the budget",
   "ar": "بين حساباتك، نحو الادخار والاستثمارات والقروض: خارج الميزانية"
+ },
+ "Justificatif de revenu": {
+  "en": "Proof of income",
+  "ar": "إثبات الدخل"
  }
 };
