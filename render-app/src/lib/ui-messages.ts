@@ -8083,5 +8083,101 @@ export const uiMessages:Record<string,{en:string;ar:string}>={
  "Justificatif de revenu": {
   "en": "Proof of income",
   "ar": "إثبات الدخل"
+ },
+ "saisie retrouvée dans vos relevés": {
+  "en": "entry found in your statements",
+  "ar": "إدخال وُجد في كشوفك"
+ },
+ "saisies retrouvées dans vos relevés": {
+  "en": "entries found in your statements",
+  "ar": "إدخالات وُجدت في كشوفك"
+ },
+ "La banque fait foi pour le montant, la date et le libellé ; votre catégorie et « Pour qui » sont conservés.": {
+  "en": "The bank is the reference for amount, date and label; your category and “For whom” are kept.",
+  "ar": "البنك هو المرجع للمبلغ والتاريخ والوصف؛ ويُحتفظ بالفئة و«لمن»."
+ },
+ "saisie": {
+  "en": "entry",
+  "ar": "إدخال"
+ },
+ "saisies": {
+  "en": "entries",
+  "ar": "إدخالات"
+ },
+ "Confirmer {0}": {
+  "en": "Confirm {0}",
+  "ar": "تأكيد {0}"
+ },
+ "Confirmer": {
+  "en": "Confirm",
+  "ar": "تأكيد"
+ },
+ "{0} · saisie": {
+  "en": "{0} · entered",
+  "ar": "{0} · إدخال يدوي"
+ },
+ "{0} · banque": {
+  "en": "{0} · bank",
+  "ar": "{0} · البنك"
+ },
+ "{0} · banque · plusieurs saisies possibles": {
+  "en": "{0} · bank · several possible entries",
+  "ar": "{0} · البنك · عدة إدخالات محتملة"
+ },
+ "C’est « {0} » du {1}": {
+  "en": "It is “{0}” of {1}",
+  "ar": "إنه «{0}» بتاريخ {1}"
+ },
+ "saisie confirmée par la banque": {
+  "en": "entry confirmed by the bank",
+  "ar": "إدخال أكّده البنك"
+ },
+ "saisies confirmées par la banque": {
+  "en": "entries confirmed by the bank",
+  "ar": "إدخالات أكّدها البنك"
+ },
+ "saisie confirmée": {
+  "en": "entry confirmed",
+  "ar": "إدخال مؤكَّد"
+ },
+ "saisies confirmées": {
+  "en": "entries confirmed",
+  "ar": "إدخالات مؤكَّدة"
+ },
+ "Confirmation impossible.": {
+  "en": "Confirmation failed.",
+  "ar": "تعذّر التأكيد."
+ },
+ "En attente de la banque": {
+  "en": "Awaiting the bank",
+  "ar": "بانتظار البنك"
+ },
+ "Saisie à confirmer par le relevé bancaire": {
+  "en": "Entry to be confirmed by the bank statement",
+  "ar": "إدخال ينتظر تأكيد كشف الحساب"
+ },
+ "Introuvable dans le relevé": {
+  "en": "Not found in the statement",
+  "ar": "غير موجود في الكشف"
+ },
+ "Le relevé de ce compte couvre cette date sans la montrer : oubliée, annulée ou payée autrement ?": {
+  "en": "This account’s statement covers this date without showing it: forgotten, cancelled or paid another way?",
+  "ar": "كشف هذا الحساب يغطي هذا التاريخ دون أن يظهره: منسي أم ملغى أم مدفوع بطريقة أخرى؟"
+ },
+ "saisie manuelle confirmée par le relevé": {
+  "en": "manual entry confirmed by the statement",
+  "ar": "إدخال يدوي أكّده الكشف"
+ },
+ "saisies manuelles confirmées par le relevé": {
+  "en": "manual entries confirmed by the statement",
+  "ar": "إدخالات يدوية أكّدها الكشف"
+ },
+ "Opération bancaire introuvable ou accès refusé.": {
+  "en": "Bank operation not found or access denied.",
+  "ar": "العملية البنكية غير موجودة أو الوصول مرفوض."
+ },
+ "Saisie confirmée, mais l’échéance est à rapprocher de nouveau.": {
+  "en": "Entry confirmed, but the bill must be matched again.",
+  "ar": "تم تأكيد الإدخال، لكن يجب مطابقة الاستحقاق من جديد."
  }
 };
