@@ -11,6 +11,7 @@ it('couvre un large éventail de libellés bancaires français',()=>{
   ['CB AMAZON PAYMENTS','expense','Shopping'],['CB IKEA PARIS','expense','Logement'],['PRLV FONCIA LOYER','expense','Logement'],
   ['CB BOOKING.COM HOTEL','expense','Voyages'],['RETRAIT DAB 12/10','expense','Retraits d’espèces'],['FRAIS CB VISA','expense','Banque et frais'],
   ['VIR SEPA SALAIRE OCTOBRE','income','Salaire'],['VIR CAF ALLOCATIONS','income','Aides'],['VIR CARSAT RETRAITE','income','Retraite'],
+  ['Hypermarket','expense','Courses'],['In\'li','expense','Logement'],['République Française','expense','Impôts et taxes'],
   ['VIR CPAM REMBOURSEMENT','income','Remboursements'],['VIR VINTED','income','Ventes'],['INTERETS CREDITES LIVRET','income','Revenus de placements'],
  ];
  for(const [label,kind,category] of cases)expect([label,referenceMatch(label,kind)?.category]).toEqual([label,category]);

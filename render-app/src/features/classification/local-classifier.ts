@@ -33,6 +33,9 @@ const ignoredWords = new Set([
   'the', 'carte', 'paiement', 'achat', 'operation', 'virement', 'prelevement',
   'sepa', 'cb', 'cartebancaire', 'retrait', 'commission', 'transaction', 'eur',
   'euros', 'debit', 'credit', 'du', 'dun', 'au', 'a', 'le', 'la', 'en', 'from',
+  // Bank wording without a counterparty: learning from it spreads one choice to every unrelated transfer.
+  'facture', 'inst', 'instantane', 'emis', 'recu', 'recus', 'cpte', 'compte', 'comptes', 'envoye', 'depuis', 'vers',
+  'paypal', 'sumup', 'zettle', 'stripe', 'europe', 'sarl', 'cie',
 ]);
 
 function tokens(value: string): string[] {
