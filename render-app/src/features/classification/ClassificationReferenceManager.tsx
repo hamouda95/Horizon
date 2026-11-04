@@ -11,7 +11,8 @@ import {supabase} from '../../lib/client';
 type Category={id:string;name:string;kind:string;active:boolean};
 type Subcategory={id:string;name:string;category_id:string;active:boolean};
 const RULE_COLUMNS='merchant_key,merchant_label,kind,category_id,subcategory_id,sample_count,flow_type';
-const flowOptions:Array<[FlowType,string]>=[['standard','Revenu / dépense'],['refund','Remboursement'],['transfer','Transfert interne'],['savings','Épargne'],['investment','Placement'],['review','À vérifier']];
+// Same labels as the register; a loan needs a specific loan, so it cannot be a rule.
+const flowOptions=(Object.entries(flowTypeLabels) as Array<[FlowType,string]>).filter(([value])=>value!=='loan');
 
 /** Household categorisation rules: "label contains X → category, subcategory, nature". Rules override the general dictionary. */
 export default function ClassificationReferenceManager({householdId,userId,categories,subcategories,rules:providedRules,entries,open=false,onChanged}:{householdId:string;userId:string;categories:Category[];subcategories:Subcategory[];rules?:MerchantKnowledgeRule[];entries?:RuleTarget[];open?:boolean;onChanged:()=>Promise<void>}){

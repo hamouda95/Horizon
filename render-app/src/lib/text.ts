@@ -1,9 +1,18 @@
 import {translatePlural} from './i18n';
 /** Format visible labels only. Bank statements, identifiers and matching keys stay unchanged. */
 const commonWords=new Set(('de du des le la les et en pour par au aux a à depuis vers compte comptes courant courants livret livrets épargne virement virements transfert transferts interne internes reçu reçus émis salaire salaires revenus dépenses entrées sorties budget courses factures loisirs voyage loyer loyers remboursement remboursements janvier février mars avril mai juin juillet août septembre octobre novembre décembre sepa csv pdf tsv camt ofx qif jpeg png webp iban bic cb vir inst').split(' '));
+const namedEntities:Record<string,string>={amp:'&',lt:'<',gt:'>',quot:'"',apos:"'",nbsp:' '};
+/** Some banks export labels HTML-escaped ("Compte d&#39;épargne"); show the real characters. */
+export function decodeEntities(value:string):string{
+ return value.replace(/&(#\d+|#x[\da-f]+|[a-z]+);/gi,(match,code:string)=>{
+  if(code[0]!=='#')return namedEntities[code.toLowerCase()]??match;
+  const point=code[1]==='x'||code[1]==='X'?parseInt(code.slice(2),16):Number(code.slice(1));
+  return point>0&&point<=0x10ffff?String.fromCodePoint(point):match;
+ });
+}
 export function displayText(value:string|null|undefined):string{
  if(!value)return '';
- const result=value.trim().replace(/\bVIR\s+(?=Virement\b)/i,'').replace(/^VIR\s+INST\b/i,'Virement instantané').replace(/^VIR\s+SEPA\b/i,'Virement sepa').replace(/^VIR\b/i,'Virement').replace(/^CB\b/i,'Carte').replace(/^PRLV\b/i,'Prélèvement')
+ const result=decodeEntities(value).trim().replace(/\bVIR\s+(?=Virement\b)/i,'').replace(/^VIR\s+INST\b/i,'Virement instantané').replace(/^VIR\s+SEPA\b/i,'Virement sepa').replace(/^VIR\b/i,'Virement').replace(/^CB\b/i,'Carte').replace(/^PRLV\b/i,'Prélèvement')
   .replace(/\p{L}[\p{L}’'-]*/gu,word=>{if(word.length<=1||word!==word.toLocaleUpperCase('fr-FR'))return word;const lower=word.toLocaleLowerCase('fr-FR');return commonWords.has(lower)?lower:lower.charAt(0).toLocaleUpperCase('fr-FR')+lower.slice(1)});
  return result.charAt(0).toLocaleUpperCase('fr-FR')+result.slice(1);
 }

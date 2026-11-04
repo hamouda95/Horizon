@@ -8056,10 +8056,6 @@ export const uiMessages:Record<string,{en:string;ar:string}>={
   "en": "Received by",
   "ar": "استلمها"
  },
- "Dépense courante": {
-  "en": "Everyday expense",
-  "ar": "مصروف جارٍ"
- },
  "Paiement": {
   "en": "Payment",
   "ar": "الدفع"
@@ -8075,5 +8071,17 @@ export const uiMessages:Record<string,{en:string;ar:string}>={
  "Provision répartie sur les 12 mois de l’année.": {
   "en": "Provision spread over the 12 months of the year.",
   "ar": "مخصص موزع على أشهر السنة الاثني عشر."
+ },
+ "Virements, épargne et prêts": {
+  "en": "Transfers, savings and loans",
+  "ar": "تحويلات وادخار وقروض"
+ },
+ "Entre vos comptes, vers l’épargne, les placements et les prêts : hors budget": {
+  "en": "Between your accounts, to savings, investments and loans: outside the budget",
+  "ar": "بين حساباتك، نحو الادخار والاستثمارات والقروض: خارج الميزانية"
+ },
+ "Justificatif de revenu": {
+  "en": "Proof of income",
+  "ar": "إثبات الدخل"
  }
 };
