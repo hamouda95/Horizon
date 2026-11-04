@@ -22,6 +22,22 @@ export function normalizeMerchant(value: string): string {
     .filter(token => token && !ignored.has(token) && !/^\d+$/.test(token)).join(' ');
 }
 
+// Bank wording and payment intermediaries say how money moved, not who received it. A key made only of
+// these words ("facture", "paypal", "inst emis") would match unrelated operations, so it is never learned or applied.
+const genericTokens = new Set([
+  'facture', 'cpte', 'cpt', 'inst', 'emis', 'emise', 'recu', 'recue', 'envoye', 'envoyee', 'par', 'to', 'from', 'a',
+  'avec', 'depuis', 'creation', 'versement', 'initial', 'paypal', 'sumup', 'zettle', 'izettle', 'stripe', 'lydia',
+  'wero', 'paylib', 'europe', 'sarl', 'cie', 'et',
+]);
+export function isGenericMerchantKey(key: string): boolean {
+  const tokens = key.split(' ').filter(Boolean);
+  return tokens.every(token => genericTokens.has(token) || token.length < 2);
+}
+/** True when a bank label names no counterparty: "Facture Carte", "Virement sepa inst Emis", "Prélèvement sepa". */
+export function hasNoCounterparty(label: string): boolean {
+  return isGenericMerchantKey(normalizeMerchant(label));
+}
+
 function exactTokenPhrase(label: string, phrase: string): boolean {
   return (` ${normalizeMerchant(label)} `).includes(` ${phrase} `);
 }
@@ -33,7 +49,7 @@ export function matchMerchantRule(
   rules: MerchantKnowledgeRule[],
 ): MerchantKnowledgeRule | null {
   const matches = rules.filter(rule => rule.kind === kind && rule.category_id &&
-    exactTokenPhrase(label, rule.merchant_key));
+    !isGenericMerchantKey(rule.merchant_key) && exactTokenPhrase(label, rule.merchant_key));
   if (!matches.length) return null;
   const longest = Math.max(...matches.map(rule => rule.merchant_key.length));
   const best = matches.filter(rule => rule.merchant_key.length === longest);
@@ -47,12 +63,14 @@ export function cardMerchantKey(label: string): string | null {
     .replace(/[^a-z0-9]+/g, ' ').trim();
   if (!/(^| )(carte|cb|card|visa|mastercard)( |$)/.test(normalized)) return null;
   const merchantTokens = normalized.split(' ').filter(token => !/^\d+$/.test(token) && !ignored.has(token));
-  if (!merchantTokens.length) return null;
+  if (!merchantTokens.length || isGenericMerchantKey(merchantTokens.join(' '))) return null;
   return merchantTokens.slice(0, Math.min(3, merchantTokens.length)).join(' ');
 }
 
 /** Stable key for learning a bank counterparty beyond card-only labels. */
 export function transactionMerchantKey(label:string):string|null{
- const key=normalizeMerchant(label).split(' ').filter(token=>token&&!/^\d+$/.test(token)).slice(0,3).join(' ');
+ const tokens=normalizeMerchant(label).split(' ').filter(token=>token&&!/^\d+$/.test(token));
+ if(isGenericMerchantKey(tokens.join(' ')))return null;
+ const key=tokens.slice(0,3).join(' ');
  return key.length>=4?key:null;
 }

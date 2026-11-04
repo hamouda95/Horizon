@@ -3,6 +3,7 @@ import type {AssetValuation} from './asset-valuation';
 import type {FlowType} from '../../lib/flow';
 import {strFromU8,unzipSync} from 'fflate';
 import {guessHeaderRoles,type ColumnRole} from './column-roles';
+import {hasNoCounterparty} from '../classification/merchant-knowledge';
 
 export type CsvMapping={date:string;label:string;amount:string;debit:string;credit:string;valueDate:string;reference:string;currency:string;suggestedLabel:string;category:string;parentCategory:string;balance:string};
 export type StatementTransaction={rowNumber:number;transactionDate:string;valueDate:string|null;label:string;suggestedLabel?:string;categoryHint?:string;parentCategoryHint?:string;amountCents:number;currency:string;externalId:string|null;fingerprint:string;possibleDuplicate?:boolean;balanceCents?:number;balanceDate?:string;error?:string};
@@ -20,15 +21,19 @@ export function inferStatementFlowType(row:StatementTransaction,accountType?:str
  // Explicit interest is income even when the account itself is a savings account.
  if(/interets? (?:livret|epargne|compte)|remuneration (?:du )?(?:livret|epargne)|interets credites/.test(text))return 'standard';
  // Transfers between accounts are balance movements, never household income or spending.
- if(/virements? emis de comptes a comptes|virements? recus de comptes a comptes|transfert interne|mouvements internes/.test(text))return 'transfer';
+ if(/virements? emis de comptes a comptes|virements? recus de comptes a comptes|transfert interne|mouvements internes|\bcpte a cpte\b/.test(text))return 'transfer';
  if(/\b(?:virement|vir|transfert)\b.*\b(?:depuis|vers)\b.*\b(?:bourso(?:bank)?|boursorama|livret|epargne|compte courant|compte epargne)\b/.test(text))return 'transfer';
  if(/\b(?:depuis|vers)\b.*\b(?:bourso|boursorama|livret|epargne|compte courant|compte epargne)\b/.test(text))return 'transfer';
+ // Topping up an account and depositing cash only move the household's own money.
+ if(/\bajout de fonds\b|\btop ?up\b|\brechargement (?:du )?compte\b|\b(?:versement|vrst|depot) (?:d )?especes\b/.test(text))return 'transfer';
  // A bank named "Caisse d'Épargne" is not a savings movement: its name is removed before looking for savings words.
  const withoutBankNames=text.replace(/\bcaisses? d ?epargne\b|\bcaisse epargne\b/g,' ');
  if(/livret|epargne|compte epargne/.test(withoutBankNames))return 'savings';
  // A refund is money coming back: a debited "remboursement prêt" is a loan instalment, not a refund.
  if(row.amountCents>0&&/remboursement|rembourse|refund|\bavoir\b|cpam|securite sociale|complementaire sante/.test(text))return 'refund';
  if(/salaire|payroll|paie|virement employeur|remuneration|loyer|revenu locatif|rent/.test(text))return 'standard';
+ // A transfer sent without a beneficiary name may be rent, a gift or money moved to another account: ask.
+ if(row.amountCents<0&&/\b(?:vir|virement)\b/.test(normalize(row.label))&&hasNoCounterparty(row.label))return 'review';
  // Unrecognized savings-account movements need review rather than being counted as income.
  if(accountType==='savings'||accountType==='investment'||accountType==='crypto'||accountType==='credit')return 'review';
  return row.amountCents>0?'review':'standard';
