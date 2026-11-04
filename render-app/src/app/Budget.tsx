@@ -76,8 +76,6 @@ export default function Budget({user,onSignOut}:{user:User;onSignOut:()=>void}){
  const {loans,home,households,selectHousehold,entries,loading,error,setError,subcategories,setSubcategories,plans,refreshVersion,load}=useHouseholdData(userId,modal,tab,setModal);
  const accountDirectory=useAccountDirectory(home?.id||'',entries.length+refreshVersion);
  const routeStarted=useRef(false),landingEntry=useRef(isLandingVisit(window.location.hash));
- // A plain visit lands on a new expense, once the household is loaded and nothing else (setup, MFA…) is open.
- useEffect(()=>{if(!landingEntry.current||loading||!home||modal)return;landingEntry.current=false;openNewEntry('expense')},[loading,home,modal]);
  useEffect(()=>{const readRoute=()=>setTab(pageFromHash(window.location.hash));window.addEventListener('popstate',readRoute);window.addEventListener('hashchange',readRoute);return()=>{window.removeEventListener('popstate',readRoute);window.removeEventListener('hashchange',readRoute)}},[]);
  useEffect(()=>{setNotice('');setLearnedRule(null)},[tab]);useEffect(()=>{const hash=hashForPage(tab);if(window.location.hash!==hash){if(routeStarted.current)window.history.pushState(null,'',hash);else window.history.replaceState(null,'',hash)}routeStarted.current=true;window.scrollTo({top:0,behavior:'auto'})},[tab]);
  const categoryBudgets=useCategoryBudgets(home?.id||'',refreshVersion,month);
@@ -96,6 +94,9 @@ export default function Budget({user,onSignOut}:{user:User;onSignOut:()=>void}){
  const [kind,setKind]=useState<'income'|'expense'>('expense'),[label,setLabel]=useState(''),[quickOpen,setQuickOpen]=useState(false),[learnedRule,setLearnedRule]=useState<{key:string;kind:'income'|'expense';category:string}|null>(null),[category,setCategory]=useState(''),[amount,setAmount]=useState(''),[date,setDate]=useState(now()),[frequency,setFrequency]=useState<'monthly'|'annual'>('monthly'),[allocation,setAllocation]=useState<'calendar'|'next_month'>('calendar'),[expenseType,setExpenseType]=useState<''|'recurring'|'one_off'>(''),[flowType,setFlowType]=useState<FlowType>('standard'),[personId,setPersonId]=useState('');
  const [entryAccountId,setEntryAccountId]=useState(''),[entryLoanId,setEntryLoanId]=useState(''),[paymentMethod,setPaymentMethod]=useState('');
  useEffect(()=>{setModal('');setEditingId(null);setSelectedCategory(null);setNotice('');setLabel('');setAmount('');setCategory('');setSubId('');setSubName('');setPersonId('');setAccountSnapshots([])},[home?.id]);
+ // A plain visit lands on a new expense once the household is loaded and nothing else (setup, MFA…) is open.
+ // Declared after the reset above: effects run in order, so the reset on household load does not close it.
+ useEffect(()=>{if(!landingEntry.current||loading||!home||modal)return;landingEntry.current=false;openNewEntry('expense')},[loading,home,modal]);
  // Set before rendering the pages, so every label and amount below uses them.
  setUiLanguage(language);setAppCurrency(home?.currency);
  useEffect(()=>{document.documentElement.dataset.theme=theme;document.documentElement.lang=language;document.documentElement.dir='ltr'},[theme,language]);
