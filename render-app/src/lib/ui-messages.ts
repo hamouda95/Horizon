@@ -8179,5 +8179,13 @@ export const uiMessages:Record<string,{en:string;ar:string}>={
  "Saisie confirmée, mais l’échéance est à rapprocher de nouveau.": {
   "en": "Entry confirmed, but the bill must be matched again.",
   "ar": "تم تأكيد الإدخال، لكن يجب مطابقة الاستحقاق من جديد."
+ },
+ "Pour qui": {
+  "en": "For whom",
+  "ar": "لمن"
+ },
+ "Sélectionner la page": {
+  "en": "Select the page",
+  "ar": "تحديد الصفحة"
  }
 };
