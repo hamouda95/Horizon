@@ -8187,5 +8187,21 @@ export const uiMessages:Record<string,{en:string;ar:string}>={
  "Sélectionner la page": {
   "en": "Select the page",
   "ar": "تحديد الصفحة"
+ },
+ "Méthode de calcul": {
+  "en": "Calculation method",
+  "ar": "طريقة الحساب"
+ },
+ "Chargement du budget…": {
+  "en": "Loading the budget…",
+  "ar": "جارٍ تحميل الميزانية…"
+ },
+ "Aucune dépense ni plafond ce mois-ci.": {
+  "en": "No spending or limit this month.",
+  "ar": "لا توجد مصاريف ولا سقف هذا الشهر."
+ },
+ "Voir les {0} catégories →": {
+  "en": "See all {0} categories →",
+  "ar": "عرض الفئات الـ{0} ←"
  }
 };
